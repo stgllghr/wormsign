@@ -185,9 +185,10 @@ MITRE ATT&CK [S9008](https://attack.mitre.org/software/S9008/)).
 
 **What the worm does.** In November 2025, with no usable GitHub or npm credentials, it "attempts to destroy all files
 in the user's home folder" ([Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/)). Only
-stopping stage 1 prevents it, and backups, the control, are out of scope. In May 2026 a watcher wipes it when its
-token is revoked: H14 finds that watcher before it fires, and the [incident-response guide](incident-response.md)
-isolates the machine before any token is revoked. Nothing detects the wipe itself.
+stopping stage 1 prevents it, and backups, the control, are out of scope. In May 2026 a watcher wipes the home
+folder when its token is revoked: H14 finds that watcher before it fires, and the
+[incident-response guide](incident-response.md) isolates the machine before any token is revoked. Nothing detects
+the wipe itself.
 
 ## PyPI
 

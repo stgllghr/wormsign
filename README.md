@@ -9,29 +9,29 @@ version younger than 7 days, one OSV lists as malware, and anything it cannot ve
 ## How it answers a Shai-Hulud worm
 
 A Shai-Hulud worm spreads through the registry. With a stolen maintainer token it publishes new versions of that
-maintainer's packages, up to 100 in one wave, each with an install script that runs the payload. Anyone who installs
-one before it is reported and removed runs it, and the payload uses their tokens to do the same again.
+maintainer's packages (up to 100 per token in November 2025), each with an install script that runs the payload.
+Anyone who installs one before it is reported and removed runs it, and the payload uses their tokens to do the same
+again.
 
-Prevention is concentrated at that first step. A worm version does its harm before it is reported, and across five
-waves (3,547 versions) the slowest public malware advisory came 77.4 hours after publish, three method artefacts
-corrected; `soak` installs no locked version younger than 7 days
-([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)). Past that step wormsign mostly detects
-([threat model](docs/threat-model.md)).
+Prevention is concentrated at that first step. A worm version does its harm before it is reported. Across five
+waves (3,547 versions) the slowest was reported 77.4 hours after publish (three method artefacts corrected), so
+`soak` fails any locked version younger than 7 days ([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)).
+Past that step wormsign mostly detects ([threat model](docs/threat-model.md)).
 
 | Step | The worm | wormsign | Misses |
 |---|---|---|---|
-| 1. Install | A new version's install script runs the payload; in 2026 also a git dependency's `prepare` | `soak` fails versions under 7 days, ones OSV lists as malware, and what it cannot verify, such as a git source; `harden-dev.sh` checks install scripts and cooldowns (`--apply` sets them for npm, pnpm 11, Yarn and pip); `diff` reports a new dependency with an install script | an old enough unreported version; without `soak`, a git dependency's `prepare`; installs outside the lock |
-| 2. Harvest | Collects npm and GitHub tokens and cloud credentials, with TruffleHog | `harden-dev.sh` reports plaintext and over-scoped tokens and credential files | anything read at run time |
+| 1. Install | A new version's install script runs the payload; in May 2026 also a git dependency's `prepare` | `soak` fails versions under 7 days, ones OSV lists as malware, and what it cannot verify, such as a git source; `harden-dev.sh` checks install scripts and cooldowns (`--apply` sets both for npm, pnpm 11 and Yarn 4.10+, and pip's cooldown); `diff` reports a new dependency with an install script | an old enough unreported version; without `soak`, a git dependency's `prepare`; installs outside the lock |
+| 2. Harvest | Collects npm and GitHub tokens and cloud credentials, with TruffleHog (2025) | `harden-dev.sh` reports plaintext and over-scoped tokens and credential files | anything read at run time |
 | 3. Exfiltrate | Sends them to webhooks and to public GitHub repositories | `scan`: known endpoints; `audit-org`: the worm's repositories | it blocks no traffic; unlisted endpoints |
-| 4. Persist | Plants workflows that send out CI secrets or take commands on a self-hosted runner, and VS Code and Claude Code hooks that run it again | `diff` reports new editor and agent hooks, and workflow changes (medium, for code-owner review); `scan` and `audit-org` find what landed | a push with a stolen token |
+| 4. Persist | Plants workflows that send out CI secrets or take commands on a self-hosted runner, and VS Code tasks and Claude Code hooks that run it again | `diff` reports new editor and agent hooks, and workflow changes (medium, for code-owner review); `scan` and `audit-org` find what landed | a push with a stolen token skips `diff`; runners on a host; deleted branches |
 | 5. Spread | Republishes the victim's packages the same way | other projects' `soak` waits out the 7 days and checks OSV; registry signals | a publish through the package's own release workflow |
 | 6. Expose | Makes private repositories public | `audit-org`; detection WS-AL-001 | needs GitHub Enterprise Cloud's audit log |
 | 7. Wipe | Deletes the home folder: with no usable token (November 2025), or when its watched token is revoked (May 2026) | `harden-dev.sh` finds the May 2026 watcher; the [incident-response guide](docs/incident-response.md) isolates the machine before any token is revoked | the wipe itself, once step 1 has run |
 
 - **Coding agents:** the [agent skill](docs/skills.md) gives Claude Code, Codex and Cursor the same install rules:
   lockfile installs, scripts off, exact versions at least 7 days old (guidance, not enforcement).
-- **Detections:** [SIEM rules](detections/README.md) (experimental) watch for the worm's loaders, TruffleHog, runners,
-  repositories and visibility flips.
+- **Detections:** [SIEM rules](detections/README.md) (experimental) watch for the worm's loaders, Bun, TruffleHog,
+  runners, workflow runs, secret dumps, repositories and visibility flips.
 - **Private registries:** `scan` and `diff` take a `registry-host`; `soak` fails closed behind a mirror until
   [ADR 0007](docs/adr/0007-private-registry-mirrors.md) is built.
 - **PyPI is partial:** `soak` protects only exact-lock installs, such as `uv sync --locked`
