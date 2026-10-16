@@ -50,7 +50,8 @@ On an older npm, `wormsign soak` reports the setting as ignored (WS-SK-004) and 
   | Workflow | Run | Result |
   |---|---|---|
   | `ci.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437604) | success |
-  | `ci.yml` | `workflow_dispatch` with `-f slow=true` (full mutation check, macOS): [run](https://github.com/stgllghr/wormsign/actions/runs/38855495362) | in progress at publication |
+  | `ci.yml` | `workflow_dispatch` with `-f slow=true` (full mutation check, macOS): [first run](https://github.com/stgllghr/wormsign/actions/runs/38855495362), cancelled | 47 jobs passed; 4 module baselines failed on test races, fixed in #18; one mutant survived, a stale kill, fixed in #19 |
+  | `ci.yml` | the same, on the fixed `main` (7926cc9): [run](https://github.com/stgllghr/wormsign/actions/runs/38874783278) | in progress |
   | `wormsign.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437638) | success |
   | `action-selftest.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437615) | success |
   | `codeql.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437613) | success; its first alerts are being triaged |
