@@ -311,8 +311,8 @@ organization rulesets need GitHub Team or Enterprise
 Keep a `wormsign-gate.yml` with the gate job, pinned to a release SHA, in a repository only security owners can
 change; require it on the gated repositories' default branches; keep each baseline on its base branch.
 
-Whether this repository's `main` requires the gate and code-owner review is under
-[Release status](installation.md#release-status); until it does, do not treat its gate as blocking.
+A ruleset on this repository's `main` requires the gate's status check (the `gate (built from base)` job in
+`.github/workflows/wormsign.yml`), the CI checks and code-owner review ([Release status](installation.md#release-status)).
 
 ### soak's root
 

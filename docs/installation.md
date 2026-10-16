@@ -37,19 +37,30 @@ On an older npm, `wormsign soak` reports the setting as ignored (WS-SK-004) and 
 
 - **No release has been cut.** There is no tag, no tarball and no attestation; version 0.1.0 in
   `package.json` is not released. Until the first release, [install from source](#install-from-source).
-- **This repository starts from one commit.** Each item below happens after it is published and is
-  linked here when it is done. Until an item has a link, treat it as not done:
-  - the first runs of `ci.yml`, `wormsign.yml` and `action-selftest.yml`, which are also the first
-    runs of the PyPI soak and the pre-public fixes on GitHub's runners and on Linux;
-  - the full mutation check on one commit (`ci.yml` by `workflow_dispatch` with `-f slow=true`), and the macOS job;
-  - the canary pull request ([validation.md](validation.md#the-canary-pull-request)), whose gate run must fail;
-  - a ruleset on `main` that requires the `gate (built from base)` check, the CI checks and
-    code-owner review, and one that limits who can create `v*` tags. Until then neither the gate nor
-    code-owner review is required ([github-action.md](github-action.md#what-the-gate-does-not-stop));
-  - private vulnerability reporting ([SECURITY.md](../SECURITY.md));
-  - the first SARIF upload to code scanning, checked in the alerts view;
-  - the v0.1.0 tag, its release and the output of `gh attestation verify` for its tarball
-    ([Check a release tag yourself](#check-a-release-tag-yourself)).
+- **The repository is public** since 2026-10-16, on a
+  Free personal account, starting from one commit. A ruleset on `main` requires a pull request, the
+  gate's status check (the `gate (built from base)` job in `.github/workflows/wormsign.yml`), the CI
+  checks and code-owner review, and blocks force pushes and deletion; a second limits who can create
+  `v*` tags ([github-action.md](github-action.md#what-the-gate-does-not-stop)). With one maintainer, the
+  repository admin is the rulesets' one bypass actor, for pull requests only: GitHub does not let an author
+  approve their own pull request. Private vulnerability reporting, secret scanning with push protection and
+  Dependabot alerts are on ([SECURITY.md](../SECURITY.md)).
+- **This repository's first runs:**
+
+  | Workflow | Run | Result |
+  |---|---|---|
+  | `ci.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437604) | success |
+  | `ci.yml` | `workflow_dispatch` with `-f slow=true` (full mutation check, macOS): [run](https://github.com/stgllghr/wormsign/actions/runs/38855495362) | in progress at publication |
+  | `wormsign.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437638) | success |
+  | `action-selftest.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437615) | success |
+  | `codeql.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437613) | success; its first alerts are being triaged |
+  | `scorecard.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437684) | success |
+  | `wormsign.yml` | the canary pull request ([validation.md](validation.md#the-canary-pull-request)) [#15](https://github.com/stgllghr/wormsign/pull/15), closed unmerged: [run](https://github.com/stgllghr/wormsign/actions/runs/38855521831) | failed, as it must: `gate (built from base)` failed on CRITICAL WS-GH-001 |
+  | code scanning | the canary's SARIF upload: [run](https://github.com/stgllghr/wormsign/actions/runs/38855521831) | the alerts view shows WS-GH-001 (critical, [#39](https://github.com/stgllghr/wormsign/security/code-scanning/39)) and WS-DF-003 (medium, [#38](https://github.com/stgllghr/wormsign/security/code-scanning/38)) |
+
+  They are also the first runs of the PyPI soak and the pre-public fixes on GitHub's runners and on Linux.
+- **Not yet done:** the v0.1.0 tag, its release and the output of `gh attestation verify` for its
+  tarball ([Check a release tag yourself](#check-a-release-tag-yourself)), linked here when they exist.
 
 Earlier runs, in the private development repository, are in
 [evidence/test-runs.md](evidence/test-runs.md#before-publication). Where a page describes CI without a dated run, it
