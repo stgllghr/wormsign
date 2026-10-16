@@ -27,7 +27,7 @@ import { dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ENFORCED_SINCE, checkSoakConfig } from "../src/soak-config.js";
 import { privateBase } from "./harden-sandbox.js";
-import { fx } from "./helpers.js";
+import { escapeRegExp, fx } from "./helpers.js";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const SCRIPT = join(ROOT, "harden-dev.sh");
@@ -1429,7 +1429,7 @@ for (const bash of BASHES) {
         ".yarnrc.yml": "nodeLinker: node-modules\n",
         ".zshrc": "export PATH=$PATH:/x\n",
       };
-      const documented = new RegExp(`^(\\.npmrc|${PNPM_DIR.replace(/\//g, "\\/")}\\/config\\.yaml|\\.yarnrc\\.yml)(\\.wormsign-bak\\.\\d+\\.\\d+)?$`);
+      const documented = new RegExp(`^(\\.npmrc|${escapeRegExp(PNPM_DIR)}\\/config\\.yaml|\\.yarnrc\\.yml)(\\.wormsign-bak\\.\\d+\\.\\d+)?$`);
 
       test("backs up every changed file once, writes only documented files, and a second run changes nothing", async () => {
         const seeded = await run({ tools, files });
@@ -1465,10 +1465,9 @@ test("harden-dev.sh applies its own minimum pip and uv versions, which docs/hard
   const pipMin = /^PIP_MIN=(\d+(?:\.\d+)+)$/m.exec(text)?.[1];
   const uvMin = /^UV_MIN=(\d+(?:\.\d+)+)$/m.exec(text)?.[1];
   assert.ok(pipMin && uvMin, "positive control: PIP_MIN and UV_MIN are found");
-  const esc = (v: string) => v.replace(/\./g, "\\.");
   const table = readFileSync(join(ROOT, "docs", "hardening.md"), "utf8").split("\n");
-  assert.match(table.find((l) => l.startsWith("| H12 |")) ?? "", new RegExp(`relative values need pip >= ${esc(pipMin)};`));
-  assert.match(table.find((l) => l.startsWith("| H13 |")) ?? "", new RegExp(`relative values need uv >= ${esc(uvMin)}\\)`));
+  assert.match(table.find((l) => l.startsWith("| H12 |")) ?? "", new RegExp(`relative values need pip >= ${escapeRegExp(pipMin)};`));
+  assert.match(table.find((l) => l.startsWith("| H13 |")) ?? "", new RegExp(`relative values need uv >= ${escapeRegExp(uvMin)}\\)`));
   const below = (v: string): string => {
     const p = v.split(".").map(Number);
     p[p.length - 1] = (p[p.length - 1] as number) - 1;
@@ -1479,8 +1478,8 @@ test("harden-dev.sh applies its own minimum pip and uv versions, which docs/hard
   const at = await runWith(bash, { tools: { python3: pipMin, uv: uvMin }, files });
   assert.deepEqual([status(at.out, "H12"), status(at.out, "H13")], [["PASS"], ["PASS"]], at.out);
   const under = await runWith(bash, { tools: { python3: below(pipMin), uv: below(uvMin) }, files });
-  assert.match(lines(under.out, "H12")[0] ?? "", new RegExp(`^\\[FAIL\\] H12 +pip ${esc(below(pipMin))} `));
-  assert.match(lines(under.out, "H13")[0] ?? "", new RegExp(`^\\[FAIL\\] H13 +uv ${esc(below(uvMin))} has no relative exclude-newer \\(needs uv >= ${esc(uvMin)};`));
+  assert.match(lines(under.out, "H12")[0] ?? "", new RegExp(`^\\[FAIL\\] H12 +pip ${escapeRegExp(below(pipMin))} `));
+  assert.match(lines(under.out, "H13")[0] ?? "", new RegExp(`^\\[FAIL\\] H13 +uv ${escapeRegExp(below(uvMin))} has no relative exclude-newer \\(needs uv >= ${escapeRegExp(uvMin)};`));
 });
 
 // soak (src/soak-config.ts) and harden-dev.sh each say which package-manager release first enforces its release-age
@@ -1505,7 +1504,7 @@ test("harden-dev.sh's release-age version gates are soak's ENFORCED_SINCE", asyn
   const at = await runWith(bash, { tools: Object.fromEntries(gates.map((g) => [g.tool, ENFORCED_SINCE[g.tool]])) });
   const under = await runWith(bash, { tools: Object.fromEntries(gates.map((g) => [g.tool, below(ENFORCED_SINCE[g.tool])])) });
   for (const g of gates) {
-    const needs = new RegExp(`needs ${g.name} >= ${short(ENFORCED_SINCE[g.tool]).replace(/\./g, "\\.")}(?![0-9.])`);
+    const needs = new RegExp(`needs ${g.name} >= ${escapeRegExp(short(ENFORCED_SINCE[g.tool]))}(?![0-9.])`);
     assert.ok(lines(at.out, g.id).length > 0, `${g.id} ran`);
     for (const l of lines(at.out, g.id)) assert.doesNotMatch(l, /needs (npm|pnpm|Yarn|Bun) >= /, `${g.tool} ${ENFORCED_SINCE[g.tool]}: ${l}`);
     assert.ok(lines(under.out, g.id).some((l) => l.startsWith("[FAIL]") && needs.test(l)), `${g.tool} ${below(ENFORCED_SINCE[g.tool])}: ${lines(under.out, g.id).join(" | ")}`);

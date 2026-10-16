@@ -14,7 +14,7 @@ import { MAX_BASELINE_BYTES } from "../src/baseline.js";
 import { run } from "../src/main.js";
 import type { Finding } from "../src/types.js";
 import { UsageError } from "../src/types.js";
-import { NOW, fakeIO, fx } from "./helpers.js";
+import { NOW, escapeRegExp, fakeIO, fx } from "./helpers.js";
 
 const CLI = fileURLToPath(new URL("../src/cli.js", import.meta.url));
 const FP1 = "0123456789abcdef0123456789abcdef";
@@ -139,7 +139,7 @@ test("baseline add: an expiry that is not a real YYYY-MM-DD date is refused", as
   for (const day of ["2027-02-30", "2027-13-01", "2027-1-5", "tomorrow", "2027-01-31T00:00:00Z", "31/01/2027"]) {
     const r = await add(file, FP1, "--reason", WHY, "--expires", day);
     assert.equal(r.code, 2, day);
-    assert.match(r.err, new RegExp(`invalid --expires "${day.replace(/[/]/g, "\\/")}" \\(a real date written YYYY-MM-DD\\)`), day);
+    assert.match(r.err, new RegExp(`invalid --expires "${escapeRegExp(day)}" \\(a real date written YYYY-MM-DD\\)`), day);
   }
   const twice = await add(file, FP1, "--reason", WHY, "--expires", "2027-01-31", "--expires", "2028-01-31");
   assert.equal(twice.code, 2);

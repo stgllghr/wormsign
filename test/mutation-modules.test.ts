@@ -1,7 +1,7 @@
 /**
  * The mutation check's modules: every scripts/mutants-<module>.mjs is loaded, listed by --list-modules and run by its
  * own job in ci.yml's mutation matrix, which is built from --list-modules, so a module file cannot go unrun and a
- * deleted one leaves no job behind. No mutant is run.
+ * deleted one leaves no job behind. No mutant of this repository is run; one scratch mutant is, on a scratch copy.
  *
  * Never run --check against this repository here: during a mutation run this test runs in the mutated copy, where the
  * mutated file no longer holds its mutant's text, so --check would fail and every mutant would count as killed.
@@ -18,7 +18,11 @@ import { pathToFileURL } from "node:url";
 const ROOT = join(import.meta.dirname, "..", "..");
 
 function mutation(root: string, ...args: string[]): { status: number | null; out: string; err: string } {
-  const r = spawnSync(process.execPath, [join(root, "scripts", "mutation-check.mjs"), ...args], { encoding: "utf8" });
+  // Without NODE_TEST_CONTEXT, which node:test sets in this file's process: a suite the script runs would inherit it,
+  // and its own node --test would then report to this run in V8's serialized form, not as the spec reporter.
+  const env = { ...process.env };
+  delete env.NODE_TEST_CONTEXT;
+  const r = spawnSync(process.execPath, [join(root, "scripts", "mutation-check.mjs"), ...args], { encoding: "utf8", env });
   return { status: r.status, out: r.stdout, err: r.stderr };
 }
 
@@ -139,4 +143,65 @@ test("mutation: --module, --only and --check work across modules; bad module fil
   assert.deepEqual(JSON.parse(mutation(d, "--list-modules").out), ["alpha", "beta-2", "gamma"]);
   rmSync(join(d, "scripts", "mutants-gamma.mjs"));
   assert.deepEqual(moduleFiles(d), ["alpha", "beta-2"]);
+});
+
+test("mutation: when the unmutated suite fails, the log says why: each failed test's assertion, its first stack frames, and a test node:test cancelled", () => {
+  // A scratch repository whose `npm test` runs one test file through the real scripts/run-tests.mjs, so the output
+  // is the spec reporter's own; its one mutant breaks the file the tests read.
+  const d = mkdtempSync(join(tmpdir(), "ws-mutation-why-"));
+  for (const dir of ["scripts", "src", "node_modules"]) mkdirSync(join(d, dir));
+  for (const f of ["mutation-check.mjs", "run-tests.mjs"]) copyFileSync(join(ROOT, "scripts", f), join(d, "scripts", f));
+  // On failure the script adds a line to stderr after the suite's report, as npm's own error lines come.
+  const npmTest = `"${process.execPath}" scripts/run-tests.mjs t.test.mjs || { echo "npm error the test script failed" >&2; exit 1; }`;
+  writeFileSync(join(d, "package.json"), JSON.stringify({ name: "scratch", private: true, type: "module", scripts: { test: npmTest } }));
+  writeFileSync(join(d, "scripts", "mutants-alpha.mjs"), 'export default [["A1", "src/a.txt", "ok", "bad"]];\n');
+  writeFileSync(
+    join(d, "t.test.mjs"),
+    [
+      'import { test } from "node:test";',
+      'import assert from "node:assert/strict";',
+      'import { readFileSync } from "node:fs";',
+      'const said = () => readFileSync(new URL("./src/a.txt", import.meta.url), "utf8").trim();',
+      // A failure eight calls deep, so its stack has more frames than the log shows.
+      'const deep = (n) => (n === 0 ? assert.equal(said(), "ok") : deep(n - 1));',
+      'test("the file says ok", () => deep(8));',
+      // A subtest that never ends, under a parent with a timeout: node:test cancels it and the one it never started,
+      // which has no time on its line.
+      'test("a parent out of time", { timeout: 200 }, async (t) => {',
+      '  const first = t.test("a subtest that never ends", () => (said() === "ok" ? undefined : new Promise(() => {})));',
+      '  await Promise.all([first, t.test("the subtest after it", () => {})]);',
+      "});",
+      "",
+    ].join("\n"),
+  );
+
+  writeFileSync(join(d, "src", "a.txt"), "not ok\n");
+  const broken = mutation(d);
+  assert.equal(broken.status, 1, broken.out + broken.err);
+  assert.match(broken.err, /^the unmutated suite does not pass in .+ \(fail: the file says ok; a subtest that never ends; the subtest after it\), so no mutant result would mean anything\nwhy, from the suite's output:\n/);
+  const why = broken.err.slice(broken.err.indexOf("why, from the suite's output:\n"));
+  // The assertion's message and diff, and the stack frame in the test file, under the test's location and name.
+  assert.match(why, /^test at t\.test\.mjs:6:\d+\n✖ the file says ok \(\d[\d.]*ms\)\n {2}AssertionError \[ERR_ASSERTION\]: Expected values to be strictly equal:\n(?: *\n)? {2}'not ok' !== 'ok'\n/m);
+  const first = why.slice(0, why.indexOf("\n\ntest at "));
+  assert.match(first, /^ +at deep \(.*t\.test\.mjs:5:\d+\)$/m, "the frame that failed");
+  assert.equal(first.split("\n").filter((l) => /^\s+at /.test(l)).length, 5, "its first five frames");
+  assert.match(first, /^ {6}\.\.\. \d+ more stack frame\(s\)\n {2}\{\n {4}generatedMessage: true,$/m, "and how many more there were");
+  assert.match(first, /^ {4}actual: 'not ok',\n {4}expected: 'ok',$/m, "and what it compared");
+  // A test cancelled before it started has no time on its line: it is named, and so is why. Node 22 and 23 cancel both
+  // subtests when the event loop runs out of work (nothing holds it during the wait), as in CI; Node 24 holds the loop
+  // for a running test, and its parent's timeout cancels them.
+  const cancelled = "'(?:Promise resolution is still pending but the event loop has already resolved|test did not finish before its parent and was cancelled)'";
+  assert.match(why, new RegExp(`^✖ a subtest that never ends \\(\\d[\\d.]*ms\\)\\n {2}${cancelled}$`, "m"));
+  assert.match(why, new RegExp(`^✖ the subtest after it\\n {2}${cancelled}$`, "m"));
+  assert.doesNotMatch(why, /npm (error|ERR!)/, "npm's own lines are no test's");
+
+  // Positive control: an unmutated suite that passes prints no why, and the mutant that breaks it is killed, with its
+  // failed tests named.
+  writeFileSync(join(d, "src", "a.txt"), "ok\n");
+  const fine = mutation(d);
+  assert.equal(fine.status, 0, fine.out + fine.err);
+  assert.doesNotMatch(fine.err, /why, from the suite's output/);
+  assert.match(fine.out, /^baseline: the unmutated suite passes /m);
+  assert.match(fine.out, /^killed {5}A1 \(\d failing: the file says ok; a subtest that never ends\)$/m);
+  assert.match(fine.out, /^1\/1 mutants killed in \d+ min$/m);
 });

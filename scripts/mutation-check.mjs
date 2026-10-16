@@ -6,7 +6,8 @@
 // one change, runs `npm test` (build, then every test) and records whether the suite failed (killed) or passed
 // (survived). Exit 1 if any mutant survives, does not compile, or names text the file no longer contains exactly
 // once, so the list cannot rot silently. Before any mutant, the unchanged copy must pass: otherwise a failure would
-// prove nothing.
+// prove nothing. When it does not, the script prints why: each failed test's error from the reporter's output, its
+// message and first stack frames, so a CI log that stops there can be read without a rerun.
 //
 // Mutants live in modules, one file each: scripts/mutants-<module>.mjs exports a default array of
 // [name, file, search, replace]. Every such file is loaded, and a mutant's name is unique across all of them. CI runs
@@ -119,17 +120,76 @@ for (const a of [["init", "-q"], ["add", "-A"], ["commit", "-q", "-m", "mutation
   if (r.status !== 0) throw new Error(`git ${a[0]} failed in ${work}: ${r.stderr}`);
 }
 
-/** Runs the suite in the copy: "pass", "fail" (with the failing test names), "no-compile" or "timeout". */
+/** At most this many failed tests, this many lines of each one's error and this many of its stack frames are printed. */
+const SHOWN_TESTS = 5;
+const SHOWN_LINES = 30;
+const SHOWN_FRAMES = 5;
+
+/**
+ * The failed tests in the spec reporter's closing "✖ failing tests:" list, each with its name and its block: the
+ * "test at <file>:<line>:<column>" line, the "✖ <name> (<time>)" line (a test node:test cancelled has no time) and the
+ * error under it, message first, with only its first SHOWN_FRAMES stack frames. Colour codes are dropped. Empty when
+ * the output has no such list.
+ */
+function failures(out) {
+  // eslint-disable-next-line no-control-regex -- an ANSI colour code starts with ESC
+  const lines = out.replace(/\x1b\[[0-9;]*m/g, "").split(/\r?\n/);
+  const start = lines.findLastIndex((l) => /^\s*✖ failing tests:\s*$/.test(l));
+  if (start === -1) return [];
+  const blocks = [];
+  for (const line of lines.slice(start + 1)) {
+    const last = blocks.at(-1);
+    // A block starts at its location line, or at its ✖ line when the reporter knew no file.
+    if (/^test at \S.*:\d+:\d+$/.test(line) || (/^\s*✖ /.test(line) && !(last?.lines.length === 1 && last.lines[0].startsWith("test at ")))) blocks.push({ name: undefined, lines: [], frames: 0, more: -1 });
+    const block = blocks.at(-1);
+    if (block === undefined) continue;
+    const title = block.name === undefined ? /^\s*✖ (.+?)(?: \(\d[\d.]*m?s\))?$/.exec(line) : null;
+    if (title) block.name = title[1];
+    const frame = /^(\s+)at /.exec(line);
+    if (frame && ++block.frames > SHOWN_FRAMES) {
+      // In place of the frames not shown, one line that counts them, at their indent.
+      if (block.more === -1) block.more = block.lines.push(frame[1]) - 1;
+      // The last frame's line opens the error's own properties ("... (file:1:2) {"), which are shown.
+      if (line.endsWith(" {")) block.lines.push(`${frame[1].slice(4)}{`);
+      continue;
+    }
+    block.lines.push(line);
+  }
+  return blocks
+    .filter((b) => b.name !== undefined)
+    .map((b) => {
+      if (b.more !== -1) b.lines[b.more] += `... ${b.frames - SHOWN_FRAMES} more stack frame(s)`;
+      while (b.lines.at(-1)?.trim() === "") b.lines.pop();
+      const lines = b.lines.slice(0, SHOWN_LINES).map((l) => (l.length > 300 ? `${l.slice(0, 300)}...` : l));
+      if (b.lines.length > SHOWN_LINES) lines.push(`  ... ${b.lines.length - SHOWN_LINES} more line(s)`);
+      return { name: b.name, text: lines.join("\n") };
+    });
+}
+
+/**
+ * Runs the suite in the copy: "pass", "fail" (with the failing test names), "no-compile" or "timeout", and `why`: what
+ * the output says about it, for a log to show. For a failure that is each failed test's block from the reporter's list
+ * (failures()), or, when the output has none (a crash before the reporter's summary, a build that failed), its last
+ * lines; for a compile error the compiler's errors; for a timeout the output's last lines.
+ */
 function suite() {
   // Each test file has its own timeout (scripts/run-tests.mjs); this backstop catches a hang outside any file.
   const r = spawnSync("npm", ["test"], { cwd: work, encoding: "utf8", maxBuffer: 256 * 1024 * 1024, timeout: 20 * 60_000, killSignal: "SIGKILL" });
-  if (r.error || r.signal) return { status: "timeout", failed: [] };
-  const out = `${r.stdout}${r.stderr}`;
-  if (r.status === 0) return { status: "pass", failed: [] };
-  if (/error TS\d+/.test(out)) return { status: "no-compile", failed: [out.match(/error TS\d+[^\n]*/)?.[0] ?? ""] };
-  // The spec reporter marks each failed test "✖ <name> (<time>)"; the summary repeats them, so deduplicate.
+  const out = `${r.stdout ?? ""}${r.stderr ?? ""}`;
+  const tail = (n) => `the output's last ${n} lines:\n${out.trimEnd().split(/\r?\n/).slice(-n).join("\n")}`;
+  if (r.error || r.signal) return { status: "timeout", failed: [], why: tail(30) };
+  if (r.status === 0) return { status: "pass", failed: [], why: "" };
+  if (/error TS\d+/.test(out)) return { status: "no-compile", failed: [out.match(/error TS\d+[^\n]*/)?.[0] ?? ""], why: [...out.matchAll(/^.*error TS\d+.*$/gm)].slice(0, 10).map((m) => m[0]).join("\n") };
+  // The reporter writes to stdout; npm's own error lines follow on stderr and are no test's.
+  const listed = failures(r.stdout ?? "");
+  if (listed.length > 0) {
+    const shown = listed.slice(0, SHOWN_TESTS).map((f) => f.text);
+    if (listed.length > SHOWN_TESTS) shown.push(`... and ${listed.length - SHOWN_TESTS} more failed test(s)`);
+    return { status: "fail", failed: [...new Set(listed.map((f) => f.name))], why: shown.join("\n\n") };
+  }
+  // No list to read: every "✖ <name> (<time>)" line, deduplicated, and the output's end.
   const failed = [...new Set([...out.matchAll(/^\s*✖ (.+?) \(\d[\d.]*m?s\)$/gm)].map((m) => m[1]))];
-  return { status: "fail", failed };
+  return { status: "fail", failed, why: tail(30) };
 }
 
 process.on("exit", () => rmSync(work, { recursive: true, force: true }));
@@ -137,6 +197,7 @@ const t0 = Date.now();
 const base = suite();
 if (base.status !== "pass") {
   console.error(`the unmutated suite does not pass in ${work} (${base.status}: ${base.failed.slice(0, 3).join("; ")}), so no mutant result would mean anything`);
+  console.error(`why, from the suite's output:\n${base.why || "(the suite printed nothing)"}`);
   process.exit(1);
 }
 console.log(`baseline: the unmutated suite passes (${Math.round((Date.now() - t0) / 1000)}s); running ${selected.length} mutants one at a time`);

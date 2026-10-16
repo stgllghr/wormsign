@@ -76,6 +76,25 @@ function fake(ids: Record<string, string[]>, records: Record<string, unknown> = 
   return { fetchImpl, sleep, waits, batches, asked, bodies, flight };
 }
 
+/**
+ * An answer that never comes: the request fails only when its abort signal fires, as a socket that hangs does.
+ * AbortSignal.timeout's timer does not keep Node alive (a real socket does), so a timer holds the event loop open until
+ * the abort and is cleared then. Without it the test's process can run out of work mid-test, and node:test cancels the
+ * test ("Promise resolution is still pending but the event loop has already resolved"); with it left running, it would
+ * hold the loop for later tests and hide their missing hold. If the abort never comes, the request fails with that.
+ */
+const hang = (init?: RequestInit): Promise<Response> =>
+  new Promise((_resolve, reject) => {
+    const signal = init?.signal;
+    if (!signal) return reject(new Error("a record query without a timeout"));
+    if (signal.aborted) return reject(signal.reason);
+    const hold = setTimeout(() => reject(new Error("the hang was never cut short")), 2_000);
+    signal.addEventListener("abort", () => {
+      clearTimeout(hold);
+      reject(signal.reason);
+    });
+  });
+
 /** A recorded query batch: its packages (the request) and the record ids OSV answered for each. */
 function recordedBatch(file: string): { pkgs: OsvPackage[]; ids: Record<string, string[]> } {
   const doc = JSON.parse(readFileSync(fx("osv", file), "utf8")) as { request: { queries: Query[] }; response: { results: { vulns?: { id: string }[]; next_page_token?: string }[] } };
@@ -270,15 +289,10 @@ test("osv cwe-506: a version's records are read over every page", async () => {
 });
 
 test("osv cwe-506: a record query that hangs is cut short by the timeout and leaves its version unchecked", async () => {
-  const hang = (): Promise<Response> => new Promise((_resolve, reject) => setTimeout(() => reject(new Error("the hang was never cut short")), 2_000));
   const ids = { "a@1.0.0": ["GHSA-hhhh-hhhh-hhhh"] };
-  // The fake ignores the signal, so wrap it: each record query races its own abort signal, as a real socket would.
+  // Each record query hangs until its own abort signal fires, as a real socket would.
   const db = fake(ids, {}, { "a@1.0.0": hang });
-  const fetchImpl = ((url: string | URL, init?: RequestInit) =>
-    String(url) === QUERY
-      ? Promise.race([db.fetchImpl(url, init), new Promise<Response>((_resolve, reject) => init?.signal?.addEventListener("abort", () => reject(init.signal?.reason)))])
-      : db.fetchImpl(url, init)) as typeof fetch;
-  const res = await checkOsvDetailed([{ name: "a", version: "1.0.0" }], { fetchImpl, timeoutMs: 20 });
+  const res = await checkOsvDetailed([{ name: "a", version: "1.0.0" }], { fetchImpl: db.fetchImpl, timeoutMs: 20 });
   assert.equal(db.asked.length, 2, "retried once");
   assert.deepEqual(summary(res.findings), ["WS-OS-900 high a@1.0.0"]);
   assert.match(res.findings[0]?.message ?? "", /request to OSV for a version's records failed: .*aborted due to timeout/);
@@ -409,13 +423,6 @@ test("osv cwe-506: once a record query fails after its retry, no other starts in
   assert.deepEqual([up.asked.length, ok.unchecked, ok.findings, ok.notes], [20, [], [], [note(20)]]);
 
   // Every request fails: answered at once, or never answered until the 20 ms timeout aborts it.
-  const hang = (init?: RequestInit): Promise<Response> =>
-    new Promise((_resolve, reject) => {
-      const signal = init?.signal;
-      if (!signal) return reject(new Error("a record query without a timeout"));
-      if (signal.aborted) return reject(signal.reason);
-      signal.addEventListener("abort", () => reject(signal.reason));
-    });
   const thrown = () => {
     throw new TypeError("fetch failed");
   };

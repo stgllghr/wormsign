@@ -124,8 +124,9 @@ export function onlyKey(file: string, p: LockedPackage): string {
   return `${file}\0${soakIdentity(p)}`;
 }
 
+/** A package's document URL: the name is one path segment, a scope's slash written %2F as npm writes it. */
 export function registryUrl(registry: string, name: string): string {
-  return `${registry.replace(/\/+$/, "")}/${name.replace("/", "%2F")}`;
+  return `${registry.replace(/\/+$/, "")}/${name.replaceAll("/", "%2F")}`;
 }
 
 function hostOf(url: string): string | undefined {

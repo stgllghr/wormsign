@@ -9,7 +9,7 @@ import { MANIFEST, detectAgents, inspect, loadBundle, manifestText, parseAgents,
 import type { Bundle, FsOps } from "../src/skills.js";
 import { run } from "../src/main.js";
 import { UsageError } from "../src/types.js";
-import { fakeIO } from "./helpers.js";
+import { escapeRegExp, fakeIO } from "./helpers.js";
 
 const home = (): string => mkdtempSync(join(tmpdir(), "ws-skills-home-"));
 /** A UsageError (which run() prints with exit 2, never as an internal error) whose message matches re. */
@@ -294,7 +294,7 @@ test("skills install: an upgrade names the old and new version", () => {
   const m = JSON.parse(readFileSync(join(dir, MANIFEST), "utf8")) as Record<string, unknown>;
   writeFileSync(join(dir, MANIFEST), JSON.stringify({ ...m, version: "0.0.1" }));
   const r = runSkills("install", { agents: ["claude"], ...opts() }, { home: h, env: {} });
-  assert.match(r.lines.join("\n"), new RegExp(`replaced 0\\.0\\.1 with ${bundle().version.replace(/\./g, "\\.")}`));
+  assert.match(r.lines.join("\n"), new RegExp(`replaced 0\\.0\\.1 with ${escapeRegExp(bundle().version)}`));
 });
 
 test("skills: a linked skills folder, or a linked .claude in the project, is refused with exit 2 and nothing is written through it", () => {
@@ -343,7 +343,7 @@ test("skills check: missing, edited, extra, outdated and invisible characters ar
   assert.match(r.lines.join("\n"), /edited: SKILL\.md/);
   assert.match(r.lines.join("\n"), /extra: x\.md/);
   assert.match(r.lines.join("\n"), /not plain ASCII: SKILL\.md/);
-  const v = bundle().version.replace(/\./g, "\\.");
+  const v = escapeRegExp(bundle().version);
   const manifest = (): { tool: string; version: string; files: Record<string, string> } => JSON.parse(readFileSync(join(dir, MANIFEST), "utf8"));
   const fresh = (): void => {
     rmSync(dir, { recursive: true, force: true });
@@ -439,7 +439,7 @@ test("skills uninstall: a copy it can move but not delete is exit 2 saying where
 
 test("skills: with no --agent and no agent folder, it stops with exit 2 and names the folders it looked for", () => {
   const h = join(home(), "missing");
-  assert.throws(() => runSkills("install", opts(), { home: h, env: {} }), usageError(new RegExp(`no supported agent found \\(looked for ${join(h, ".claude").replace(/[.]/g, "\\.")}`)));
+  assert.throws(() => runSkills("install", opts(), { home: h, env: {} }), usageError(new RegExp(`no supported agent found \\(looked for ${escapeRegExp(join(h, ".claude"))}`)));
 });
 
 test("skills: a write that fails part-way leaves neither a partial copy nor a temporary folder", () => {
@@ -526,7 +526,7 @@ test("cli: --help lists the skills command and its options within the size limit
   const io = fakeIO();
   await run(["--help"], io);
   assert.match(io.out, /\n {2}wormsign skills <action> {10}/);
-  for (const flag of ["--agent <list>", "--project", "--dry-run", "--force"]) assert.match(io.out, new RegExp(`\\n {2}${flag.replace(/[<>]/g, "\\$&")} +skills`));
+  for (const flag of ["--agent <list>", "--project", "--dry-run", "--force"]) assert.match(io.out, new RegExp(`\\n {2}${escapeRegExp(flag)} +skills`));
 });
 
 test("cli skills: --agent, --dry-run and --force reach the installer", async () => {
@@ -726,7 +726,7 @@ test("skills uninstall: a target that cannot be removed stops the run before any
   const shared = join(h, ".agents", "skills");
   chmodSync(shared, 0o555);
   try {
-    assert.throws(() => runSkills("uninstall", { agents: ["claude", "codex"], ...opts() }, { home: h, env: {} }), usageError(new RegExp(`^cannot remove ${join(shared, "wormsign").replace(/[.]/g, "\\.")}: EACCES$`)));
+    assert.throws(() => runSkills("uninstall", { agents: ["claude", "codex"], ...opts() }, { home: h, env: {} }), usageError(new RegExp(`^cannot remove ${escapeRegExp(join(shared, "wormsign"))}: EACCES$`)));
   } finally {
     chmodSync(shared, 0o755);
   }
@@ -1050,7 +1050,7 @@ test("skills: a link on the path is refused with what to run instead, and what i
   mkdirSync(join(h, ".claude"));
   symlinkSync(behind, join(h, ".claude", "skills"));
   const repo = mkdtempSync(join(tmpdir(), "ws-skills-repo-"));
-  assert.throws(() => runSkills("install", { agents: ["claude"], ...opts({ force: true }) }, { home: h, env: {} }), usage(new RegExp(`^${join(h, ".claude", "skills").replace(/[.]/g, "\\.")} is a symbolic link, which wormsign does not write through, even with --force; to install the skill anyway, run \`wormsign skills install --project --agent claude\` in a git repository: it writes into that repository's folders instead$`)));
+  assert.throws(() => runSkills("install", { agents: ["claude"], ...opts({ force: true }) }, { home: h, env: {} }), usage(new RegExp(`^${escapeRegExp(join(h, ".claude", "skills"))} is a symbolic link, which wormsign does not write through, even with --force; to install the skill anyway, run \`wormsign skills install --project --agent claude\` in a git repository: it writes into that repository's folders instead$`)));
   const r = runSkills("install", { agents: ["claude"], ...opts() }, { home: h, env: {}, projectRoot: repo });
   assert.equal(r.code, 0, r.lines.join("\n"));
   assert.ok(current(inspect(join(repo, ".claude", "skills", "wormsign"), bundle())));

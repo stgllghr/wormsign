@@ -155,7 +155,7 @@ function valueRegex(value: string | number | boolean, how: StringMatch): RegExp 
       const c = value[i] as string;
       const n = value[i + 1];
       if (c === "\\" && (n === "*" || n === "?" || n === "\\")) {
-        body += n.replace(/[\\*?]/, "\\$&");
+        body += `\\${n}`; // n is "*", "?" or "\\", each a regex metacharacter: escaped, it matches only itself
         i++;
       } else if (c === "*") body += ".*";
       else if (c === "?") body += ".";
