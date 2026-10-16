@@ -5,20 +5,21 @@ It supports [validation.md](../validation.md) and [Release status](../installati
 
 ## Test suite
 
-- **The Python PR-mode change** (branch `pre/py-prmode`, on 70841f2): `npm test` on 2026-10-15, macOS 15.6.1 (arm64),
-  npm 10.9.2, Node 23.11.0: 1,348 tests, 1,347 passed, 0 failed, 1 skipped (the same differential test), in 105 s.
-  It adds the 19 tests of `test/soak-python-prmode.test.ts`, ten in `test/soak-python-gates.test.ts`, one each in
-  `test/python-differential-requirements.test.ts`, `test/baseline-add.test.ts` and `test/validation-replay.test.ts`; the Node 22 and 24 runs below are of 6211561.
-- **6211561**, whose code the later commits leave as it is but for a blank line at the end of a test file: `npm test`
-  (build, then every test) on 2026-10-15 (UTC), macOS 15.6.1 (arm64), npm 10.9.2, one run after another:
+- **The tree of 0ff5d3e**, which equals release 328fbef of the private development repository: `npm test` (build,
+  then every test) on 2026-10-16 (UTC), macOS 15.6.1 (arm64), npm 10.9.2, one run after another:
 
   | Node | Tests | Passed | Failed | Skipped | Test time |
   |---|---|---|---|---|---|
-  | 22.23.3 | 1,315 | 1,314 | 0 | 1 | 99 s |
-  | 24.21.0 | 1,315 | 1,314 | 0 | 1 | 103 s |
-  | 23.11.0 | 1,315 | 1,314 | 0 | 1 | 108 s |
+  | 22.23.3 | 1,348 | 1,347 | 0 | 1 | 141 s |
+  | 24.21.0 | 1,348 | 1,347 | 0 | 1 | 114 s |
+  | 23.11.0 | 1,348 | 1,347 | 0 | 1 | 113 s |
 
   Node 23 is not a release this project supports. The first runs on GitHub's runners and on Linux are CI's jobs.
+- **The Python PR-mode change** (branch `pre/py-prmode`, on 70841f2), before its merge: `npm test` on 2026-10-15,
+  macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,348 tests, 1,347 passed, 0 failed, 1 skipped, in 105 s. It adds
+  the 19 tests of `test/soak-python-prmode.test.ts`, ten in `test/soak-python-gates.test.ts`, one each in
+  `test/python-differential-requirements.test.ts`, `test/baseline-add.test.ts` and `test/validation-replay.test.ts`.
+- **An earlier commit, 6211561**, with 1,315 tests, passed on Node 22.23.3, 24.21.0 and 23.11.0 on 2026-10-15.
 - **An earlier commit, 7bb2879**, with 1,312 tests, passed on the same three. Its first Node 24 run failed one test,
   `outage-mode.test.ts`'s connection-reset case: Node 24's bundled undici called `setTypeOfService` on the socket the
   test's server had just reset, and the EINVAL it threw escaped as an uncaught exception, which then exited 1 (since
@@ -172,9 +173,9 @@ self-scan, `harden-dev.sh` on Ubuntu and macOS, and the mutation check of the 70
 request that adds an IOC-named workflow failed the gate, as it must
 ([validation.md](../validation.md#the-canary-pull-request)). No SARIF upload reached code scanning there.
 
-The PyPI soak and the pre-public review fixes have run only locally, on macOS: 6211561's suite on Node 22.23.3,
-24.21.0 and 23.11.0. Their first runs on GitHub's runners and on Linux are the first item
-of [Release status](../installation.md#release-status).
+The PyPI soak, the pre-public review fixes and the Python PR-mode change have run only locally, on macOS: the suite
+of 0ff5d3e's tree on Node 22.23.3, 24.21.0 and 23.11.0 ([above](#test-suite)). Their first runs on GitHub's runners
+and on Linux are the first item of [Release status](../installation.md#release-status).
 
 ## Installation commands
 
