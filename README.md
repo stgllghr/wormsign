@@ -6,6 +6,40 @@ it is a TypeScript CLI with no npm runtime dependencies, a GitHub Action, a hard
 (experimental; [each part's maturity](docs/stability.md#maturity)), centred on a **soak gate** that fails on a locked
 version younger than 7 days, one OSV lists as malware, and anything it cannot verify.
 
+## How it stops a Shai-Hulud worm
+
+A Shai-Hulud worm spreads through the registry itself. With a stolen maintainer token it publishes a new version of
+every package that token can write, with an install script that runs the payload. Anyone who installs one in the
+next hours runs it. The payload then:
+
+- harvests npm, GitHub and cloud tokens;
+- sends them out through webhooks and public GitHub repositories;
+- plants workflows, self-hosted runners, and editor and agent hooks that run it again;
+- republishes the victim's own packages, which is how it spreads;
+- in later waves, makes private repositories public, or wipes the home folder.
+
+wormsign breaks that loop at each step ([threat model](docs/threat-model.md)):
+
+- **Don't install it.** Worm versions are reported quickly: across five waves (3,547 versions), the slowest public
+  malware advisory came 77.4 hours after publish, so 7 days leaves a margin
+  ([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)). `soak` fails any locked npm or PyPI version younger
+  than 7 days, any version OSV lists as malware, and anything it cannot verify, such as a git dependency.
+  `harden-dev.sh` checks install scripts and each package manager's own release-age cooldown, and `--apply` sets them
+  for npm, pnpm, Yarn and pip.
+- **Stop the change that brings it in.** On a pull request, `diff` reports a new dependency with an install script, a
+  changed lifecycle script or workflow, a new editor task or agent hook that runs commands, and a change to the
+  install settings or baseline. The gate runs from the base commit, so a pull request cannot switch off its own checks.
+- **Find it if it got in.** `scan` looks for known worm versions, payload files by hash, exfiltration endpoints, the
+  worm's workflows (secret dumps, discussion-triggered self-hosted runners) and its editor and agent hooks.
+  `audit-org` checks a GitHub organization for the worm's repositories, runners, workflows and visibility flips.
+- **Leave less to steal.** `harden-dev.sh` reports plaintext and over-scoped tokens and credential files, and the
+  May 2026 wave's watcher that wipes the home folder when its token is revoked.
+- **Respond without setting off the wiper.** The [incident-response guide](docs/incident-response.md) isolates the
+  machine before any token is revoked; the [SIEM detections](detections/README.md) (experimental) watch the GitHub
+  audit log, CI logs and endpoints for the worm spreading.
+- **Same rules for coding agents.** The [agent skill](docs/skills.md) gives Claude Code, Codex and Cursor the same
+  install rules: lockfile installs, scripts off, exact versions at least 7 days old.
+
 ## Quickstart
 
 Node.js 22 or later; npm enforces a release age from 11.10 (bundled from Node 24.14.1). Until the first release, build
@@ -67,9 +101,8 @@ private repository skips the SARIF upload by default
 
 The rest is [out of scope](docs/threat-model.md#out-of-scope).
 
-Across five waves (3,547 versions), the slowest malware advisory came 77.4 hours after publish, three method artefacts
-corrected: 7 days leaves a margin ([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)). Every inert wave
-replay (a regression test, not a measurement) fails the recommended gate
+The 77.4 hours corrects three method artefacts. Every inert wave replay (a regression test, not a measurement) fails
+the recommended gate
 ([replays](docs/validation.md#3-wave-replays)). With no baseline, 8 of 15 popular repositories fail `scan`'s
 default gate, all on accurate, harmless findings ([noise](docs/evidence/false-positives.md)).
 
