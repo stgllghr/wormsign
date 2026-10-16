@@ -66,8 +66,8 @@ export const RULE_META = {
   "WS-OS-001": { commands: ["soak"], severities: ["critical"], when: "Not run with --no-osv." },
   "WS-OS-900": { commands: ["soak"], severities: ["high"], when: "Not run with --no-osv." },
   "WS-OS-901": { commands: ["soak"], severities: ["medium"], when: "Only with --on-outage warn, when api.osv.dev gave no answer in the whole run nor to the probe after it; never suppressed by a baseline. Not run with --no-osv." },
-  "WS-PS-001": { commands: ["scan"], severities: ["high"], when: "whatever the command it runs." },
-  "WS-PS-002": { commands: ["scan"], severities: ["high"], when: "whatever the command it runs." },
+  "WS-PS-001": { commands: ["scan", "diff"], severities: ["high"], when: "whatever the command it runs." },
+  "WS-PS-002": { commands: ["scan", "diff"], severities: ["high"], when: "whatever the command it runs." },
 };
 
 /** What each ID prefix covers, in the order the families are listed. */
