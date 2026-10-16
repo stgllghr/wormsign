@@ -544,7 +544,7 @@ test("soak (privacy): a requirements file's own index options send none of its n
   // Control: the same file without the option is checked.
   const control = fakeNet();
   assert.equal((await soak(tempTree({ "requirements.txt": `--require-hashes\n${pin}` }), [], control)).code, 0);
-  assert.ok(control.calls.includes("https://pypi.org/simple/six/"));
+  assert.ok(control.calls.some((u) => u === "https://pypi.org/simple/six/"));
 });
 
 test("soak (privacy): a pylock.toml package with no index whose file URLs are on another host is sent nowhere", async () => {
@@ -571,11 +571,11 @@ test("soak (privacy): a vendored archive's name is looked up on the index only w
   const net = fakeNet();
   const r = await soak(dir, [], net);
   assert.equal(r.code, 1);
-  assert.ok(!net.calls.includes("https://pypi.org/simple/six/"), "six (vendor/six-1.17.0-py2.py3-none-any.whl) is not asked about");
+  assert.ok(!net.calls.some((u) => u === "https://pypi.org/simple/six/"), "six (vendor/six-1.17.0-py2.py3-none-any.whl) is not asked about");
   assert.match(r.findings.find((f) => f.message.startsWith("Cannot verify soak time for PyPI package six==1.17.0"))?.message ?? "", /it is a local archive, which can be checked only by asking the index for its name, and --pypi-index was not given explicitly to allow that, so its name is sent nowhere/);
   const explicit = fakeNet();
   const e = await soak(dir, ["--pypi-index", "https://pypi.org/simple/"], explicit);
-  assert.ok(explicit.calls.includes("https://pypi.org/simple/six/"));
+  assert.ok(explicit.calls.some((u) => u === "https://pypi.org/simple/six/"));
   assert.ok(!e.findings.some((f) => f.message.startsWith("Cannot verify soak time for PyPI package six==1.17.0")), e.findings.map((f) => f.message).join("\n"));
 });
 
