@@ -13,17 +13,16 @@ TypeScript ([below](#soaks-python-side-on-the-same-corpus)); `soak`'s npm side w
 1,591 findings, 1 is a false positive, a medium one, below the default gate; the IOC-driven rules reported
 nothing. Three fixes removed 5,675 of the first run's 5,676 false positives.
 
-Run 2026-10-15 from 15:18 to 15:25 UTC on Node 23.11.0 (built with npm 10.9.2), macOS 15.6.1 arm64, git 2.50.1,
+Run 2026-10-16 from 04:20 to 04:24 UTC on Node 23.11.0 (built with npm 10.9.2), macOS 15.6.1 arm64, git 2.50.1,
 IOC data dated 2026-10-02, default options. The JSON's `scanner` field gives the tree IDs of `src/`
-(`d89b7aadc0b88b9624b0a742948ed30d71140e19`) and `data/iocs/` (`ce5f3ebb8e67bf7860f2bb0e9b72b7407ab5a8fe`), as
-`git rev-parse 7bb2879:src 7bb2879:data/iocs` prints them. The only later change to `src/`, 63a0ccb's handler in
-`src/cli.ts` that makes a crash exit 2, does not change what `scan` or `soak` report. The JSON's one edit replaces
-each checkout's path with `<repo>/` (15 times): `sed 's#<absolute path of the checkout>/#<repo>/#g'`.
+(`6e08aa14b48c6fb5aeed1065ed9634680794c1de`) and `data/iocs/` (`ce5f3ebb8e67bf7860f2bb0e9b72b7407ab5a8fe`), as
+`git rev-parse 0ff5d3e:src 0ff5d3e:data/iocs` prints them. The JSON's one edit replaces each checkout's path with
+`<repo>/` (15 times): `sed 's#<absolute path of the checkout>/#<repo>/#g'`.
 
 | File | Size | SHA-256 |
 | --- | --- | --- |
-| [`data/fp-corpus.json`](data/fp-corpus.json): every finding, note and control result | 633,581 bytes | `ea6b908413982a6168a081aa0265e1e5ef299c5d7978f88acf7cfcc171f61ca8` |
-| [`data/fp-corpus-soak.json`](data/fp-corpus-soak.json): `soak`'s [Python findings](#soaks-python-side-on-the-same-corpus) | 6,171 bytes | `baefaa5d390527329918f1e69a53e36882b0febe5125d6d01f32a7a0d0877f2a` |
+| [`data/fp-corpus.json`](data/fp-corpus.json): every finding, note and control result | 633,581 bytes | `6530dc4fa06a51d5b2fe899c5b1a1be350a3a671acebadd428165f2b6a740e47` |
+| [`data/fp-corpus-soak.json`](data/fp-corpus-soak.json): `soak`'s [Python findings](#soaks-python-side-on-the-same-corpus) | 6,171 bytes | `32a3bc9006ef43f8f56c64e3a22bb3ad216cd5613b759ffff64dd43bf61c7a07` |
 
 ## Corpus
 
@@ -176,13 +175,14 @@ false positives, and a second (2026-10-09, before the fixes) 7,249 and 5,676, wi
 Every other finding is unchanged, at the same file and line. The fixes have tests and mutants (`core-lockfile`,
 `core-workflows`).
 
-This page's run is of 7bb2879's src tree. Against the published 2026-10-09 run (21:38 UTC) only the 18 WS-SC-900 keys
+This page's run is of 0ff5d3e's src tree. Against the published 2026-10-09 run (21:38 UTC) only the 18 WS-SC-900 keys
 and fingerprints changed (the key now digests the reason). Runs at these earlier src trees gave the same findings and
 notes, byte for byte but `scanner` and `retrieved`, so the review fixes to `scan` after d37a961 (property paths read
 as GitHub reads them, a `${{` in a comment, the line breaks YAML reads) changed nothing here:
 
 | src tree | Run (UTC) |
 | --- | --- |
+| `d89b7aadc0b88b9624b0a742948ed30d71140e19` (7bb2879, before the Python PR-mode change) | 2026-10-15 15:18 to 15:25 |
 | `db08c840a6131252b6e384d677f35e811d4459f5` (d37a961) | 2026-10-14 21:34 to 21:45 |
 | `c1193a069f361499a6cd381b1f88a59afb8cbb3f` | 2026-10-10 00:49 to 00:57 |
 | `a5401f7eb596d6f8d75ad8e6dfa8151afb4f6b6d` | 2026-10-10 02:24 to 02:30 |
@@ -200,7 +200,7 @@ steps, aliases, merge keys). A new note names Python inputs `scan` does not read
 
 [`scripts/fp-corpus-soak.mjs`](../../scripts/fp-corpus-soak.mjs) runs `wormsign soak --no-baseline --no-osv` over the
 checkouts, with the npm registry on a closed local port (npm's half fails at once, sending nothing) and the default
-Python index. Run 2026-10-15 at 15:27 UTC, same code and machine:
+Python index. Run 2026-10-16 at 04:25 UTC, same code and machine:
 
 | rule | findings | TP | BD | FP | severity |
 | --- | --- | --- | --- | --- | --- |
@@ -217,9 +217,10 @@ A deliberate trade: `soak` reports the 42 rather than note them, because a note 
 02:30 UTC) or read them as requirements files (2,459 WS-SK-002).
 
 The runs at src trees `415fd1a4` (2026-10-10 06:04 UTC), `927c90b8` (2026-10-11 03:23 UTC), `169249d4` (2026-10-12 06:56
-UTC) and `db08c840` (d37a961, 2026-10-14 21:45 UTC) gave the same PyPI results as this one. The corpus has no
-`pyproject.toml`, `setup.py`, `setup.cfg` or `Pipfile`, so it says nothing about the manifest rules or `diff`'s build
-check ([WS-DF-005](../cli/diff.md#a-python-build-changed-expected-on-ordinary-pull-requests)).
+UTC), `db08c840` (d37a961, 2026-10-14 21:45 UTC) and `d89b7aad` (7bb2879, before the Python PR-mode change, 2026-10-15
+15:27 UTC) gave the same PyPI results as this one. The corpus has no `pyproject.toml`, `setup.py`, `setup.cfg` or
+`Pipfile`, so it says nothing about the manifest rules or `diff`'s build check
+([WS-DF-005](../cli/diff.md#a-python-build-changed-expected-on-ordinary-pull-requests)).
 
 ## Reproduce
 
