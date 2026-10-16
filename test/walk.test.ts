@@ -21,7 +21,7 @@ import { execFileSync, spawnSync } from "node:child_process";
 import { chmodSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import type { Dirent } from "node:fs";
 import { tmpdir } from "node:os";
-import { dirname, join, posix, relative } from "node:path";
+import { dirname, join, parse, posix, relative } from "node:path";
 import { LOCKFILE_NAMES } from "../src/lockfile/index.js";
 import type { ParsedLockfile } from "../src/lockfile/index.js";
 import { run } from "../src/main.js";
@@ -615,6 +615,24 @@ test("walk: git is started from the filesystem root, so a git in the scanned tre
     process.env["PATH"] = saved;
   }
   assert.equal(statSync(marker, { throwIfNoEntry: false }), undefined, "tree.ts: the tree's git did not run");
+  // Where git starts, seen by the git that runs. src/exec.ts skips the empty PATH entry, so walk.ts spawns no git above
+  // and that half cannot tell where git would have started. A git on PATH outside the tree records its physical working
+  // directory: the filesystem root, never the scanned tree (pwd -P, so the /tmp and /var symlinks of macOS change
+  // nothing).
+  const bin = tmp("ws-walk-gitcwd-");
+  const seen = join(bin, "cwd");
+  writeFileSync(join(bin, "git"), `#!/bin/sh\npwd -P >> "${seen}"\nexit 1\n`);
+  chmodSync(join(bin, "git"), 0o755);
+  assert.equal(walkTree(root, { env: { PATH: bin } }).git().kind, "git-error");
+  assert.deepStrictEqual(readFileSync(seen, "utf8").split("\n"), [parse(process.cwd()).root, ""], "walk.ts: git ran once, from the filesystem root");
+  rmSync(seen);
+  process.env["PATH"] = bin;
+  try {
+    assert.throws(() => gitRoot(root), /not inside a git repository/);
+  } finally {
+    process.env["PATH"] = saved;
+  }
+  assert.deepStrictEqual(readFileSync(seen, "utf8").split("\n"), [parse(process.cwd()).root, ""], "tree.ts: git ran once, from the filesystem root");
   // And with git on PATH, -C still runs it in the root.
   const repo = tmp("ws-walk-gitc-");
   write(repo, { "a.txt": "x" });

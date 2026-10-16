@@ -38,7 +38,11 @@ It supports [validation.md](../validation.md) and [Release status](../installati
 
 **Kill record.** 651 of the 974 mutants, those unchanged since 8baf3ce, have each been killed at least once, locally
 on macOS (Node 23.11.0) between 2026-10-02 and 2026-10-15: each on the branch that added it, by the full suite or by
-the test files that cover it, or in a batch with `--only` or `--module` after the unmutated suite passed first. The
+the test files that cover it, or in a batch with `--only` or `--module` after the unmutated suite passed first. A kill
+goes stale when the code a mutant edits changes after the kill and the mutant's text does not. The first CI mutation
+run here found one: `PY walk: git is started from the scanned root`, killed on 2026-10-08, survived after a 2026-10-09
+change to how `src/walk.ts` finds git, until `test/walk.test.ts` checked where git starts. The full CI run re-checks
+every mutant ([Release status](../installation.md#release-status)). The
 other 323, added or changed after 8baf3ce (322 by the pre-publication reviews, 1 for a code scanning alert), were
 hand-applied by their authors one at a time on a scratch copy against the test files that cover them, and every one
 was killed; the script has not run them yet (runner pass pending; the module table counts them). The batches, with
