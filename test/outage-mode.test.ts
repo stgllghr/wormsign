@@ -3,8 +3,8 @@
 // to the probe after it; so one name a host will not serve, while it serves the rest, stays high. Every request goes
 // through Node's own fetch to a local server, so the error a DNS, connection, TLS or timeout failure throws is the one
 // Node throws in CI; the registry, the Python index and OSV keep their real URLs, which the test's fetch maps to
-// 127.0.0.1. Only the DNS and certificate failures are recorded errors. No request leaves the machine: the test's
-// fetch refuses any URL it did not map.
+// 127.0.0.1. Only the DNS, certificate and broken-handshake failures, and the errors of a name with several addresses
+// (localhost's), are recorded errors. No request leaves the machine: the test's fetch refuses any URL it did not map.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { createServer as createHttpServer } from "node:http";
@@ -59,6 +59,25 @@ async function tcp(onConnection: (c: Socket) => void): Promise<Local> {
   const port = await listen(s);
   return { url: `http://127.0.0.1:${port}`, close: () => new Promise((resolve) => { for (const c of sockets) c.destroy(); s.close(() => resolve()); }) };
 }
+
+/**
+ * A TCP server's connection handler that reads the request's head (up to the blank line that ends it), then does
+ * `then`, and keeps reading whatever follows. So a server that answers, breaks off or resets does it to a request in
+ * flight, never to one still being written, and nothing waits on a timer. Done at once instead, on a busy machine a
+ * reset races the request's write (Node 24's undici then calls setTypeOfService on a socket already reset, which throws
+ * EINVAL on macOS), and a socket closed with the request still unread sends a reset, not a FIN.
+ */
+const afterRequest = (then: (c: Socket) => void) => (c: Socket): void => {
+  let head = "";
+  let done = false;
+  c.on("data", (chunk: Buffer) => {
+    if (done) return;
+    head += chunk.toString("latin1");
+    if (!head.includes("\r\n\r\n")) return;
+    done = true;
+    then(c);
+  });
+};
 
 /** A port nothing listens on: a connection to it is refused. */
 async function closedPort(): Promise<Local> {
@@ -152,15 +171,15 @@ test("outage classifier: Node's own DNS, connection, TLS-handshake and timeout f
   const caught = async (p: Promise<unknown>): Promise<unknown> => p.then(() => assert.fail("expected a failure"), (e: unknown) => e);
   const refused = await closedPort();
   // resetAndDestroy sends a TCP RST, so the refusal is the same on every platform (a plain close can read as EOF).
-  const reset = await tcp((c) => c.resetAndDestroy());
-  const cut = await tcp((c) => c.write('HTTP/1.1 200 OK\r\ncontent-length: 100\r\n\r\n{"a":', () => setTimeout(() => c.destroy(), 20)));
+  const reset = await tcp(afterRequest((c) => c.resetAndDestroy()));
+  // The head and 5 of the 100 bytes it promises, then a FIN: the request was read, so the close is never a reset.
+  const cut = await tcp(afterRequest((c) => c.end('HTTP/1.1 200 OK\r\ncontent-length: 100\r\n\r\n{"a":')));
   const silent = await tcp(() => undefined);
-  const garbage = await tcp((c) => c.end("garbage\r\n\r\n"));
+  const garbage = await tcp(afterRequest((c) => c.end("garbage\r\n\r\n")));
   const plain = await http((_req, _body, res) => json(res, "not json", 200, "text/plain"));
   try {
+    // 127.0.0.1 is one address, so one attempt and one error; localhost is recorded below.
     assert.equal(transportFailure(await caught(fetch(refused.url))), "connection failed (ECONNREFUSED)");
-    // localhost tries ::1 and 127.0.0.1, and fetch throws an AggregateError of both refusals.
-    assert.equal(transportFailure(await caught(fetch(refused.url.replace("127.0.0.1", "localhost")))), "connection failed (ECONNREFUSED)");
     assert.equal(transportFailure(await caught(fetch(reset.url))), "connection failed (ECONNRESET)");
     // The classifier calls a cut-off body a socket failure; the clients never ask it about one after a status line.
     assert.equal(transportFailure(await caught(fetch(cut.url).then((r) => r.text()))), "connection failed (UND_ERR_SOCKET)");
@@ -175,6 +194,15 @@ test("outage classifier: Node's own DNS, connection, TLS-handshake and timeout f
   }
   // Recorded shapes, each under fetch's TypeError: a lookup that fails, handshakes that broke off.
   assert.equal(transportFailure(dnsError("registry.npmjs.org")), "DNS lookup failed (ENOTFOUND)");
+  // A name with several addresses, as localhost has ::1 and 127.0.0.1: Node tries each and throws an AggregateError of
+  // their errors, whose code is the first's. Recorded, not live: whether localhost has one address or two is the
+  // platform's, a process stalled past net's 250 ms attempt timeout records the first attempt as ETIMEDOUT, and a host
+  // without IPv6 fails ::1 with EADDRNOTAVAIL, which is no transport failure, so the refusal after it decides.
+  const attempt = (code: string, address: string) => Object.assign(new Error(`connect ${code} ${address}:4873`), { code, syscall: "connect", address, port: 4873 });
+  const attempts = (...errors: Error[]) => new TypeError("fetch failed", { cause: Object.assign(new AggregateError(errors, ""), { code: (errors[0] as Error & { code: string }).code }) });
+  assert.equal(transportFailure(attempts(attempt("ECONNREFUSED", "::1"), attempt("ECONNREFUSED", "127.0.0.1"))), "connection failed (ECONNREFUSED)", "both refused");
+  assert.equal(transportFailure(attempts(attempt("ETIMEDOUT", "::1"), attempt("ECONNREFUSED", "127.0.0.1"))), "connection failed (ETIMEDOUT)", "the first attempt timed out");
+  assert.equal(transportFailure(attempts(attempt("EADDRNOTAVAIL", "::1"), attempt("ECONNREFUSED", "127.0.0.1"))), "connection failed (ECONNREFUSED)", "no IPv6, then refused");
   const under = (...codes: string[]) => new TypeError("fetch failed", { cause: codes.reduceRight<unknown>((cause, code) => Object.assign(new Error(code), { code, ...(cause ? { cause } : {}) }), undefined) });
   assert.equal(transportFailure(under("EAI_AGAIN")), "DNS lookup failed (EAI_AGAIN)");
   for (const code of ["EPROTO", "ERR_TLS_HANDSHAKE_TIMEOUT", "ERR_SSL_PACKET_LENGTH_TOO_LONG"]) assert.equal(transportFailure(under(code)), `TLS failed (${code})`, code);
@@ -267,7 +295,7 @@ const REGISTRY_OUTAGES: { name: string; error: RegExp; server: () => Promise<Loc
   { name: "HTTP 429", error: /^HTTP 429$/, server: () => http((_req, _b, res) => json(res, "", 429)) },
   { name: "HTTP 502", error: /^HTTP 502$/, server: () => http((_req, _b, res) => json(res, "", 502)) },
   { name: "connection refused", error: /^connection failed \(ECONNREFUSED\)$/, server: closedPort },
-  { name: "connection reset", error: /^connection failed \(ECONNRESET\)$/, server: () => tcp((c) => c.resetAndDestroy()) },
+  { name: "connection reset", error: /^connection failed \(ECONNRESET\)$/, server: () => tcp(afterRequest((c) => c.resetAndDestroy())) },
   { name: "TLS failure", error: /^TLS failed \(/, server: () => http((_req, _b, res) => json(res, "plain")), https: true },
   { name: "timeout", error: /^timed out$/, server: () => tcp(() => undefined), timeoutMs: 150 },
   { name: "DNS failure", error: /^DNS lookup failed \(ENOTFOUND\)$/, server: async () => "dns" },
@@ -348,7 +376,7 @@ for (const n of ONE_NAME) {
 /** A status line and then a body that never ends or breaks off, for every request: the host is up, so never an outage. */
 for (const b of [
   { name: "a body slower than the timeout after HTTP 200", server: () => tcp((c) => c.write('HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: 100000\r\n\r\n{"name":')), timeoutMs: 150 },
-  { name: "a body cut off after HTTP 200", server: () => tcp((c) => c.write('HTTP/1.1 200 OK\r\ncontent-length: 100000\r\n\r\n{"name":', () => setTimeout(() => c.destroy(), 20))) },
+  { name: "a body cut off after HTTP 200", server: () => tcp(afterRequest((c) => c.end('HTTP/1.1 200 OK\r\ncontent-length: 100000\r\n\r\n{"name":'))) },
 ]) {
   test(`registry, ${b.name}: not an outage, so warn reports exactly what the default does (WS-SK-002, high), and no claim is filed`, async () => {
     const server = await b.server();
@@ -514,7 +542,7 @@ for (const n of OSV_ANSWERS) {
 
 test("a failure after a status line is never an outage: the registry, the index and OSV file no claim for a body that is slow or cut off", async () => {
   const slow = await tcp((c) => c.write('HTTP/1.1 200 OK\r\ncontent-type: application/vnd.pypi.simple.v1+json\r\ncontent-length: 100000\r\n\r\n{"name":'));
-  const cut = await tcp((c) => c.write('HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: 100000\r\n\r\n{"results":', () => setTimeout(() => c.destroy(), 20)));
+  const cut = await tcp(afterRequest((c) => c.end('HTTP/1.1 200 OK\r\ncontent-type: application/json\r\ncontent-length: 100000\r\n\r\n{"results":')));
   try {
     const index = await createIndexClient({ index: "https://pypi.org/simple/", fetchImpl: routed({ pypi: slow.url }), timeoutMs: 150, outages: new OutageLedger() }).project("idna");
     assert.ok("error" in index && !("outage" in index), JSON.stringify(index));
