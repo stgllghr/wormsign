@@ -5,7 +5,8 @@
 # Writes (replacing them):
 #   test/fixtures/python/locks/        uv.lock, PEP 723 script locks and pylock.toml files written by uv 0.10.9 and
 #                                      0.12.21 and by pip 26.2.1, plus forged/ variants derived from them;
-#                                      forged/uv-script-reads.json records how both uvs read each script in forged/scripts/
+#                                      forged/uv-script-reads.json records how both uvs read each script in forged/scripts/;
+#                                      an osv-scanner.toml beside each lock that pins idna 3.10 (osv_ignore)
 #   test/fixtures/python/requirements/ a requirements corpus (corpus/), what pip 26.2.1's parser reads in each file
 #                                      (pip-26.2.1.json) and what `uv pip sync --dry-run` of both uvs would install
 #                                      (uv-pip-sync.json)
@@ -79,6 +80,17 @@ out="$work/out"
 mkdir -p "$out/locks" "$out/requirements/corpus/included" "$out/simple"
 
 # ---- uv projects, locked and exported by each uv ----
+# osv_ignore <dir> <id> <what>: <dir>'s lockfile pins <what> on purpose, an old release with advisory <id>. OSV-Scanner,
+# which OpenSSF Scorecard's Vulnerabilities check runs, reads osv-scanner.toml for the lockfiles in its own directory only.
+osv_ignore() {
+  printf '%s\n' \
+    "# OSV-Scanner, which OpenSSF Scorecard's Vulnerabilities check runs, reads this file for the lockfile next to it only." \
+    "# That lockfile is an inert test fixture: wormsign's tests read it, and nothing installs it or runs what it locks." \
+    '' '[[IgnoredVulns]]' "id = \"$2\"" \
+    "reason = \"Test fixture, never installed: scripts/gen-py-fixtures.sh pins $3 on purpose, an old, long-published release for the tests to read.\"" \
+    > "$1/osv-scanner.toml"
+}
+
 project() { # project <dir>: writes the pyproject files of one fixture project into <dir>
   local d="$1"
   case "$(basename "$d")" in
@@ -103,7 +115,8 @@ project() { # project <dir>: writes the pyproject files of one fixture project i
         '[tool.uv]' 'package = false' '' '[tool.uv.sources]' 'six = { path = "vendor/six-1.17.0-py2.py3-none-any.whl" }' \
         'localdir = { path = "libs/localdir", editable = false }' > "$d/pyproject.toml"
       printf '%s\n' '[project]' 'name = "localdir"' 'version = "1.0.0"' 'requires-python = ">=3.9"' 'dependencies = ["idna==3.10"]' '' \
-        '[build-system]' 'requires = ["hatchling"]' 'build-backend = "hatchling.build"' > "$d/libs/localdir/pyproject.toml" ;;
+        '[build-system]' 'requires = ["hatchling"]' 'build-backend = "hatchling.build"' > "$d/libs/localdir/pyproject.toml"
+      osv_ignore "$d" PYSEC-2026-215 "idna 3.10" ;;
   esac
 }
 
@@ -130,6 +143,7 @@ d="$out/locks/pip-$PIP_VERSION/lock"
 mkdir -p "$d"
 printf '%s\n' 'six==1.17.0' 'idna==3.10' 'certifi' > "$d/requirements.in"
 (cd "$d" && "$py" -m pip lock -q --only-binary :all: --uploaded-prior-to "$EXCLUDE_NEWER" -r requirements.in -o pylock.toml)
+osv_ignore "$d" PYSEC-2026-215 "idna 3.10"
 
 # ---- forged variants for reader problems, derived from the uv 0.12.21 and pip outputs ----
 "$py" - "$out/locks" <<'PY'
