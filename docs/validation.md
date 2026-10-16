@@ -8,7 +8,7 @@ behind the figures are in [evidence/test-runs.md](evidence/test-runs.md).
 
 | Layer | The question it answers | Where | Run with | Latest result |
 |---|---|---|---|---|
-| Test suite | Does each check behave as written? | `test/*.test.ts` (77 files) | `npm test` | 1,348 tests: 1,347 pass, 1 skipped (a differential test that needs a live pip, named by `WORMSIGN_PIP_REF`); the real pip and uv suites of `test/harden-real.test.ts` run only with `HARDEN_REAL=1` |
+| Test suite | Does each check behave as written? | `test/*.test.ts` (77 files) | `npm test` | 1,349 tests: 1,348 pass, 1 skipped (a differential test that needs a live pip, named by `WORMSIGN_PIP_REF`); the real pip and uv suites of `test/harden-real.test.ts` run only with `HARDEN_REAL=1` |
 | 1. Rule coverage | Can every rule actually fire through the real CLI? | `test/validation-coverage.test.ts` | `npm test` | 46 of 46 rules produced |
 | 2. IOC recall | Does every indicator that ships reach its rule? | `test/validation-recall.test.ts` | `npm test` | every testable indicator found; hashes untestable (0 / 20) |
 | 3. Wave replays | Would the reported waves, rebuilt inertly, fail the gate? | `test/validation-replay.test.ts`, `test/fixtures/replay/` | `npm test` | all 4 fail the recommended pull-request gate (`diff`, `scan`, `soak --base`); `scan` and `diff` alone fail 3, and pass Mini Shai-Hulud, which only `soak` fails (its git dependency, WS-SK-002) |

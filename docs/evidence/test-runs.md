@@ -15,6 +15,9 @@ It supports [validation.md](../validation.md) and [Release status](../installati
   | 23.11.0 | 1,348 | 1,347 | 0 | 1 | 113 s |
 
   Node 23 is not a release this project supports. The first runs on GitHub's runners and on Linux are CI's jobs.
+- **The code scanning fixes** (branch `fix/code-scanning`, on 6575b22), before their merge: `npm test` on 2026-10-16,
+  macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,349 tests, 1,348 passed, 0 failed, 1 skipped, in 118 s. It adds
+  one test in `test/soak.test.ts`.
 - **The Python PR-mode change** (branch `pre/py-prmode`, on 70841f2), before its merge: `npm test` on 2026-10-15,
   macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,348 tests, 1,347 passed, 0 failed, 1 skipped, in 105 s. It adds
   the 19 tests of `test/soak-python-prmode.test.ts`, ten in `test/soak-python-gates.test.ts`, one each in
