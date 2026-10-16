@@ -6,39 +6,42 @@ it is a TypeScript CLI with no npm runtime dependencies, a GitHub Action, a hard
 (experimental; [each part's maturity](docs/stability.md#maturity)), centred on a **soak gate** that fails on a locked
 version younger than 7 days, one OSV lists as malware, and anything it cannot verify.
 
-## How it stops a Shai-Hulud worm
+## How it answers a Shai-Hulud worm
 
-A Shai-Hulud worm spreads through the registry itself. With a stolen maintainer token it publishes a new version of
-every package that token can write, with an install script that runs the payload. Anyone who installs one in the
-next hours runs it. The payload then:
+A Shai-Hulud worm spreads through the registry. With a stolen maintainer token it publishes new versions of that
+maintainer's packages, up to 100 in one wave, each with an install script that runs the payload. Anyone who installs
+one before it is reported and removed runs it, and the payload uses their tokens to do the same again.
 
-- harvests npm, GitHub and cloud tokens;
-- sends them out through webhooks and public GitHub repositories;
-- plants workflows, self-hosted runners, and editor and agent hooks that run it again;
-- republishes the victim's own packages, which is how it spreads;
-- in later waves, makes private repositories public, or wipes the home folder.
+Prevention is concentrated at that first step. A worm version does its harm before it is reported, and across five
+waves (3,547 versions) the slowest public malware advisory came 77.4 hours after publish, three method artefacts
+corrected; `soak` installs no locked version younger than 7 days
+([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)). Past that step wormsign mostly detects
+([threat model](docs/threat-model.md)).
 
-wormsign breaks that loop at each step ([threat model](docs/threat-model.md)):
+| Step | The worm | wormsign | Misses |
+|---|---|---|---|
+| 1. Install | A new version's install script runs the payload; in 2026 also a git dependency's `prepare` | `soak` fails versions under 7 days, ones OSV lists as malware, and what it cannot verify, such as a git source; `harden-dev.sh` checks install scripts and cooldowns (`--apply` sets them for npm, pnpm 11, Yarn and pip); `diff` reports a new dependency with an install script | an old enough unreported version; without `soak`, a git dependency's `prepare`; installs outside the lock |
+| 2. Harvest | Collects npm and GitHub tokens and cloud credentials, with TruffleHog | `harden-dev.sh` reports plaintext and over-scoped tokens and credential files | anything read at run time |
+| 3. Exfiltrate | Sends them to webhooks and to public GitHub repositories | `scan`: known endpoints; `audit-org`: the worm's repositories | it blocks no traffic; unlisted endpoints |
+| 4. Persist | Plants workflows that send out CI secrets or take commands on a self-hosted runner, and VS Code and Claude Code hooks that run it again | `diff` reports new editor and agent hooks, and workflow changes (medium, for code-owner review); `scan` and `audit-org` find what landed | a push with a stolen token |
+| 5. Spread | Republishes the victim's packages the same way | other projects' `soak` waits out the 7 days and checks OSV; registry signals | a publish through the package's own release workflow |
+| 6. Expose | Makes private repositories public | `audit-org`; detection WS-AL-001 | needs GitHub Enterprise Cloud's audit log |
+| 7. Wipe | Deletes the home folder: with no usable token (November 2025), or when its watched token is revoked (May 2026) | `harden-dev.sh` finds the May 2026 watcher; the [incident-response guide](docs/incident-response.md) isolates the machine before any token is revoked | the wipe itself, once step 1 has run |
 
-- **Don't install it.** Worm versions are reported quickly: across five waves (3,547 versions), the slowest public
-  malware advisory came 77.4 hours after publish, so 7 days leaves a margin
-  ([why](docs/soak.md#why-7-days-and-when-72-hours-is-enough)). `soak` fails any locked npm or PyPI version younger
-  than 7 days, any version OSV lists as malware, and anything it cannot verify, such as a git dependency.
-  `harden-dev.sh` checks install scripts and each package manager's own release-age cooldown, and `--apply` sets them
-  for npm, pnpm, Yarn and pip.
-- **Stop the change that brings it in.** On a pull request, `diff` reports a new dependency with an install script, a
-  changed lifecycle script or workflow, a new editor task or agent hook that runs commands, and a change to the
-  install settings or baseline. The gate runs from the base commit, so a pull request cannot switch off its own checks.
-- **Find it if it got in.** `scan` looks for known worm versions, payload files by hash, exfiltration endpoints, the
-  worm's workflows (secret dumps, discussion-triggered self-hosted runners) and its editor and agent hooks.
-  `audit-org` checks a GitHub organization for the worm's repositories, runners, workflows and visibility flips.
-- **Leave less to steal.** `harden-dev.sh` reports plaintext and over-scoped tokens and credential files, and the
-  May 2026 wave's watcher that wipes the home folder when its token is revoked.
-- **Respond without setting off the wiper.** The [incident-response guide](docs/incident-response.md) isolates the
-  machine before any token is revoked; the [SIEM detections](detections/README.md) (experimental) watch the GitHub
-  audit log, CI logs and endpoints for the worm spreading.
-- **Same rules for coding agents.** The [agent skill](docs/skills.md) gives Claude Code, Codex and Cursor the same
-  install rules: lockfile installs, scripts off, exact versions at least 7 days old.
+- **Coding agents:** the [agent skill](docs/skills.md) gives Claude Code, Codex and Cursor the same install rules:
+  lockfile installs, scripts off, exact versions at least 7 days old (guidance, not enforcement).
+- **Detections:** [SIEM rules](detections/README.md) (experimental) watch for the worm's loaders, TruffleHog, runners,
+  repositories and visibility flips.
+- **Private registries:** `scan` and `diff` take a `registry-host`; `soak` fails closed behind a mirror until
+  [ADR 0007](docs/adr/0007-private-registry-mirrors.md) is built.
+- **PyPI is partial:** `soak` protects only exact-lock installs, such as `uv sync --locked`
+  ([covered installs](docs/soak.md#which-installs-the-gate-covers)). Build requirements and `.pth` files go
+  unchecked; Poetry, PDM and pipenv locks fail closed ([limits](docs/soak.md#python-limitations)).
+
+Every inert wave replay (a regression test, not a measurement) fails the recommended gate
+([replays](docs/validation.md#3-wave-replays)). With no baseline, 8 of 15 popular repositories fail `scan`'s default
+gate, all on accurate, harmless findings ([noise](docs/evidence/false-positives.md)). The rest is
+[out of scope](docs/threat-model.md#out-of-scope).
 
 ## Quickstart
 
@@ -86,29 +89,6 @@ private repository skips the SARIF upload by default
   ([limits](docs/github-action.md#what-the-gate-does-not-stop)).
 - **Pin a release commit SHA** after [checking its tag](docs/installation.md#check-a-release-tag-yourself); before
   the first release, [run from source](docs/github-action.md#running-from-source-before-a-release).
-
-## What it catches and misses
-
-| Stage | Catches | Misses |
-|---|---|---|
-| 1. Install script runs the payload | `soak`: young, OSV-listed, git-sourced versions; `harden-dev.sh`: scripts off | an old enough unreported version; without `soak`, a git dependency's `prepare` script; installs outside the lock |
-| 2. Secrets harvested | `harden-dev.sh`: plaintext and over-scoped tokens, credential files | anything at run time |
-| 3. Exfiltration | `scan`: IOC and webhook endpoints | it blocks no traffic; unlisted endpoints |
-| 4. Persistence: workflows, runners, hooks | `diff`: high-risk workflow and auto-run changes; `scan`: what landed | a push with a stolen token |
-| 5. Republish with the stolen token | `soak`: registry signals and OSV | a publish through the package's release workflow |
-| 6. Private repositories made public | `audit-org`; detection WS-AL-001 | needs GitHub Enterprise Cloud's audit log |
-| Private registry | `scan`, `diff`: `registry-host` input | `soak` fails closed ([ADR 0007](docs/adr/0007-private-registry-mirrors.md), not yet built) |
-
-The rest is [out of scope](docs/threat-model.md#out-of-scope).
-
-The 77.4 hours corrects three method artefacts. Every inert wave replay (a regression test, not a measurement) fails
-the recommended gate
-([replays](docs/validation.md#3-wave-replays)). With no baseline, 8 of 15 popular repositories fail `scan`'s
-default gate, all on accurate, harmless findings ([noise](docs/evidence/false-positives.md)).
-
-PyPI support is partial: `soak` protects only exact-lock installs, such as `uv sync --locked`
-([covered installs](docs/soak.md#which-installs-the-gate-covers)). Build requirements and `.pth` files go
-unchecked; Poetry, PDM and pipenv locks fail closed ([limits](docs/soak.md#python-limitations)).
 
 ## Documentation
 

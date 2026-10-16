@@ -33,8 +33,8 @@ IOC data (`data/iocs/`, see [iocs.md](iocs.md)). How severities map to exit code
 | [WS-EX-001](#ws-ex-001) | exfil-endpoint | scan | medium |
 | [WS-EX-002](#ws-ex-002) | ioc-exfil-endpoint | scan | set by the IOC entry |
 | [WS-NM-001](#ws-nm-001) | installed-package-install-script | scan | low, medium |
-| [WS-PS-001](#ws-ps-001) | editor-auto-run-task | scan | high |
-| [WS-PS-002](#ws-ps-002) | agent-settings-command | scan | high |
+| [WS-PS-001](#ws-ps-001) | editor-auto-run-task | scan, diff | high |
+| [WS-PS-002](#ws-ps-002) | agent-settings-command | scan, diff | high |
 | [WS-SC-900](#ws-sc-900) | file-not-checked | scan | low, high |
 | [WS-DF-001](#ws-df-001) | new-dependency-install-script | diff | high |
 | [WS-DF-002](#ws-df-002) | lifecycle-script-changed | diff | medium |
@@ -271,7 +271,7 @@ An installed package in node\_modules declares an install-time script.
 
 A VS Code task runs automatically (runOptions.runOn folderOpen or worktreeCreated) from .vscode/tasks.json, the tasks section of .vscode/settings.json, or a \*.code-workspace file, so opening the folder runs its command and those of the tasks it depends on; or a settings file sets what tasks run with (a tasks section, or the terminal profile and environment settings tasks use). Always high, whatever the command; the message adds reasons when the command matches the lifecycle-script heuristics or an IOC file name.
 
-- **Reported by:** [`scan`](cli/scan.md)
+- **Reported by:** [`scan`](cli/scan.md), [`diff`](cli/diff.md)
 - **Severity:** high. Whatever the command it runs.
 - **What to do:** High whatever it runs: each automatic task in .vscode/tasks.json or a \*.code-workspace file; each top-level dotted key there (VS Code reads "linux.tasks" as nested task settings); and, in .vscode/settings.json or a workspace's settings, one entry for any tasks section (nested or dotted tasks.\* keys) and one for the terminal settings tasks run with (terminal.integrated.automationProfile, defaultProfile, profiles, env). Remove runOn unless needed, or review and baseline it. A task's fingerprint covers it, the tasks its dependsOn reaches and its file's global settings (the whole file for a dotted key or an unresolved or over-long dependsOn); a settings entry's covers all it lists. A script a task runs (or an npm task's script), a setting it reads with ${config:...} and settings outside the repository can change without a new finding. VS Code runs automatic tasks only in a trusted workspace; while task.allowAutomaticTasks is unset it asks once per workspace, and Allow turns them on for every trusted workspace.
 
@@ -281,7 +281,7 @@ A VS Code task runs automatically (runOptions.runOn folderOpen or worktreeCreate
 
 A Claude Code settings file, plugin file, skill/command/subagent frontmatter or project .mcp.json makes Claude Code run something automatically: a hook of any event or type, a command setting such as statusLine or apiKeyHelper, an env entry outside a few inert settings, or an MCP server that runs a local command or a headersHelper. Always high, whatever the command; the message adds reasons when it matches the lifecycle-script heuristics or an IOC file name.
 
-- **Reported by:** [`scan`](cli/scan.md)
+- **Reported by:** [`scan`](cli/scan.md), [`diff`](cli/diff.md)
 - **Severity:** high. Whatever the command it runs.
 - **What to do:** High whatever it runs: every settings-file hook, command setting such as statusLine, project MCP server that runs a local command or a headersHelper, env entry other than a few inert model, limit and telemetry settings, plugin or marketplace a settings file adds, plugin file under .claude/, and skill, command or subagent file under .claude/ whose frontmatter mentions hooks or mcpServers or holds a backslash (wormsign does not parse YAML, so a mere mention counts). A symlink under .claude/ is WS-SC-900. Not reported: a skill's !\`command\` lines and allowed-tools, a plugin's other files, a plugin outside .claude/. Review each entry and any script it runs, then baseline it: the fingerprint covers the entry, so editing it reports it again, but the script can change unseen. claude -p and SDK sessions run most of these at once, an interactive session once you trust the folder. To keep hooks from running in a repository you have not reviewed, start Claude Code with --bare or --settings '{"disableAllHooks": true}'.
 

@@ -65,7 +65,7 @@ stops it; `npm install` or Yarn 1's `yarn install` resolves it fresh.
 | 4. Persistence | none: code-owner review of `.github/` does, outside wormsign | WS-DF-003 (medium, for that review); WS-GH-001, WS-GH-004, WS-GH-006, WS-GH-007, WS-PS-001, WS-PS-002; WS-OR-003, WS-OR-004; WS-AL-002, WS-AL-004, WS-CI-004, WS-EP-002 | runners on a host; deleted branches; persistence outside repositories; a push with a stolen token |
 | 5. Propagation (republish) | consumers wait out the soak (WS-SK-001) and check OSV (WS-OS-001) | WS-RG-001 to WS-RG-003; WS-LK-001 | publishes through your own trusted release workflow; your own packages are not watched |
 | 6. Visibility flip | none | WS-OR-002; WS-AL-001 | needs GitHub Enterprise Cloud for the audit log |
-| 7. Destructive fallback | only by stopping stage 1 | none | the wipe itself |
+| 7. Destructive fallback | only by stopping stage 1 | H14 (the May 2026 watcher, before it fires) | the wipe itself |
 
 ## Stage 1: install-time execution
 
@@ -185,7 +185,9 @@ MITRE ATT&CK [S9008](https://attack.mitre.org/software/S9008/)).
 
 **What the worm does.** In November 2025, with no usable GitHub or npm credentials, it "attempts to destroy all files
 in the user's home folder" ([Datadog](https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/)). Only
-stopping stage 1 prevents it, nothing detects it, and backups, the control, are out of scope.
+stopping stage 1 prevents it, and backups, the control, are out of scope. In May 2026 a watcher wipes it when its
+token is revoked: H14 finds that watcher before it fires, and the [incident-response guide](incident-response.md)
+isolates the machine before any token is revoked. Nothing detects the wipe itself.
 
 ## PyPI
 
