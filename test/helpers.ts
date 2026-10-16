@@ -13,6 +13,9 @@ export const testCtx = (extra: Parameters<typeof makeContext>[1] = {}) => makeCo
 
 export const NOW = new Date("2026-10-01T12:00:00Z");
 
+/** `s` as a pattern that matches only itself: every metacharacter escaped, "/" too, so it also fits a regex literal. */
+export const escapeRegExp = (s: string): string => s.replace(/[.*+?^${}()|[\]\\/]/g, "\\$&");
+
 export function fakeIO(over: Partial<IO> = {}): IO & { out: string; err: string } {
   const io = {
     out: "",

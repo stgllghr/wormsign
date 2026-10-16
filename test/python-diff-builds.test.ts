@@ -26,7 +26,7 @@ import { diffTrees } from "../src/diff.js";
 import { gitTree, type Tree } from "../src/tree.js";
 import { localBuild, type BuildEntry } from "../src/python/build.js";
 import type { Finding } from "../src/types.js";
-import { fakeIO, fx, testCtx } from "./helpers.js";
+import { escapeRegExp, fakeIO, fx, testCtx } from "./helpers.js";
 import { fakeNet, gitRepo, stubBin, tempTree } from "./validation-helpers.js";
 
 const IOCS = ["--iocs", fx("iocs")];
@@ -475,7 +475,7 @@ test("diff: a hook path or backend-path entry that climbs with .. from a symboli
       // A version bump: the files are the same, but what the path opens was not read, so the build is changed.
       const bump = await run(how, files("0.1.0", path), files("0.2.0", path), true);
       assert.deepEqual(builds(bump), [HIGH_APP], `${what} (${how})`);
-      assert.match(message(bump), new RegExp(`not read in full, so counted as unreadable: ${path.replace(/[.]/g, "\\.")} climbs with "\\.\\." from a symbolic link, which the OS resolves from where the link points\\): `), `${what} (${how})`);
+      assert.match(message(bump), new RegExp(`not read in full, so counted as unreadable: ${escapeRegExp(path)} climbs with "\\.\\." from a symbolic link, which the OS resolves from where the link points\\): `), `${what} (${how})`);
       // Control: app/lnk a directory, not a link: the path is read, and a version bump keeps the build.
       assert.deepEqual(builds(await run(how, files("0.1.0", path), files("0.2.0", path), false)), [], `${what}, no link (${how})`);
     }
