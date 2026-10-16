@@ -12,7 +12,7 @@ behind the figures are in [evidence/test-runs.md](evidence/test-runs.md).
 | 1. Rule coverage | Can every rule actually fire through the real CLI? | `test/validation-coverage.test.ts` | `npm test` | 46 of 46 rules produced |
 | 2. IOC recall | Does every indicator that ships reach its rule? | `test/validation-recall.test.ts` | `npm test` | every testable indicator found; hashes untestable (0 / 20) |
 | 3. Wave replays | Would the reported waves, rebuilt inertly, fail the gate? | `test/validation-replay.test.ts`, `test/fixtures/replay/` | `npm test` | all 4 fail the recommended pull-request gate (`diff`, `scan`, `soak --base`); `scan` and `diff` alone fail 3, and pass Mini Shai-Hulud, which only `soak` fails (its git dependency, WS-SK-002) |
-| 4. Mutation check | If a rule's core condition is deleted, does any test notice? | `scripts/mutation-check.mjs` | `npm run mutation` | 973 mutants in 72 modules; 651 killed at least once, 322 hand-applied by their authors with the script's run pending (section 4) |
+| 4. Mutation check | If a rule's core condition is deleted, does any test notice? | `scripts/mutation-check.mjs` | `npm run mutation` | 974 mutants in 73 modules; 651 killed at least once, 323 hand-applied by their authors with the script's run pending (section 4) |
 | Real-world evidence | How long should the soak be? How noisy is scan on real projects? Does soak work against the live registry? | [docs/evidence/](#evidence-from-real-data) | scripts named on each page | see each page |
 | On GitHub | Do the suite and the gates pass on GitHub's runners, and does the gate fail a bad change? | `.github/workflows/` | push, pull request, schedule | [Release status](installation.md#release-status) |
 
@@ -110,7 +110,7 @@ IOC-based rules, leaving the heuristics, the persistence rules and the soak gate
 ## 4. Mutation check
 
 The mutation check switches off one decision at a time (for example "never report an IOC package version") and runs
-the whole suite: a mutant the suite catches is "killed", one it misses "survives". The 973 mutants in 72 modules
+the whole suite: a mutant the suite catches is "killed", one it misses "survives". The 974 mutants in 73 modules
 (`scripts/mutants-<module>.mjs`) are hand-written, one per rule condition or safety property, not generated operator
 changes, so the check says whether the suite notices a decision going missing, not how well it pins every boundary.
 
@@ -122,7 +122,7 @@ ten-minute timeout and counts as killed; a hang outside any test file hits the 2
 reported as TIMEOUT.
 
 ```sh
-npm run mutation -- --check             # 973 mutants, every one names text that occurs exactly once
+npm run mutation -- --check             # 974 mutants, every one names text that occurs exactly once
 npm run mutation -- --module <name>     # one module; --list-modules names them
 npm run mutation -- --only "<name>"     # named mutants
 ```
@@ -132,10 +132,10 @@ and on demand (`gh workflow run ci.yml -f slow=true`), one job per module: `--li
 a new module gets a job without a workflow edit, and the script refuses a module of more than 18 mutants.
 `test/mutation-modules.test.ts` checks both.
 
-651 of the 973 have been killed at least once. The other 322, added or changed in the pre-publication reviews, were
-hand-applied by their authors against the tests that cover them; the script has not run them yet. No single run has
-yet covered all 973 on one commit; that first full CI run in this repository will be, and it will be linked from
-[Release status](installation.md#release-status). The kill record, the timings and the module list are in
+651 of the 974 have been killed at least once. The other 323, added or changed in the pre-publication reviews or
+since, were hand-applied by their authors against the tests that cover them; the script has not run them yet. No
+single run has yet covered all 974 on one commit; that first full CI run in this repository will be, and it will be
+linked from [Release status](installation.md#release-status). The kill record, the timings and the module list are in
 [evidence/test-runs.md](evidence/test-runs.md#mutation-check).
 
 **Proves:** for each listed decision, at least one test fails when it is removed. **Does not prove:** that the

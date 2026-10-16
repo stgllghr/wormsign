@@ -1,0 +1,6 @@
+# OSV-Scanner, which OpenSSF Scorecard's Vulnerabilities check runs, reads this file for the lockfile next to it only.
+# That lockfile is an inert test fixture: wormsign's tests read it, and nothing installs it or runs what it locks.
+
+[[IgnoredVulns]]
+id = "GHSA-67mh-4wv8-2f99"
+reason = "Test fixture, never installed: esbuild 0.21.5 is a devDependency the lockfile tests read, and no esbuild development server runs."

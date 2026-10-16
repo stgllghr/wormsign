@@ -4,6 +4,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync, spawnSync } from "node:child_process";
+import type { SpawnSyncReturns } from "node:child_process";
 import { existsSync, mkdtempSync, readFileSync, statSync, symlinkSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
@@ -55,7 +56,14 @@ test("--output replaces a regular file's content and creates a new one with mode
   assert.equal(await run(["scan", fx("clean"), "--format", "json", "--output", out], fakeIO()), 0);
   assert.equal((JSON.parse(readFileSync(out, "utf8")) as { findings: unknown[] }).findings.length, 0, "the old content is gone, not left after the report");
   const fresh = join(d, "fresh.json");
-  const r = spawnSync("/bin/sh", ["-c", 'umask 000 && exec "$0" "$1" scan "$2" --format json --output "$3"', process.execPath, CLI, fx("clean"), fresh], { encoding: "utf8", timeout: 60_000 });
+  // The child inherits this process's umask, 000 for the spawn, so the mode is the one --output chooses.
+  const umask = process.umask(0o000);
+  let r: SpawnSyncReturns<string>;
+  try {
+    r = spawnSync(process.execPath, [CLI, "scan", fx("clean"), "--format", "json", "--output", fresh], { encoding: "utf8", timeout: 60_000 });
+  } finally {
+    process.umask(umask);
+  }
   assert.equal(r.status, 0, r.stderr);
   assert.equal(statSync(fresh).mode & 0o777, 0o644);
 });

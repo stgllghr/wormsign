@@ -154,6 +154,13 @@ test("soak: one request per package name, scoped names are encoded", async () =>
   assert.equal(registryUrl("https://r.example/", "@a/b"), "https://r.example/@a%2Fb");
 });
 
+test("soak: a name is one path segment of the registry URL, whatever slashes it holds", () => {
+  // The lockfile readers refuse such a name (src/lockfile/identity.ts); the URL does not rely on that.
+  const url = registryUrl("https://r.example", "a/../../b");
+  assert.equal(url, "https://r.example/a%2F..%2F..%2Fb");
+  assert.equal(new URL(url).pathname, "/a%2F..%2F..%2Fb", "no dot-segment reaches another document");
+});
+
 test("soak: git and non-registry tarballs fail closed and are never looked up by name; local code is listed, not failed", async () => {
   const r = registry({ ok: { "1.0.0": 500 }, gitdep: { "1.0.0": 500 }, offsite: { "1.0.0": 500 }, mirror: { "1.0.0": 500 }, patched: { "1.0.0": 500 } });
   const l = lock({ ok: "1.0.0" });
