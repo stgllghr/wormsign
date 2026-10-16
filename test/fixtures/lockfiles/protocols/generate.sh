@@ -113,6 +113,7 @@ done
 pkg "$WORK/pnpm11-runtime" '{"name":"fixture-runtime","version":"1.0.0","private":true,"devEngines":{"runtime":{"name":"node","version":"22.11.0","onFail":"download"}},"dependencies":{"is-number":"7.0.0"}}'
 (cd "$WORK" && npx -y pnpm@11.16.0 --dir "$WORK/pnpm11-runtime" install --lockfile-only --ignore-scripts >/dev/null)
 save "$WORK/pnpm11-runtime/pnpm-lock.yaml" pnpm11-runtime
+# bun 1.1.38 has an advisory; pnpm11-runtime-bun/osv-scanner.toml, which save leaves in place, tells OSV-Scanner why.
 for rt in deno:2.1.4 bun:1.1.38; do
   d="$WORK/pnpm11-runtime-${rt%%:*}" && pkg "$d" "{\"name\":\"fixture-runtime\",\"version\":\"1.0.0\",\"private\":true,\"devEngines\":{\"runtime\":{\"name\":\"${rt%%:*}\",\"version\":\"${rt#*:}\",\"onFail\":\"download\"}}}"
   (cd "$WORK" && npx -y pnpm@11.16.0 --dir "$d" install --lockfile-only --ignore-scripts >/dev/null) && save "$d/pnpm-lock.yaml" "pnpm11-runtime-${rt%%:*}"

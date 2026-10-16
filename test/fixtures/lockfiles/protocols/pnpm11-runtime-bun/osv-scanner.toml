@@ -1,0 +1,6 @@
+# OSV-Scanner, which OpenSSF Scorecard's Vulnerabilities check runs, reads this file for the lockfile next to it only.
+# That lockfile is an inert test fixture: wormsign's tests read it, and nothing installs it or runs what it locks.
+
+[[IgnoredVulns]]
+id = "GHSA-4j66-8f4r-3pjx"
+reason = "Test fixture, never installed: a pnpm 11 devEngines runtime lock of bun 1.1.38, kept to test how wormsign reads runtime entries; no bun runs from it."

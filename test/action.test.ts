@@ -8,6 +8,7 @@ import { cpSync, existsSync, mkdtempSync, readFileSync, rmSync, symlinkSync, wri
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
+import { escapeRegExp } from "./helpers.js";
 
 const ROOT = fileURLToPath(new URL("../../", import.meta.url));
 const SCRIPT = join(ROOT, "scripts", "ci-action.mjs");
@@ -533,7 +534,7 @@ function noNetwork(dir: string, mode: "old" | "refused"): string {
       "  const url = String(input);",
       '  if (url === "https://api.osv.dev/v1/querybatch") return new Response(JSON.stringify({ results: JSON.parse(String(init.body)).queries.map(() => ({})) }));',
       // The public registry, or the private one at ACME (MIRROR) that the registry tests point soak at.
-      `  const m = /^(https:\\/\\/registry\\.npmjs\\.org|${MIRROR.replace(/[./]/g, "\\$&")})\\/(.*)$/.exec(url);`,
+      `  const m = /^(https:\\/\\/registry\\.npmjs\\.org|${escapeRegExp(MIRROR)})\\/(.*)$/.exec(url);`,
       '  if (m && MODE === "refused") throw new TypeError("fetch failed", { cause: Object.assign(new Error("connect ECONNREFUSED 127.0.0.9:443"), { code: "ECONNREFUSED" }) });',
       "  if (m) {",
       "    const name = decodeURIComponent(m[2]);",
@@ -746,7 +747,7 @@ test("action: the gate passes a private registry's lock with registry-host and r
   const high = (r: { out: Record<string, string> }) => soakRun(r)?.results.filter((x) => x.level === "error").map((x) => x.ruleId);
   try {
     assert.equal(both.out["exit-code"], "0", both.stdout);
-    assert.match(both.stdout, new RegExp(`^wormsign soak \\S+ --base [0-9a-f]{40} --registry ${MIRROR.replace(/[./]/g, "\\$&")}/ --no-osv$`, "m"));
+    assert.ok(both.stdout.split("\n").some((l) => /^wormsign soak \S+ --base [0-9a-f]{40} --registry \S+ --no-osv$/.test(l) && l.endsWith(` --registry ${MIRROR}/ --no-osv`)), both.stdout);
     assert.deepEqual(high(both), []);
     assert.equal(hostOnly.out["exit-code"], "1", hostOnly.stdout);
     assert.ok(high(hostOnly)?.includes("WS-SK-002"), "soak asks registry.npmjs.org, which the lock does not resolve from");

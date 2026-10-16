@@ -15,6 +15,9 @@ It supports [validation.md](../validation.md) and [Release status](../installati
   | 23.11.0 | 1,348 | 1,347 | 0 | 1 | 113 s |
 
   Node 23 is not a release this project supports. The first runs on GitHub's runners and on Linux are CI's jobs.
+- **The code scanning fixes** (branch `fix/code-scanning`, on 6575b22), before their merge: `npm test` on 2026-10-16,
+  macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,349 tests, 1,348 passed, 0 failed, 1 skipped, in 118 s. It adds
+  one test in `test/soak.test.ts`.
 - **The Python PR-mode change** (branch `pre/py-prmode`, on 70841f2), before its merge: `npm test` on 2026-10-15,
   macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,348 tests, 1,347 passed, 0 failed, 1 skipped, in 105 s. It adds
   the 19 tests of `test/soak-python-prmode.test.ts`, ten in `test/soak-python-gates.test.ts`, one each in
@@ -33,13 +36,13 @@ It supports [validation.md](../validation.md) and [Release status](../installati
 
 ## Mutation check
 
-**Kill record.** 651 of the 973 mutants, those unchanged since 8baf3ce, have each been killed at least once, locally
+**Kill record.** 651 of the 974 mutants, those unchanged since 8baf3ce, have each been killed at least once, locally
 on macOS (Node 23.11.0) between 2026-10-02 and 2026-10-15: each on the branch that added it, by the full suite or by
 the test files that cover it, or in a batch with `--only` or `--module` after the unmutated suite passed first. The
-other 322, added or changed by the pre-publication reviews after 8baf3ce, were hand-applied by their authors one at a
-time on a scratch copy against the test files that cover them, and every one was killed; the script has not run them
-yet (runner pass pending; the module table counts them). The batches, with `--only` unless named, under the module
-names of the time:
+other 323, added or changed after 8baf3ce (322 by the pre-publication reviews, 1 for a code scanning alert), were
+hand-applied by their authors one at a time on a scratch copy against the test files that cover them, and every one
+was killed; the script has not run them yet (runner pass pending; the module table counts them). The batches, with
+`--only` unless named, under the module names of the time:
 
 | Date | Mutants | Killed (minutes) |
 |---|---|---|
@@ -68,7 +71,7 @@ with exit 1 before any test, and a mutant that only edits a comment is reported 
 caught real drift: after the lockfile, file-hash and config-name code was rewritten, five `STALE` lines, and those
 mutants were pointed at the new code.
 
-**The 72 modules** (`npm run mutation -- --list-modules`). *Hand-applied* counts the mutants added or changed after
+**The 73 modules** (`npm run mutation -- --list-modules`). *Hand-applied* counts the mutants added or changed after
 8baf3ce: hand-applied by their authors, runner pass pending.
 
 | Module | Mutants | Hand-applied | What they switch off |
@@ -83,6 +86,7 @@ mutants were pointed at the new code.
 | `core-pm-code` | 11 |  | WS-LC-004; the `.npmrc` keys followed |
 | `core-diff` | 17 |  | WS-DF-001 to WS-DF-006, the base's baseline |
 | `core-soak` | 16 | 3 | WS-SK-001 to WS-SK-004, OSV privacy, the 7-day default |
+| `code-scanning` | 1 | 1 | a package name kept as one path segment of soak's registry URL |
 | `bunfig` | 7 | 7 | `bunfig.toml` headers and strings, as `soak` and H07 read them |
 | `outage-mode` | 17 | 17 | `--on-outage warn`: the outage classifier, what warn reports |
 | `outage-host` | 13 | 13 | an outage is the whole host silent for the run, then probed |

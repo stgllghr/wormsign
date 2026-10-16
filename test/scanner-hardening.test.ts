@@ -112,7 +112,7 @@ test("scan: unparseable package.json, lockfile and installed manifest are high f
 test("scan: an oversized or binary manifest or workflow is a finding, and the workflow file-name IOC still fires", () => {
   const pad = " ".repeat(2 * 1024 * 1024);
   const d = project({
-    "package.json": EVIL_PKG.replace("{", `{${pad}`),
+    "package.json": `{${pad}${EVIL_PKG.slice(1)}`, // EVIL_PKG is a JSON object: the padding goes inside its "{"
     "a/package.json": Buffer.from('{"name":"a"}\0'),
     ".github/workflows/wormsign-marker-workflow.yml": `on: push${pad}\n`,
     "dist/big.js": `x${pad}`,

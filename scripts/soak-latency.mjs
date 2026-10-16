@@ -140,7 +140,7 @@ if (!(await ghsaFor(control))?.length || !(await osvFor(control))?.vulns?.length
 // `time` but leaves `versions`; the removal itself is not timestamped.
 const registry = new Map();
 await pool(names, async (name) => {
-  const doc = await getJson(`https://registry.npmjs.org/${name.replace("/", "%2F")}`, {},
+  const doc = await getJson(`https://registry.npmjs.org/${name.replaceAll("/", "%2F")}`, {},
     (d) => ({ time: d.time, versions: Object.fromEntries(Object.keys(d.versions ?? {}).map((v) => [v, 1])) }));
   registry.set(name, doc && { time: doc.time ?? {}, versions: Object.keys(doc.versions ?? {}) });
 });
