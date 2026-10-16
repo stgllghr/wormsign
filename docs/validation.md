@@ -8,7 +8,7 @@ behind the figures are in [evidence/test-runs.md](evidence/test-runs.md).
 
 | Layer | The question it answers | Where | Run with | Latest result |
 |---|---|---|---|---|
-| Test suite | Does each check behave as written? | `test/*.test.ts` (77 files) | `npm test` | 1,348 tests: 1,347 pass, 1 skipped (a differential test that needs a live pip, named by `WORMSIGN_PIP_REF`); the real pip and uv suites of `test/harden-real.test.ts` run only with `HARDEN_REAL=1` |
+| Test suite | Does each check behave as written? | `test/*.test.ts` (77 files) | `npm test` | 1,349 tests: 1,348 pass, 1 skipped (a differential test that needs a live pip, named by `WORMSIGN_PIP_REF`); the real pip and uv suites of `test/harden-real.test.ts` run only with `HARDEN_REAL=1` |
 | 1. Rule coverage | Can every rule actually fire through the real CLI? | `test/validation-coverage.test.ts` | `npm test` | 46 of 46 rules produced |
 | 2. IOC recall | Does every indicator that ships reach its rule? | `test/validation-recall.test.ts` | `npm test` | every testable indicator found; hashes untestable (0 / 20) |
 | 3. Wave replays | Would the reported waves, rebuilt inertly, fail the gate? | `test/validation-replay.test.ts`, `test/fixtures/replay/` | `npm test` | all 4 fail the recommended pull-request gate (`diff`, `scan`, `soak --base`); `scan` and `diff` alone fail 3, and pass Mini Shai-Hulud, which only `soak` fails (its git dependency, WS-SK-002) |
@@ -115,10 +115,11 @@ the whole suite: a mutant the suite catches is "killed", one it misses "survives
 changes, so the check says whether the suite notices a decision going missing, not how well it pins every boundary.
 
 `scripts/mutation-check.mjs` runs `npm test` on a temporary copy of the repository per mutant, after the unmutated
-copy passes. It exits 1 if any mutant survives, does not compile, times out, or names text its file no longer
-contains exactly once. Mutants run one at a time because the suite has timing assertions. A hang inside a test file
-hits that file's ten-minute timeout and counts as killed; a hang outside any test file hits the 20-minute limit per
-mutant and is reported as TIMEOUT.
+copy passes; when that copy fails, it prints each failed test's error (message and first stack frames) and stops. It
+exits 1 if any mutant survives, does not compile, times out, or names text its file no longer contains exactly once.
+Mutants run one at a time because the suite has timing assertions. A hang inside a test file hits that file's
+ten-minute timeout and counts as killed; a hang outside any test file hits the 20-minute limit per mutant and is
+reported as TIMEOUT.
 
 ```sh
 npm run mutation -- --check             # 973 mutants, every one names text that occurs exactly once
