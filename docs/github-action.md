@@ -121,7 +121,7 @@ jobs:
         with:
           fetch-depth: 0 # diff, scan and soak read the base commit
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           check-latest: true # use the latest 24.x, not an older one from the runner's tool cache
@@ -186,7 +186,7 @@ jobs:
 
       # npm 11.10 or newer (bundled from Node 24.14.1) enforces min-release-age; soak checks the npm that will run.
       # check-latest: without it, setup-node reuses any 24.x in the runner's tool cache, which may be older.
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           check-latest: true # use the latest 24.x, not an older one from the runner's tool cache
@@ -207,7 +207,7 @@ jobs:
 
       - name: Upload SARIF as an artifact
         if: always()
-        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: wormsign-sarif
           path: ${{ runner.temp }}/sarif/
@@ -221,7 +221,7 @@ jobs:
       - name: Upload SARIF to code scanning
         if: always() && steps.gate.outputs.sarif != '' && github.event.pull_request.head.repo.full_name == github.repository
         continue-on-error: ${{ github.event.repository.private }}
-        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        uses: github/codeql-action/upload-sarif@24c54180a607b1449ed407dd24f251e4e9147c8d # v4.38.3
         with:
           sarif_file: ${{ steps.gate.outputs.sarif }}
 
@@ -245,7 +245,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           persist-credentials: false
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: 24
           package-manager-cache: false
