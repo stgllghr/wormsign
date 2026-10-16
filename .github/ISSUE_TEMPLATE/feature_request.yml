@@ -1,0 +1,33 @@
+# Issue form syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+name: Feature request
+description: Suggest a new check, output, option or improvement.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        wormsign stays small: no npm runtime dependencies, no network in `scan` or `diff`, and every check fails closed.
+        A proposal that fits those constraints, and names the attack behaviour it addresses, is the easiest to accept.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What attack behaviour or workflow gap does this address? Link a public write-up if it is about worm behaviour.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: What wormsign should do, and how it would report it (rule, severity, output).
+    validations:
+      required: true
+  - type: textarea
+    id: false-positives
+    attributes:
+      label: False positives and limits
+      description: What legitimate projects would this flag, and what would it still miss?
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered

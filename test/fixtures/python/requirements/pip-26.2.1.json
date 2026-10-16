@@ -1,0 +1,3008 @@
+{
+  "files": {
+    "abbreviated-hash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "abbreviated-hash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "abbreviated-hash.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "abbreviated-require-hashes.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "abbreviated-require-hashes.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "abbreviated-require-hashes.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "coding-latin1.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "coding-latin1.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "coding-latin1.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "comment-ends-with-backslash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "comment-ends-with-backslash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "comment-ends-with-backslash.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "config-settings.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "config-settings.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "config-settings.txt",
+          "line": 2,
+          "opts": {
+            "config_settings": {
+              "key": "value"
+            },
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "continuation-broken-by-comment.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "continuation-broken-by-comment.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "continuation-broken-by-comment.txt",
+          "line": 2,
+          "opts": {},
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "continuation-broken-by-comment.txt",
+          "line": 4,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "ctl-delete.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ctl-delete.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ctl-delete.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81\u007f"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ctl-start-of-heading.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ctl-start-of-heading.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ctl-start-of-heading.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "\u0001",
+          "constraint": false,
+          "file": "ctl-start-of-heading.txt",
+          "line": 3,
+          "opts": {},
+          "requirement": "\u0001"
+        }
+      ],
+      "require_hashes": true
+    },
+    "double-backslash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "double-backslash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "double-backslash.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "double-dash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "double-dash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "double-dash.txt",
+          "line": 2,
+          "opts": {},
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "editable.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "editable.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "editable.txt",
+          "line": 2,
+          "opts": {
+            "editables": [
+              "."
+            ]
+          },
+          "requirement": "."
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "editable.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "empty-comments.txt": {
+      "lines": [],
+      "require_hashes": false
+    },
+    "empty-file.txt": {
+      "lines": [],
+      "require_hashes": false
+    },
+    "env-var-in-comment.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "env-var-in-comment.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "env-var-in-comment.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "env-var.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "env-var.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==${SIX_VERSION}",
+          "constraint": false,
+          "file": "env-var.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==${SIX_VERSION}"
+        }
+      ],
+      "require_hashes": true
+    },
+    "extra-index-url.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "extra-index-url.txt",
+          "line": 1,
+          "opts": {
+            "extra_index_urls": [
+              "https://example.invalid/simple"
+            ]
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "extra-index-url.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "extra-index-url.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "find-links.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "find-links.txt",
+          "line": 1,
+          "opts": {
+            "find_links": [
+              "./wheels"
+            ]
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "find-links.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "find-links.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "hash-before-requirement.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "hash-before-requirement.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "hash-before-requirement.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "hash-on-own-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "hash-on-own-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "hash-on-own-line.txt",
+          "line": 2,
+          "opts": {},
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "hash-on-own-line.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-and-require-hashes.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/base.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "include-attached.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "include-attached.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/base.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-cycle.txt": {
+      "error": "RequirementsFileParseError: <corpus>/included/cycle-a.txt recursively references itself in <corpus>/included/cycle-b.txt and again in include-cycle.txt"
+    },
+    "include-equals.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "include-equals.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/=eq.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-hash-in-path.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "include-hash-in-path.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/hash#x.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-missing.txt": {
+      "error": "InstallationError: Could not open requirements file: [Errno 2] No such file or directory: '<corpus>/included/missing.txt'"
+    },
+    "include-on-requirement-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "include-on-requirement-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "include-on-requirement-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            },
+            "requirements": [
+              "included/base.txt"
+            ]
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-outside.txt": {
+      "error": "InstallationError: Could not open requirements file: [Errno 2] No such file or directory: '<corpus>/../outside.txt'"
+    },
+    "include-twice-on-a-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "include-twice-on-a-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/base.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "include-url.txt": {
+      "error": "NetworkConnectionError: 404 Client Error: FileNotFoundError for url: file:///nonexistent/requirements.txt"
+    },
+    "included/=eq.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/=eq.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/base.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/base.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/constraint-with-r.txt": {
+      "lines": [
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/reqs-in-constraint.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/constraints.txt": {
+      "lines": [
+        {
+          "args": "packaging==25.0",
+          "constraint": false,
+          "file": "included/constraints.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484",
+                "d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"
+              ]
+            }
+          },
+          "requirement": "packaging==25.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/cycle-a.txt": {
+      "error": "RequirementsFileParseError: <corpus>/included/cycle-a.txt recursively references itself in <corpus>/included/cycle-b.txt"
+    },
+    "included/cycle-b.txt": {
+      "error": "RequirementsFileParseError: <corpus>/included/cycle-b.txt recursively references itself in <corpus>/included/cycle-a.txt"
+    },
+    "included/eq.txt": {
+      "lines": [
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/eq.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/equals.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/=eq.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/hash": {
+      "lines": [
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/hash",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/hash#x.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/hash#x.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/reqs-in-constraint.txt": {
+      "lines": [
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/reqs-in-constraint.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": false
+    },
+    "included/require-hashes-only.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "included/require-hashes-only.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "included/with-require-hashes.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "included/with-require-hashes.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/with-require-hashes.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "index-url.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "index-url.txt",
+          "line": 1,
+          "opts": {
+            "index_url": "https://example.invalid/simple"
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "index-url.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "index-url.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "invalid-utf8.txt": {
+      "error": "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in position 189: invalid start byte"
+    },
+    "leftover-text.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "leftover-text.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "leftover-text.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "local-version.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "local-version.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0+local",
+          "constraint": false,
+          "file": "local-version.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0+local"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-coding-utf8.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-coding-utf8.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-coding-utf8.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-comments.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-comments.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-comments.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-constraint.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-constraint.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-constraint.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "packaging==25.0",
+          "constraint": true,
+          "file": "included/constraints.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484",
+                "d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"
+              ]
+            }
+          },
+          "requirement": "packaging==25.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-continuation.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-continuation.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0    ",
+          "constraint": false,
+          "file": "lock-continuation.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0    "
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-crlf.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-crlf.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-crlf.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "lock-crlf.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-extras-marker.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-extras-marker.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six[test]==1.17.0 ; python_version >= \"3.8\"",
+          "constraint": false,
+          "file": "lock-extras-marker.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six[test]==1.17.0 ; python_version >= \"3.8\""
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-hash-space-value.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-hash-space-value.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-hash-space-value.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-include.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-include.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "included/base.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "lock-include.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-one-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-one-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-one-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "lock-one-line.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        },
+        {
+          "args": "packaging==25.0",
+          "constraint": false,
+          "file": "lock-one-line.txt",
+          "line": 4,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484",
+                "d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"
+              ]
+            }
+          },
+          "requirement": "packaging==25.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-only-require-hashes.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-only-require-hashes.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-require-hashes-in-include.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "included/with-require-hashes.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/with-require-hashes.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-require-hashes-in-include.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-spaces-around-eq.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-spaces-around-eq.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six == 1.17.0",
+          "constraint": false,
+          "file": "lock-spaces-around-eq.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six == 1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-trailing-backslash-eof.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-trailing-backslash-eof.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-trailing-backslash-eof.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-utf8-bom.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-utf8-bom.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "lock-utf8-bom.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-uv-export.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-uv-export.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "idna==3.20    ",
+          "constraint": false,
+          "file": "lock-uv-export.txt",
+          "line": 4,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44",
+                "ab7ae7122974553370f0bdb919e1a960b2cd1bc1ef0276416d896db81c14582c"
+              ]
+            }
+          },
+          "requirement": "idna==3.20    "
+        },
+        {
+          "args": "six==1.17.0    ",
+          "constraint": false,
+          "file": "lock-uv-export.txt",
+          "line": 8,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0    "
+        }
+      ],
+      "require_hashes": true
+    },
+    "lock-uv-pip-compile.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "lock-uv-pip-compile.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "idna==3.10    ",
+          "constraint": false,
+          "file": "lock-uv-pip-compile.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10    "
+        },
+        {
+          "args": "packaging==25.0    ",
+          "constraint": false,
+          "file": "lock-uv-pip-compile.txt",
+          "line": 6,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "29572ef2b1f17581046b3a2227d5c611fb25ec70ca1ba8554b24b0e69331a484",
+                "d443872c98d677bf60f6a1f2f8c1cb748e8fe762d2bf9d3148b5599295b0fc4f"
+              ]
+            }
+          },
+          "requirement": "packaging==25.0    "
+        },
+        {
+          "args": "six==1.17.0    ",
+          "constraint": false,
+          "file": "lock-uv-pip-compile.txt",
+          "line": 10,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0    "
+        }
+      ],
+      "require_hashes": true
+    },
+    "md5-hash.txt": {
+      "error": "RequirementsFileParseError: Invalid requirement: six==1.17.0 --hash=md5:0123456789abcdef0123456789abcdef"
+    },
+    "mixed-hashes.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "mixed-hashes.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "mixed-hashes.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ],
+              "sha512": [
+                "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "nbsp-before-comment.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "nbsp-before-comment.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "nbsp-before-comment.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "no-binary.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "no-binary.txt",
+          "line": 1,
+          "opts": {
+            "format_control": "FormatControl({':all:'}, set())"
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "no-binary.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "no-binary.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "no-index.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "no-index.txt",
+          "line": 1,
+          "opts": {
+            "no_index": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "no-index.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "no-index.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "no-require-hashes.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "no-require-hashes.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "no-require-hashes.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": false
+    },
+    "nul-byte.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "nul-byte.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "nul-byte.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "\u0000",
+          "constraint": false,
+          "file": "nul-byte.txt",
+          "line": 3,
+          "opts": {},
+          "requirement": "\u0000"
+        }
+      ],
+      "require_hashes": true
+    },
+    "only-binary.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "only-binary.txt",
+          "line": 1,
+          "opts": {
+            "format_control": "FormatControl(set(), {':all:'})"
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "only-binary.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "only-binary.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "path-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "path-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "./vendor/six-1.17.0-py2.py3-none-any.whl",
+          "constraint": false,
+          "file": "path-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "./vendor/six-1.17.0-py2.py3-none-any.whl"
+        }
+      ],
+      "require_hashes": true
+    },
+    "prefer-binary.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "prefer-binary.txt",
+          "line": 1,
+          "opts": {
+            "prefer_binary": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "prefer-binary.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "prefer-binary.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "quoted-hash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "quoted-hash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "quoted-hash.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "require-hashes-in-constraint.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "require-hashes-in-constraint.txt",
+          "line": 1,
+          "opts": {},
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "",
+          "constraint": true,
+          "file": "included/require-hashes-only.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "require-hashes-in-include-unhashed.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "require-hashes-in-include-unhashed.txt",
+          "line": 1,
+          "opts": {},
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "included/require-hashes-only.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        }
+      ],
+      "require_hashes": true
+    },
+    "require-hashes-on-requirement-line.txt": {
+      "lines": [
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "require-hashes-on-requirement-line.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            },
+            "require_hashes": true
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": false
+    },
+    "requirements-in-constraint.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "requirements-in-constraint.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "requirements-in-constraint.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "included/reqs-in-constraint.txt",
+          "line": 1,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-bare-cr.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-bare-cr.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-bare-cr.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-escape-control.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-escape-control.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-escape-control.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81\u001b"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-file-separator.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-file-separator.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-file-separator.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "sep-file-separator.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-form-feed.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-form-feed.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-form-feed.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "sep-form-feed.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-line-separator.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-line-separator.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-line-separator.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "sep-line-separator.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-next-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-next-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-next-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "sep-next-line.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sep-vertical-tab.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sep-vertical-tab.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sep-vertical-tab.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "sep-vertical-tab.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "sha512-only.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "sha512-only.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "sha512-only.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha512": [
+                "abababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababababab"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "tab-before-hash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "tab-before-hash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0\t--hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+          "constraint": false,
+          "file": "tab-before-hash.txt",
+          "line": 2,
+          "opts": {},
+          "requirement": "six==1.17.0\t--hash=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274"
+        }
+      ],
+      "require_hashes": true
+    },
+    "triple-equals.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "triple-equals.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six===1.17.0",
+          "constraint": false,
+          "file": "triple-equals.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six===1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "trusted-host.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "trusted-host.txt",
+          "line": 1,
+          "opts": {
+            "trusted_hosts": [
+              "example.invalid"
+            ]
+          },
+          "requirement": null
+        },
+        {
+          "args": "",
+          "constraint": false,
+          "file": "trusted-host.txt",
+          "line": 2,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "trusted-host.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "unhashed-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "unhashed-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "unhashed-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "unhashed-line.txt",
+          "line": 3,
+          "opts": {},
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "unpinned.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "unpinned.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six>=1.16",
+          "constraint": false,
+          "file": "unpinned.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six>=1.16"
+        }
+      ],
+      "require_hashes": true
+    },
+    "uppercase-hash.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "uppercase-hash.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "uppercase-hash.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721F391ED90541FDDACAB5ACF947AA0D3DC7D27B2E1E8EDA2BE8970586C3274"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "url-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "url-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six @ https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl",
+          "constraint": false,
+          "file": "url-line.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six @ https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl"
+        }
+      ],
+      "require_hashes": true
+    },
+    "utf16.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "utf16.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "utf16.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "vcs-line.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "vcs-line.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "git+https://github.com/benjaminp/six@1.17.0#egg=six",
+          "constraint": false,
+          "file": "vcs-line.txt",
+          "line": 2,
+          "opts": {},
+          "requirement": "git+https://github.com/benjaminp/six@1.17.0#egg=six"
+        }
+      ],
+      "require_hashes": true
+    },
+    "wildcard.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "wildcard.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.*",
+          "constraint": false,
+          "file": "wildcard.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.*"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-bom-comment.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-bom-comment.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-bom-comment.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "\ufeff# a comment idna==3.10",
+          "constraint": false,
+          "file": "ws-bom-comment.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "\ufeff# a comment idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-bom-middle.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-bom-middle.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-bom-middle.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "\ufeffidna==3.10",
+          "constraint": false,
+          "file": "ws-bom-middle.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "\ufeffidna==3.10"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-em-space-start.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-em-space-start.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-em-space-start.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-nbsp-start.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-nbsp-start.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-nbsp-start.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-unit-separator-comment.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-unit-separator-comment.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-unit-separator-comment.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        }
+      ],
+      "require_hashes": true
+    },
+    "ws-unit-separator.txt": {
+      "lines": [
+        {
+          "args": "",
+          "constraint": false,
+          "file": "ws-unit-separator.txt",
+          "line": 1,
+          "opts": {
+            "require_hashes": true
+          },
+          "requirement": null
+        },
+        {
+          "args": "six==1.17.0",
+          "constraint": false,
+          "file": "ws-unit-separator.txt",
+          "line": 2,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274",
+                "ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81"
+              ]
+            }
+          },
+          "requirement": "six==1.17.0"
+        },
+        {
+          "args": "idna==3.10",
+          "constraint": false,
+          "file": "ws-unit-separator.txt",
+          "line": 3,
+          "opts": {
+            "hashes": {
+              "sha256": [
+                "12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9",
+                "946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3"
+              ]
+            }
+          },
+          "requirement": "idna==3.10"
+        }
+      ],
+      "require_hashes": true
+    }
+  },
+  "parser": "pip._internal.req.req_file.RequirementsFileParser with get_line_parser(None)",
+  "pip": "26.2.1"
+}

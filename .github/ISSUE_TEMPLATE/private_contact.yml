@@ -1,0 +1,24 @@
+# Issue form syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+# config.yml turns blank issues off, and users with Read or Triage roles then see only these templates
+# (https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository).
+# This form is the detail-free way to ask for a private channel, so nobody is pushed into a public form.
+name: Request a private contact
+description: Ask the maintainer to contact you privately. Put no details here; this issue is public.
+title: "Private contact request"
+labels: ["private-contact"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        **This issue is public. Do not describe the problem here.** No vulnerability details, no names, no evidence.
+        For a security vulnerability, use private vulnerability reporting first (Security tab, "Report a
+        vulnerability"); use this form only if that button is missing. The maintainer will reply on this issue
+        with a private way to continue.
+  - type: dropdown
+    id: topic
+    attributes:
+      label: Topic
+      description: Optional. Choose a category only if you are comfortable saying even that much in public.
+      options:
+        - Security report
+        - Code of conduct concern

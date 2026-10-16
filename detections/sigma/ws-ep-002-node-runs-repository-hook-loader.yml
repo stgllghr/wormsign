@@ -1,0 +1,53 @@
+title: Node.js Runs a Repository's .claude or .vscode setup.mjs (Shai-Hulud Repository Hook)
+id: cd138544-3cbc-4a67-ae87-a41c2140d16c
+name: ws_ep_002_node_runs_repository_hook_loader
+status: experimental
+description: >-
+  The 2026-08 wave commits five files to every branch it can reach: .vscode/tasks.json defines a task
+  that runs `node .claude/setup.mjs` when a folder opens in VS Code, and .claude/settings.json a Claude
+  Code SessionStart hook that runs `node .vscode/setup.mjs` (JFrog). Both setup.mjs files are the Bun
+  loader, so opening an infected checkout in the editor, or starting an agent session in it, runs the
+  worm again on another machine. The 2026-04 wave (Mini Shai-Hulud) pushed files with the same names
+  (Picus), whose content is not published. This matches node running either loader. VS Code runs a shell
+  task, and Claude Code a command hook, through a shell, and process telemetry names only the direct
+  parent, so the rule does not try to tell the editor from the agent. When the loader then starts Bun,
+  WS-EP-001 fires as well. wormsign id WS-EP-002.
+references:
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  - https://www.picussecurity.com/resource/blog/mini-shai-hulud-the-npm-supply-chain-worm-explained
+  - https://attack.mitre.org/software/S9008/
+author: wormsign
+date: 2026-10-15
+tags:
+  - attack.initial-access
+  - attack.t1195.001
+logsource:
+  category: process_creation
+detection:
+  node:
+    Image|endswith:
+      - '/node'
+      - '\node.exe'
+  repository_loader:
+    # The paths the hook files name, relative to the checkout; with a forward slash on Windows too, as JSON writes it.
+    CommandLine|contains:
+      - '.claude/setup.mjs'
+      - '.vscode/setup.mjs'
+      - '.claude\setup.mjs'
+      - '.vscode\setup.mjs'
+  condition: node and repository_loader
+falsepositives:
+  - A project that keeps its own setup.mjs in .claude/ or .vscode/ and runs it with node.
+level: high
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes and `sigma check` accepts them.
+# Inert, synthetic process_creation events, one JSON object per line, written to fit the rule rather than captured.
+examples:
+  positive: |
+    {"Image":"/usr/local/bin/node","ParentImage":"/bin/zsh","CommandLine":"node .claude/setup.mjs","ParentCommandLine":"/bin/zsh -c node .claude/setup.mjs","CurrentDirectory":"/Users/dev/src/app"}
+    {"Image":"/usr/bin/node","ParentImage":"/bin/sh","CommandLine":"node .vscode/setup.mjs","ParentCommandLine":"/bin/sh -c node .vscode/setup.mjs","CurrentDirectory":"/home/dev/src/app"}
+    {"Image":"C:\\Program Files\\nodejs\\node.exe","ParentImage":"C:\\Windows\\System32\\cmd.exe","CommandLine":"node .claude/setup.mjs","ParentCommandLine":"cmd.exe /d /c node .claude/setup.mjs","CurrentDirectory":"C:\\Users\\dev\\src\\app"}
+    {"Image":"C:\\Program Files\\nodejs\\node.exe","ParentImage":"C:\\Windows\\System32\\cmd.exe","CommandLine":"\"C:\\Program Files\\nodejs\\node.exe\" C:\\Users\\dev\\src\\app\\.vscode\\setup.mjs","ParentCommandLine":"cmd.exe /d /c node C:\\Users\\dev\\src\\app\\.vscode\\setup.mjs","CurrentDirectory":"C:\\Users\\dev\\src\\app"}
+  negative: |
+    {"Image":"/usr/bin/node","ParentImage":"/bin/sh","CommandLine":"node .claude/hooks/format.mjs","ParentCommandLine":"/bin/sh -c node .claude/hooks/format.mjs","CurrentDirectory":"/home/dev/src/app"}
+    {"Image":"/usr/bin/node","ParentImage":"/usr/bin/bash","CommandLine":"node scripts/setup.mjs","ParentCommandLine":"bash -c node scripts/setup.mjs","CurrentDirectory":"/home/dev/src/app"}
+    {"Image":"/usr/bin/cat","ParentImage":"/bin/sh","CommandLine":"cat .vscode/setup.mjs","ParentCommandLine":"/bin/sh -c cat .vscode/setup.mjs","CurrentDirectory":"/home/dev/src/app"}

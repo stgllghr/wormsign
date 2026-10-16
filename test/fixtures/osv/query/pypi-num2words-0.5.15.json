@@ -1,0 +1,271 @@
+{
+  "_about": {
+    "fetched": "2026-10-08T16:20:16Z",
+    "request": "POST https://api.osv.dev/v1/query",
+    "status": 200,
+    "note": "Real read-only response; content unmodified, only re-indented. num2words 0.5.15 (PyPI), a compromised release: GHSA-jxr6-qrxx-2ph2 has cwe_ids [CWE-506]; MAL-2025-6794 and PYSEC-2025-72 are its other records. Its record ids are the ones the query batch returned for it (querybatch-pypi-2026-10-08.json)."
+  },
+  "request": {
+    "package": {
+      "name": "num2words",
+      "ecosystem": "PyPI"
+    },
+    "version": "0.5.15"
+  },
+  "response": {
+    "vulns": [
+      {
+        "id": "GHSA-jxr6-qrxx-2ph2",
+        "summary": "num2words subjected to phishing attack, two versions published containing malware",
+        "details": "The `num2words` project was compromised via a phishing attack and two new versions were uploaded to PyPI containing malicious code. The affected versions have been removed from PyPI, and users are advised to remove the affected versions from their environments.",
+        "aliases": [
+          "MAL-2025-6794",
+          "PYSEC-2025-72"
+        ],
+        "modified": "2026-07-30T05:15:37.523417714Z",
+        "published": "2025-07-31T19:33:29Z",
+        "database_specific": {
+          "nvd_published_at": null,
+          "cwe_ids": [
+            "CWE-506"
+          ],
+          "severity": "CRITICAL",
+          "github_reviewed": true,
+          "github_reviewed_at": "2025-07-31T19:33:29Z"
+        },
+        "references": [
+          {
+            "type": "WEB",
+            "url": "https://github.com/ossf/malicious-packages/blob/49d0cfba3689ed9b195d101d3a2a964c6a77f767/osv/malicious/pypi/num2words/MAL-2025-6794.json"
+          },
+          {
+            "type": "WEB",
+            "url": "https://github.com/pypa/advisory-database/tree/main/vulns/num2words/PYSEC-2025-72.yaml"
+          },
+          {
+            "type": "PACKAGE",
+            "url": "https://github.com/savoirfairelinux/num2words"
+          },
+          {
+            "type": "WEB",
+            "url": "https://nitter.tiekoetter.com/SFLinux/status/1949906299308953827"
+          },
+          {
+            "type": "WEB",
+            "url": "https://www.stepsecurity.io/blog/supply-chain-security-alert-num2words-pypi-package-shows-signs-of-compromise"
+          }
+        ],
+        "affected": [
+          {
+            "package": {
+              "name": "num2words",
+              "ecosystem": "PyPI",
+              "purl": "pkg:pypi/num2words"
+            },
+            "ranges": [
+              {
+                "type": "ECOSYSTEM",
+                "events": [
+                  {
+                    "introduced": "0.5.15"
+                  },
+                  {
+                    "last_affected": "0.5.16"
+                  }
+                ]
+              }
+            ],
+            "database_specific": {
+              "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2025/07/GHSA-jxr6-qrxx-2ph2/GHSA-jxr6-qrxx-2ph2.json"
+            }
+          },
+          {
+            "package": {
+              "name": "num2words",
+              "ecosystem": "PyPI",
+              "purl": "pkg:pypi/num2words"
+            },
+            "versions": [
+              "0.5.15"
+            ],
+            "database_specific": {
+              "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2025/07/GHSA-jxr6-qrxx-2ph2/GHSA-jxr6-qrxx-2ph2.json"
+            }
+          },
+          {
+            "package": {
+              "name": "num2words",
+              "ecosystem": "PyPI",
+              "purl": "pkg:pypi/num2words"
+            },
+            "versions": [
+              "0.5.16"
+            ],
+            "database_specific": {
+              "source": "https://github.com/github/advisory-database/blob/main/advisories/github-reviewed/2025/07/GHSA-jxr6-qrxx-2ph2/GHSA-jxr6-qrxx-2ph2.json"
+            }
+          }
+        ],
+        "schema_version": "1.9.0",
+        "severity": [
+          {
+            "type": "CVSS_V4",
+            "score": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N"
+          }
+        ]
+      },
+      {
+        "id": "MAL-2025-6794",
+        "summary": "Malicious code in num2words (PyPI)",
+        "details": "\n---\n_-= Per source details. Do not edit below this line.=-_\n\n## Source: ghsa-malware (23a528edd10eb63e7c7932830fdb314983cadc840ce8ccfbaa04ad821bbdc1da)\nThe `num2words` project was compromised via a phishing attack and two new versions were uploaded to PyPI containing malicious code. The affected versions have been removed from PyPI, and users are advised to remove the affected versions from their environments.\n\n## Source: google-open-source-security (36822c42f7e862f29cef9734efec9a9a9cc44a80e619e954dd25c12239d15767)\nThe num2words project was compromised via a phishing attack and two new\nversions were uploaded to PyPI containing malicious code.\n",
+        "aliases": [
+          "GHSA-jxr6-qrxx-2ph2",
+          "PYSEC-2025-72"
+        ],
+        "modified": "2026-07-23T07:53:03.562857918Z",
+        "published": "2025-07-31T19:33:29Z",
+        "database_specific": {
+          "malicious-packages-origins": [
+            {
+              "modified_time": "2025-08-06T01:01:03Z",
+              "versions": [
+                "0.5.15",
+                "0.5.16"
+              ],
+              "source": "google-open-source-security",
+              "sha256": "36822c42f7e862f29cef9734efec9a9a9cc44a80e619e954dd25c12239d15767",
+              "import_time": "2025-08-06T01:07:01.055679Z"
+            },
+            {
+              "ranges": [
+                {
+                  "type": "ECOSYSTEM",
+                  "events": [
+                    {
+                      "introduced": "0.5.15"
+                    },
+                    {
+                      "last_affected": "0.5.16"
+                    }
+                  ]
+                }
+              ],
+              "versions": [
+                "0.5.16",
+                "0.5.15"
+              ],
+              "source": "ghsa-malware",
+              "sha256": "23a528edd10eb63e7c7932830fdb314983cadc840ce8ccfbaa04ad821bbdc1da",
+              "import_time": "2026-07-22T03:44:29.053827259Z",
+              "id": "GHSA-jxr6-qrxx-2ph2",
+              "modified_time": "2026-07-21T17:23:21Z"
+            }
+          ]
+        },
+        "references": [
+          {
+            "type": "WEB",
+            "url": "https://nitter.tiekoetter.com/SFLinux/status/1949906299308953827"
+          },
+          {
+            "type": "ARTICLE",
+            "url": "https://www.stepsecurity.io/blog/supply-chain-security-alert-num2words-pypi-package-shows-signs-of-compromise"
+          },
+          {
+            "type": "WEB",
+            "url": "https://github.com/pypa/advisory-database/tree/main/vulns/num2words/PYSEC-2025-72.yaml"
+          },
+          {
+            "type": "WEB",
+            "url": "https://www.stepsecurity.io/blog/supply-chain-security-alert-num2words-pypi-package-shows-signs-of-compromise"
+          },
+          {
+            "type": "ADVISORY",
+            "url": "https://github.com/advisories/GHSA-jxr6-qrxx-2ph2"
+          }
+        ],
+        "affected": [
+          {
+            "package": {
+              "name": "num2words",
+              "ecosystem": "PyPI",
+              "purl": "pkg:pypi/num2words"
+            },
+            "ranges": [
+              {
+                "type": "ECOSYSTEM",
+                "events": [
+                  {
+                    "introduced": "0.5.15"
+                  },
+                  {
+                    "last_affected": "0.5.16"
+                  }
+                ]
+              }
+            ],
+            "versions": [
+              "0.5.15",
+              "0.5.16"
+            ],
+            "database_specific": {
+              "cwes": [
+                {
+                  "cweId": "CWE-506",
+                  "description": "The product contains code that appears to be malicious in nature.",
+                  "name": "Embedded Malicious Code"
+                }
+              ],
+              "source": "https://github.com/ossf/malicious-packages/blob/main/osv/malicious/pypi/num2words/MAL-2025-6794.json"
+            }
+          }
+        ],
+        "schema_version": "1.7.5"
+      },
+      {
+        "id": "PYSEC-2025-72",
+        "summary": "After a successful phishing attack, new versions of `num2words` were published containing malware.",
+        "details": "The `num2words` project was compromised via a phishing attack\nand two new versions were uploaded to PyPI containing malicious code.\nThe affected versions have been removed from PyPI,\nand users are advised to remove the affected versions from their environments.\n",
+        "aliases": [
+          "GHSA-jxr6-qrxx-2ph2",
+          "MAL-2025-6794"
+        ],
+        "modified": "2025-08-06T04:27:26.046626Z",
+        "published": "2025-07-31T14:34:47Z",
+        "references": [
+          {
+            "type": "EVIDENCE",
+            "url": "https://nitter.tiekoetter.com/SFLinux/status/1949906299308953827"
+          },
+          {
+            "type": "EVIDENCE",
+            "url": "https://www.stepsecurity.io/blog/supply-chain-security-alert-num2words-pypi-package-shows-signs-of-compromise"
+          }
+        ],
+        "affected": [
+          {
+            "package": {
+              "name": "num2words",
+              "ecosystem": "PyPI",
+              "purl": "pkg:pypi/num2words"
+            },
+            "versions": [
+              "0.5.15",
+              "0.5.16"
+            ],
+            "database_specific": {
+              "source": "https://github.com/pypa/advisory-database/blob/main/vulns/num2words/PYSEC-2025-72.yaml"
+            }
+          }
+        ],
+        "schema_version": "1.7.5",
+        "credits": [
+          {
+            "name": "Mike Fiedler",
+            "type": "COORDINATOR"
+          }
+        ]
+      }
+    ]
+  }
+}

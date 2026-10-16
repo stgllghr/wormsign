@@ -1,0 +1,12 @@
+github.com
+  ✓ Logged in to github.com account octo-work (keyring)
+  - Active account: true
+  - Git operations protocol: https
+  - Token: gho_************************************
+  - Token scopes: 'gist', 'read:org', 'repo'
+
+  ✓ Logged in to github.com account octo-personal (keyring)
+  - Active account: false
+  - Git operations protocol: ssh
+  - Token: gho_************************************
+  - Token scopes: 'admin:public_key', 'delete_repo', 'gist', 'read:org', 'repo', 'workflow'

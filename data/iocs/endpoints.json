@@ -1,0 +1,8 @@
+{
+ "schema": 1,
+ "version": "2026-10-02",
+ "description": "Exfiltration endpoints reported verbatim by vendors, stored defanged ('[.]' for '.') and refanged by the loader, so that this file never matches itself when wormsign is installed in node_modules. Generic webhook/paste heuristics are in code (src/checks/exfil.ts), not here, because they are not IOCs.",
+ "endpoints": [
+  {"substring":"webhook[.]site/bb8ca5f6-4175-45d2-b042-fc9ebb8170b7","severity":"critical","wave":"2025-09","source":"https://www.stepsecurity.io/blog/ctrl-tinycolor-and-40-npm-packages-compromised"}
+ ]
+}

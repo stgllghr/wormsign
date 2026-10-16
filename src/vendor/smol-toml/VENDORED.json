@@ -1,0 +1,33 @@
+{
+  "package": "smol-toml",
+  "version": "1.9.0",
+  "license": "BSD-3-Clause",
+  "tarball": "https://registry.npmjs.org/smol-toml/-/smol-toml-1.9.0.tgz",
+  "integrity": "sha512-hpd+HLON7HdZXqYchMM/+LaTTbdK0AU3NngIJ4KVyWbY9bfQqdL9cD+4yf6dUoU2Ap4VsU0JkQi6FxAI1B2mXQ==",
+  "published": "2026-09-22T17:15:34.756Z",
+  "copied": "package/dist/*.js except index.cjs (the CommonJS build), package/dist/*.d.ts and package/LICENSE, byte-identical",
+  "upstream": {
+    "provenance": "The npm registry's SLSA v1 provenance statement for smol-toml@1.9.0 (https://registry.npmjs.org/-/npm/v1/attestations/smol-toml@1.9.0): its subject is the tarball's sha512, built by GitHub Actions from the repository, ref and commit below. Its Sigstore signature and the registry signature were verified with `npm audit signatures` (npm 10.9.2) on 2026-10-08: \"1 package has a verified registry signature\", \"1 package has a verified attestation\".",
+    "repository": "https://github.com/squirrelchat/smol-toml",
+    "ref": "refs/tags/v1.9.0",
+    "commit": "6f9739a5ab481f57c3112024bc4947534b580b58"
+  },
+  "files": {
+    "LICENSE": "fa5659948374d4f555594f47f6da073b40dc503e921aeeece30df4362b3051a5",
+    "date.d.ts": "c7ad3531c131f2b5b246b2d208b75c5403475ad155b7661fa2d673104b806791",
+    "date.js": "ef924a2a42c7f16761e7098c3ed8e04195ecbcb02d5c369db0aee76f251a409c",
+    "error.d.ts": "02e33cdc5ca75f517f44b31070640be0fe6d0169dd91c266d02a1e2a71e064ac",
+    "error.js": "76f8e47f5fc57273748242d59570656d7c921a80bceb2291ca5a4d7a723e9f29",
+    "extract.js": "b964c8f39c737172295b31b9ee61b49e513ff12788e119ddfdbb68c448054c12",
+    "index.d.ts": "b4556819c2ed0cd4016d05a6bfd7d4773c0b5ffb39c8ed547796ce4a1093d9b8",
+    "index.js": "dc8e0afc74477e514f5cb8492b587560c1d7d68cec03a994cc8bc4af99c8da2a",
+    "parse.d.ts": "2b230dc984b6e51b545bfe222f9965cc2ff434164ed9428bec415c5e508a9854",
+    "parse.js": "195e33ea068bf6f3acb5b3342792ac4aa954bba7e751519ba869c00da395ecdb",
+    "primitive.js": "be47fe90bf9a410af0b9204b6b34617f4b38e57f08198b10cb024a0272eb5936",
+    "stringify.d.ts": "628a6a55714fcf4a4eb0e59866ab1e5cc67c1b9e0cfc8524ccc8d6b5ee24ad7c",
+    "stringify.js": "c717d95456426dc8a0b07c9d03a4e434d5dea8254fca24e5fd93a22de3bcd44c",
+    "struct.js": "736742cfa645bbd08bc5396c5f7ddbea5c3b7ac5d61fe86031846f5769131deb",
+    "util.d.ts": "e6b1d3eecb240dc71d0dc28d1beee69cefd6ee014507c822909be0a7117517e0",
+    "util.js": "6327e40efd957128da15867c3a32293950a925570b457b1b78c735452cebc08e"
+  }
+}

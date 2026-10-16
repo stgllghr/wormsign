@@ -1,0 +1,2 @@
+six==1.17.0
+-c included/require-hashes-only.txt

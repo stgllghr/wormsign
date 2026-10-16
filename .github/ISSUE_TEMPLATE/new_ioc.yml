@@ -1,0 +1,66 @@
+# Issue form syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+name: New IOC
+description: Propose an indicator of compromise for data/iocs, with a public source.
+labels: ["ioc"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Every IOC in wormsign needs a public https source that prints the indicator verbatim. An indicator without
+        one cannot be added. One issue per source page is easiest to review; list several indicators from the same
+        page in the "Indicator" field, one per line.
+  - type: input
+    id: source
+    attributes:
+      label: Source URL
+      description: The public https page (vendor write-up, advisory) that prints the indicator. Not a social media post or a news story about the write-up.
+      placeholder: https://
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Kind of indicator
+      options:
+        - Compromised package version (name@version)
+        - Payload file SHA-256
+        - Payload file name
+        - Workflow file name
+        - Self-hosted runner name
+        - Repository name or description
+        - Branch name
+        - Exfiltration endpoint
+    validations:
+      required: true
+  - type: textarea
+    id: indicator
+    attributes:
+      label: Indicator, exactly as the source prints it
+      description: Copy it verbatim, one per line. Write endpoints defanged ("webhook[.]site/...").
+      render: text
+    validations:
+      required: true
+  - type: input
+    id: wave
+    attributes:
+      label: Wave
+      description: Year and month the wave was reported, as in data/iocs (2025-09, 2025-11, 2026-04, 2026-08), or a new one.
+      placeholder: YYYY-MM
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Context
+      description: Where on the page the indicator appears (a section heading or a short quote), and anything that limits it, such as a version the source later corrected.
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: The source is public and served over https.
+          required: true
+        - label: The indicator appears verbatim on the source page.
+          required: true
+        - label: This issue contains no malware, live payloads or stolen credentials.
+          required: true

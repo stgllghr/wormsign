@@ -1,0 +1,320 @@
+# The dogfood gate: wormsign checks every change to wormsign.
+#
+# Why the gate on a pull request is built from the BASE commit, not from the change:
+#   A pull request can edit anything in its own tree: the scanner's rules, the IOC data, the baseline, the action.
+#   If the gate ran the pull request's code, a malicious change could switch a check off, or baseline its own
+#   findings, and then pass the check it just weakened. So the gate's code (CLI, IOC data, action wrapper,
+#   scripts/ci-*.sh) is checked out from the base commit into gate/ and built there, and the pull request's code
+#   is only ever read as data in pr/: nothing from pr/ is installed, built or run. Suppressions come from the base
+#   as well: diff and soak --base read .wormsign-baseline.json from the base revision, and scan is given gate/'s copy.
+#   A change to the gate's own code takes effect for the pull requests after it merges.
+#
+# What this does not stop: GitHub runs this workflow file as the pull request has it (pull_request workflows come
+# from the merge commit), so a pull request can still rewrite or delete this file. wormsign diff reports a changed
+# workflow (WS-DF-003); that finding, branch protection that requires these checks, and code-owner review of
+# .github/ are what stop it. No CI design can protect a check from the change it is checking without review.
+#
+# By design a change to package-manager config or to .wormsign-baseline.json is a high finding (WS-DF-005). Its
+# fingerprint includes the new content's hash, so a base baseline entry can accept one reviewed version; but adding
+# that entry is itself a change to the baseline. So a pull request that changes the baseline always fails this gate,
+# and is merged only after a maintainer reviews it and overrides the required check. The same holds for the pull
+# request that first adds this workflow: its base has no gate to build. Such a pull request also gets no ci or
+# action-selftest run (they wait on the gate); before overriding, run `gh workflow run ci.yml --ref <branch>` and
+# `gh workflow run action-selftest.yml --ref <branch>` after reviewing the change. That ci run is the per-change jobs
+# only; the hours-long mutation and macOS jobs start only with `-f slow=true` (see ci.yml).
+#
+# On pull_request (the change is merge commit M with parents base B and head):
+#   diff  B M          what merging would add: install-script deps, lifecycle scripts, workflows, config
+#   soak  --base B     every package version the change adds to the root lockfile passed the default 7-day soak,
+#                      has no OSV malware record and no registry signal; the root .npmrc keeps min-release-age
+#   scan  pr/          the whole tree after the change, with the base's baseline
+# On push to main, and weekly: scan, and a full soak --require-config of the root lockfile. The PR job above soaks
+# only the versions a change adds, so a lockfile that reached main another way (the initial commit, a direct push,
+# an override of the required check) is checked only here. The weekly run also catches an OSV malware record
+# published after a version was locked.
+#
+# Install ordering: on a pull request, every job that installs this repository's dependencies runs after the gate. A
+# dependency's code runs as soon as a job installs or builds with it (an npm install script, a PyPI package at import),
+# so a job running beside the gate would run a malicious version before the gate fails. On a pull request, ci.yml and
+# action-selftest.yml are therefore called from here (the ci and action-selftest jobs below, `needs: pull-request`)
+# instead of starting on their own; a failed gate skips them. This costs no runner minutes, only the wait. The gate job
+# is the required check: a job skipped because it failed reports as passing. On push to main, ci.yml runs beside the
+# main job, and the main job installs before its soak step; on their schedules each runs alone: what they install was
+# gated when its pull request merged, unless it was pushed directly.
+#
+# SARIF: always uploaded as a workflow artifact. Also uploaded to code scanning, which needs the repository to be
+# public (or GitHub Code Security). While the repository is private that upload fails, so it is allowed to fail
+# only while github.event.repository.private is true; once public, a failed upload fails the job. A missing value
+# counts as false, so on an event whose payload has no repository field a failed upload fails the job too.
+name: wormsign
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    # Weekly full soak of main's lockfile (see the main job).
+    - cron: "29 5 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  # One group per pull request (a newer push cancels the older run); every other run has its own group, so main
+  # commits never queue behind or cancel each other. Why: the concurrency comment in ci.yml.
+  group: wormsign-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  pull-request:
+    name: gate (built from base)
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read # check out the base and the change
+      security-events: write # upload SARIF to code scanning (same-repository pull requests; see the upload steps)
+    steps:
+      # The default ref on pull_request is the merge commit GitHub made from the base branch and the head
+      # (https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#pull_request).
+      # fetch-depth 2 brings that commit and both parents.
+      - name: Check out the change into pr/
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: pr
+          fetch-depth: 2
+          persist-credentials: false
+
+      # The merge commit's first parent is the base commit it was merged into, so diffing against it shows exactly
+      # what this pull request would land, even when the base branch moved after the branch was cut.
+      - name: Resolve the base and merge commits
+        id: revs
+        working-directory: pr
+        run: |
+          echo "base=$(git rev-parse HEAD^1)" >> "$GITHUB_OUTPUT"
+          echo "head=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Check out the base into gate/
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: ${{ steps.revs.outputs.base }}
+          path: gate
+          persist-credentials: false
+
+      # soak --require-config needs npm 11.10 or newer, which enforces min-release-age in .npmrc. Without
+      # check-latest (default false) setup-node takes the runner's cached 24.x, which can be older and bundle npm
+      # 11.9 or older (Node 24.14.1 is the first 24.x with npm 11.10 or newer).
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          check-latest: true
+          package-manager-cache: false
+
+      - name: Build the gate from base
+        working-directory: gate
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          node dist/src/cli.js --version
+
+      # soak's root: the change's own package.json, package-lock.json and .npmrc, without the synthetic lockfiles
+      # under test/fixtures, which are test data that is never installed.
+      - name: Check out the change's root project for soak
+        run: gate/scripts/ci-root-project.sh pr "$RUNNER_TEMP/root"
+
+      - id: diff
+        name: wormsign diff (base..merge)
+        uses: ./gate
+        continue-on-error: true
+        with:
+          command: diff
+          path: pr
+          base: ${{ steps.revs.outputs.base }}
+          head: ${{ steps.revs.outputs.head }}
+          sarif: ${{ runner.temp }}/sarif/diff.sarif
+          upload-sarif: "false"
+
+      - id: soak
+        name: wormsign soak --base (root lockfile)
+        uses: ./gate
+        continue-on-error: true
+        with:
+          command: soak
+          path: ${{ runner.temp }}/root
+          base: ${{ steps.revs.outputs.base }}
+          require-config: "true"
+          sarif: ${{ runner.temp }}/sarif/soak.sarif
+          upload-sarif: "false"
+
+      - id: scan
+        name: wormsign scan (baseline from base)
+        uses: ./gate
+        continue-on-error: true
+        with:
+          command: scan
+          path: pr
+          baseline: ${{ github.workspace }}/gate/.wormsign-baseline.json
+          sarif: ${{ runner.temp }}/sarif/scan.sarif
+          upload-sarif: "false"
+
+      - name: Upload SARIF as an artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wormsign-sarif
+          path: ${{ runner.temp }}/sarif/
+          if-no-files-found: warn
+          retention-days: 14
+
+      # Pull requests from forks get a read-only GITHUB_TOKEN, so they cannot upload to code scanning
+      # (https://docs.github.com/en/actions/reference/workflows-and-actions/events-that-trigger-workflows#workflows-in-forked-repositories);
+      # their results are in the artifact. checkout_path maps the SARIF paths, which are relative to pr/, to files.
+      - name: Upload diff SARIF to code scanning
+        if: always() && steps.diff.outputs.sarif != '' && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: ${{ github.event.repository.private }}
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.diff.outputs.sarif }}
+          category: wormsign-diff
+          checkout_path: ${{ github.workspace }}/pr
+      - name: Upload soak SARIF to code scanning
+        if: always() && steps.soak.outputs.sarif != '' && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: ${{ github.event.repository.private }}
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.soak.outputs.sarif }}
+          category: wormsign-soak
+          checkout_path: ${{ github.workspace }}/pr
+      - name: Upload scan SARIF to code scanning
+        if: always() && steps.scan.outputs.sarif != '' && github.event.pull_request.head.repo.full_name == github.repository
+        continue-on-error: ${{ github.event.repository.private }}
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+          category: wormsign-scan
+          checkout_path: ${{ github.workspace }}/pr
+
+      # continue-on-error above let every check run and upload; outcome is each step's result before that
+      # allowance (https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#steps-context).
+      - name: Gate
+        if: always()
+        env:
+          DIFF: ${{ steps.diff.outcome }}
+          SOAK: ${{ steps.soak.outcome }}
+          SCAN: ${{ steps.scan.outcome }}
+        run: |
+          echo "diff: $DIFF   soak: $SOAK   scan: $SCAN"
+          [ "$DIFF" = success ] && [ "$SOAK" = success ] && [ "$SCAN" = success ]
+
+  # The jobs that install the change's dependencies, only once the gate has passed (see "Install ordering" above).
+  ci:
+    name: ci
+    needs: pull-request
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read # the called jobs check out the repository
+    uses: ./.github/workflows/ci.yml
+
+  action-selftest:
+    name: action-selftest
+    needs: pull-request
+    if: github.event_name == 'pull_request'
+    permissions:
+      contents: read # the called job checks out the repository
+    uses: ./.github/workflows/action-selftest.yml
+
+  main:
+    name: scan and soak (main)
+    # push to main and the weekly schedule (which checks out the default branch).
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read # check out the repository
+      security-events: write # upload SARIF to code scanning
+    steps:
+      # Two checkouts of the pushed commit: gate/ is built, repo/ stays a clean checkout to scan (a build would add
+      # dist/, whose compiled tests repeat the test files' inert IOC strings).
+      - name: Check out the commit into repo/
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: repo
+          persist-credentials: false
+      - name: Check out the commit into gate/
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: gate
+          persist-credentials: false
+      # check-latest: see the pull-request job.
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          check-latest: true
+          package-manager-cache: false
+      # This commit is on main, so it was reviewed as a pull request unless it was pushed directly. npm ci installs
+      # its lockfile before the soak step below checks it, with install scripts off.
+      - name: Build the gate
+        working-directory: gate
+        run: |
+          npm ci --ignore-scripts
+          npm run build
+          node dist/src/cli.js --version
+      - name: Check out the root project for soak
+        run: gate/scripts/ci-root-project.sh repo "$RUNNER_TEMP/root"
+
+      - id: scan
+        name: wormsign scan
+        uses: ./gate
+        continue-on-error: true
+        with:
+          command: scan
+          path: repo
+          sarif: ${{ runner.temp }}/sarif/scan.sarif
+          upload-sarif: "false"
+
+      # Full soak: every locked version, not only what one change added. No base on push or schedule, so the
+      # Action runs soak without --base.
+      - id: soak
+        name: wormsign soak --require-config (root lockfile)
+        uses: ./gate
+        continue-on-error: true
+        with:
+          command: soak
+          path: ${{ runner.temp }}/root
+          require-config: "true"
+          sarif: ${{ runner.temp }}/sarif/soak.sarif
+          upload-sarif: "false"
+
+      - name: Upload SARIF as an artifact
+        if: always()
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: wormsign-sarif
+          path: ${{ runner.temp }}/sarif/
+          if-no-files-found: warn
+          retention-days: 30
+      - name: Upload scan SARIF to code scanning
+        if: always() && steps.scan.outputs.sarif != ''
+        continue-on-error: ${{ github.event.repository.private }}
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.scan.outputs.sarif }}
+          category: wormsign-scan
+          checkout_path: ${{ github.workspace }}/repo
+      - name: Upload soak SARIF to code scanning
+        if: always() && steps.soak.outputs.sarif != ''
+        continue-on-error: ${{ github.event.repository.private }}
+        uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+        with:
+          sarif_file: ${{ steps.soak.outputs.sarif }}
+          category: wormsign-soak
+          checkout_path: ${{ github.workspace }}/repo
+
+      - name: Gate
+        if: always()
+        env:
+          SCAN: ${{ steps.scan.outcome }}
+          SOAK: ${{ steps.soak.outcome }}
+        run: |
+          echo "scan: $SCAN   soak: $SOAK"
+          [ "$SCAN" = success ] && [ "$SOAK" = success ]

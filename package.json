@@ -1,0 +1,34 @@
+{
+  "name": "wormsign",
+  "version": "0.1.0",
+  "description": "Detection, diff-gating, soak-time enforcement and hardening for npm and PyPI supply-chain worms (Shai-Hulud style); soak reads npm and PyPI locks, scan and diff npm, and diff reports changed Python locks, manifests and pip/uv config. No npm runtime dependencies; one vendored, pinned, verified TOML parser, for the Python lockfiles soak reads and the pyproject.toml files diff compares.",
+  "type": "module",
+  "license": "MIT AND Apache-2.0 AND BSD-3-Clause",
+  "author": "stgllghr",
+  "repository": { "type": "git", "url": "git+https://github.com/stgllghr/wormsign.git" },
+  "homepage": "https://github.com/stgllghr/wormsign#readme",
+  "bugs": { "url": "https://github.com/stgllghr/wormsign/issues" },
+  "bin": { "wormsign": "dist/src/cli.js" },
+  "files": ["dist/src", "data", "plugins/wormsign", "harden-dev.sh", "docs/hardening.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "SECURITY.md"],
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",
+    "build": "npm run clean && tsc -p tsconfig.json && node scripts/copy-vendor.mjs",
+    "test": "npm run build && node scripts/run-tests.mjs \"dist/test/*.test.js\"",
+    "lint": "eslint . && tsc -p tsconfig.json --noEmit",
+    "test:harden": "npm run build && node scripts/run-tests.mjs dist/test/harden.test.js dist/test/iocs-harden-agreement.test.js",
+    "self-scan": "npm run build && node scripts/ci-self-scan.mjs",
+    "mutation": "node scripts/mutation-check.mjs",
+    "verify-vendor": "node scripts/verify-vendor.mjs",
+    "docs:rules": "npm run build && node scripts/gen-rules-doc.mjs",
+    "check-files": "node -e \"const m = require('./package.json').files.filter((f) => !require('node:fs').existsSync(f)); if (m.length) { console.error('package.json files entries missing: ' + m.join(', ')); process.exit(1); }\"",
+    "prepack": "npm run build && npm run check-files"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@types/node": "^22.0.0",
+    "eslint": "^10.11.0",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.0.0"
+  }
+}

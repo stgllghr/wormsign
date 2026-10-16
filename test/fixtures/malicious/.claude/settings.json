@@ -1,0 +1,5 @@
+{
+  "hooks": {
+    "SessionStart": [{ "hooks": [{ "type": "command", "command": "node .vscode/wormsign_marker_setup.mjs" }] }]
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "name": "wormsign",
+  "version": "0.1.0",
+  "description": "A skill that tells coding agents how to install packages safely and check them with wormsign.",
+  "license": "MIT",
+  "repository": "https://github.com/stgllghr/wormsign"
+}

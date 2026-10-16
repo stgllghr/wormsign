@@ -1,0 +1,31 @@
+lockfileVersion: '9.0'
+
+settings:
+  autoInstallPeers: true
+  excludeLinksFromLockfile: false
+
+importers:
+
+  .:
+    dependencies:
+      oddver:
+        specifier: file:./oddver-1.0.tgz
+        version: file:oddver-1.0.tgz
+      spaced:
+        specifier: file:./dir with space/lib
+        version: file:dir with space/lib
+
+packages:
+
+  oddver@file:oddver-1.0.tgz:
+    resolution: {integrity: sha512-rC7P3+wVXda+NYopq1zRAahYfSvooIC0sMR3y2fwI/FAGsOdIXoHDoGhxile4uiQEXtE7RUOFcgNrdgZ3DsYfw==, tarball: file:oddver-1.0.tgz}
+    version: '1.0'
+
+  spaced@file:dir with space/lib:
+    resolution: {directory: dir with space/lib, type: directory}
+
+snapshots:
+
+  oddver@file:oddver-1.0.tgz: {}
+
+  spaced@file:dir with space/lib: {}

@@ -1,0 +1,63 @@
+# Issue form syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+name: False positive
+description: wormsign reported a finding on something that is not a problem.
+labels: ["false-positive"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        If the finding is accurate but expected in your project (for example, a package you reviewed that needs an
+        install script), suppress it in `.wormsign-baseline.json` with a justification instead; see CONTRIBUTING.md.
+        Use this form when the rule itself is wrong or too broad.
+  - type: input
+    id: rule
+    attributes:
+      label: Rule ID
+      placeholder: WS-LK-003
+    validations:
+      required: true
+  - type: input
+    id: fingerprint
+    attributes:
+      label: Fingerprint
+      description: The 32-hex fingerprint printed with the finding (also in JSON output and in SARIF partialFingerprints).
+      placeholder: 0123456789abcdef0123456789abcdef
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: wormsign version or commit
+      description: Output of `wormsign --version`, or the commit you built.
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command and finding
+      description: The command you ran and the finding exactly as printed.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Sanitised snippet
+      description: The smallest part of the file that triggers the finding, with secrets, internal hostnames and private package names replaced.
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: why
+    attributes:
+      label: Why it is a false positive
+      description: What the flagged code or config actually does, and what you would expect the rule to do instead.
+    validations:
+      required: true
+  - type: checkboxes
+    id: sanitised
+    attributes:
+      label: Checks
+      options:
+        - label: I removed tokens, credentials, internal hostnames and private package names from everything above.
+          required: true

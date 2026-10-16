@@ -1,0 +1,53 @@
+# Issue form syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/syntax-for-issue-forms
+name: Bug report
+description: wormsign, harden-dev.sh or the detections behave differently from what the documentation says.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        A vulnerability in wormsign (a detection bypass, a gate that passes when it should fail, harmful behaviour
+        on hostile input) goes through private reporting instead: see SECURITY.md.
+        A finding you believe is wrong goes in the "False positive" template.
+  - type: input
+    id: version
+    attributes:
+      label: wormsign version or commit
+      description: Output of `wormsign --version`, or the commit you built.
+      placeholder: 0.1.0
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, `node --version`, and the package manager and version if relevant.
+      placeholder: macOS 15, Node 24.21.0, npm 11.19.0
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Command
+      description: The exact command you ran.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Output and exit code. Remove tokens, private package names and anything else you do not want public.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Smallest input that reproduces it
+      description: A minimal, inert package.json, lockfile excerpt, workflow or directory layout. Never attach real malware.

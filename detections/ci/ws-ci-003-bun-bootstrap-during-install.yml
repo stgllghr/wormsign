@@ -1,0 +1,38 @@
+id: WS-CI-003
+title: Bun runtime fetched during a dependency install
+severity: high
+description: >-
+  Shai-Hulud 2.0's setup_bun.js installs Bun and runs the real payload with it, contacting bun.sh
+  (Datadog lists bun.sh as a domain used during initialization; MITRE notes the worm used curl to
+  install Bun and masqueraded as a legitimate Bun installer). The 2026-04 Mini Shai-Hulud loader
+  downloads Bun from github.com/oven-sh/bun/releases/download (Picus). Most Node projects never
+  download Bun while installing dependencies, so a Bun download inside an npm/pnpm/Yarn install
+  step is worth a look.
+attack:
+  - id: T1105
+    name: Ingress Tool Transfer
+    url: https://attack.mitre.org/techniques/T1105/
+  - id: T1036.005
+    name: "Masquerading: Match Legitimate Resource Name or Location"
+    url: https://attack.mitre.org/techniques/T1036/005/
+data_source: >-
+  CI job logs and egress or DNS logs (bun.sh, github.com/oven-sh/bun/releases) for
+  dependency-install steps.
+pattern: '(//|\s)bun\.sh(/|\s|$)|github\.com/oven-sh/bun/releases/download/'
+logic: |
+  Match pattern against lines and URLs logged while a dependency-install step runs. For DNS logs,
+  alert on a lookup of bun.sh from a runner during an install step of a project that does not use Bun.
+false_positives:
+  - Projects that use Bun. oven-sh/setup-bun and the Bun install script download from these hosts by design; exclude those steps.
+sources:
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://www.picussecurity.com/resource/blog/mini-shai-hulud-the-npm-supply-chain-worm-explained
+  - https://attack.mitre.org/software/S9008/
+examples:
+  positive: |
+    curl -fsSL https://bun.sh/install | bash
+    GET https://github.com/oven-sh/bun/releases/download/bun-v1.3.13/bun-linux-x64.zip
+  negative: |
+    GET https://registry.npmjs.org/bun-types/-/bun-types-1.3.0.tgz
+    > node setup_bun.sh.bak
+    added 812 packages, and audited 813 packages in 14s

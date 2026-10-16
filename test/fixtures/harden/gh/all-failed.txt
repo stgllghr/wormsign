@@ -1,0 +1,10 @@
+github.com
+  X Failed to log in to github.com account octo-work (/home/u/.config/gh/hosts.yml)
+  - Active account: true
+  - The token in /home/u/.config/gh/hosts.yml is invalid.
+  - To re-authenticate, run: gh auth refresh -h github.com
+  - To forget about this account, run: gh auth logout -h github.com -u octo-work
+
+ghe.example.com
+  X Timeout trying to log in to ghe.example.com using token (GH_ENTERPRISE_TOKEN)
+  - Active account: true

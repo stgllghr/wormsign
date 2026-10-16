@@ -1,0 +1,37 @@
+{
+  "accept": "application/vnd.pypi.simple.v1+json",
+  "captured": "2026-10-08T14:05:33Z",
+  "from": "https://pypi.org/simple/<project>/",
+  "projects": {
+    "certifi": {
+      "api-version": "1.4",
+      "file": "certifi.json",
+      "files": 140,
+      "sha256": "41085741927edb970f42ec87a520bd5223683611733bf5874a572bf6d9c1327b"
+    },
+    "idna": {
+      "api-version": "1.4",
+      "file": "idna.json",
+      "files": 75,
+      "sha256": "0bb074e13eeab85764ae0b58f43a40fe70d7155ac7485d849e435f5b8df12811"
+    },
+    "markupsafe": {
+      "api-version": "1.4",
+      "file": "markupsafe.json",
+      "files": 1024,
+      "sha256": "b2eb3b443e5a36c38a0fd842f51d1c3f4a826b64337be6f96f83bde0f9720522"
+    },
+    "packaging": {
+      "api-version": "1.4",
+      "file": "packaging.json",
+      "files": 108,
+      "sha256": "2669250025b2b2b09ae5c3577e2d5cb80447fc4a5d2142f4352ae1b179f674a3"
+    },
+    "six": {
+      "api-version": "1.4",
+      "file": "six.json",
+      "files": 48,
+      "sha256": "2459c9e9cba3dd414db30bcbf3f625b089d89e847ff2573aeb7b342bfe9f5122"
+    }
+  }
+}

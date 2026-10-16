@@ -1,0 +1,12 @@
+[project]
+name = "demo-path"
+version = "0.1.0"
+requires-python = ">=3.9"
+dependencies = ["six", "localdir"]
+
+[tool.uv]
+package = false
+
+[tool.uv.sources]
+six = { path = "vendor/six-1.17.0-py2.py3-none-any.whl" }
+localdir = { path = "libs/localdir", editable = false }

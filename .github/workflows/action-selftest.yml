@@ -1,0 +1,104 @@
+# Self-test of the composite action (action.yml) through `uses: ./`, the way a consumer runs it, against the inert
+# fixtures in test/fixtures/action: a change that adds a workflow with a published Shai-Hulud IOC name must fail
+# the action, and a harmless change must pass. Each case runs with continue-on-error so the next can run, and the
+# last step asserts every outcome: a gate that passes everything, or fails everything, fails this workflow.
+#
+# On a pull request wormsign.yml calls this (workflow_call) once its gate job has passed: the job installs the
+# change's dependencies and builds with them, so it must not run before the gate has checked them.
+name: action-selftest
+
+on:
+  # Pull requests: called by wormsign.yml after its gate job.
+  workflow_call:
+  push:
+    branches: [main]
+  # On demand: a branch the gate fails by design (a baseline or .npmrc change), before a maintainer overrides it, and
+  # a commit about to be published (see wormsign.yml and CONTRIBUTING.md).
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  # One group per pull request (a newer push cancels the older run); every other run has its own group, so main
+  # commits never queue behind or cancel each other. Why: the concurrency comment in ci.yml.
+  group: action-selftest-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  selftest:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      # Consumers pin a release tag that contains the compiled CLI; from a source checkout, build it first.
+      - run: npm ci --ignore-scripts && npm run build
+
+      - id: malicious
+        name: diff that adds an IOC-named workflow (must fail)
+        uses: ./
+        continue-on-error: true
+        with:
+          command: diff
+          base: dir:test/fixtures/action/malicious/base
+          head: dir:test/fixtures/action/malicious/head
+          upload-sarif: "false"
+
+      - id: clean
+        name: harmless diff (must pass)
+        uses: ./
+        continue-on-error: true
+        with:
+          command: diff
+          base: dir:test/fixtures/action/clean/base
+          head: dir:test/fixtures/action/clean/head
+          upload-sarif: "false"
+
+      - id: scan
+        name: scan of the tree with the IOC-named workflow (must fail)
+        uses: ./
+        continue-on-error: true
+        with:
+          command: scan
+          path: test/fixtures/action/malicious/head
+          # The fixture has no baseline; without this, scan on pull_request would read the base commit's, which this
+          # one-commit checkout does not hold.
+          no-baseline: "true"
+          upload-sarif: "false"
+
+      # outcome is a step's result before continue-on-error
+      # (https://docs.github.com/en/actions/reference/workflows-and-actions/contexts#steps-context).
+      - name: Assert outcomes and outputs
+        env:
+          MAL_OUTCOME: ${{ steps.malicious.outcome }}
+          MAL_EXIT: ${{ steps.malicious.outputs.exit-code }}
+          MAL_FINDINGS: ${{ steps.malicious.outputs.findings }}
+          MAL_SARIF: ${{ steps.malicious.outputs.sarif }}
+          CLEAN_OUTCOME: ${{ steps.clean.outcome }}
+          CLEAN_EXIT: ${{ steps.clean.outputs.exit-code }}
+          CLEAN_FINDINGS: ${{ steps.clean.outputs.findings }}
+          SCAN_OUTCOME: ${{ steps.scan.outcome }}
+          SCAN_EXIT: ${{ steps.scan.outputs.exit-code }}
+        run: |
+          set -u
+          ok=true
+          check() { if [ "$2" = "$3" ]; then echo "ok   $1 = $2"; else echo "FAIL $1 = '$2', expected '$3'"; ok=false; fi; }
+          check "malicious outcome" "$MAL_OUTCOME" failure
+          check "malicious exit-code" "$MAL_EXIT" 1
+          check "malicious findings" "$MAL_FINDINGS" 2
+          check "clean outcome" "$CLEAN_OUTCOME" success
+          check "clean exit-code" "$CLEAN_EXIT" 0
+          check "clean findings" "$CLEAN_FINDINGS" 0
+          check "scan outcome" "$SCAN_OUTCOME" failure
+          check "scan exit-code" "$SCAN_EXIT" 1
+          # The SARIF output names a file that holds the WS-GH-001 result.
+          if [ -n "$MAL_SARIF" ] && grep -q '"ruleId": "WS-GH-001"' "$MAL_SARIF"; then echo "ok   malicious SARIF has WS-GH-001"; else echo "FAIL malicious SARIF ($MAL_SARIF) lacks WS-GH-001"; ok=false; fi
+          "$ok"

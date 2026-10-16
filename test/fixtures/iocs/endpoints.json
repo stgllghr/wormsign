@@ -1,0 +1,1 @@
+{"schema":1,"endpoints":[{"substring":"wormsign-marker.invalid/collect","severity":"critical","wave":"test","source":"https://example.test/synthetic-ioc"}]}

@@ -1,0 +1,6 @@
+node_modules/
+# The root one as a file or a symlink too: a clone that links node_modules from elsewhere must not commit the link.
+/node_modules
+dist/
+*.tgz
+.wormsign-cache/

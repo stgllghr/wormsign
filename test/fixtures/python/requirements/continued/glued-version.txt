@@ -1,0 +1,3 @@
+six==1.16.0\
+  --hash=sha256:97e740a07598fb0c89a63e237693bcee253e4b1f6abfed59389776d5ebbc766a
+evil==0.0.1

@@ -1,0 +1,11 @@
+{
+  "name": "casefold-fixture",
+  "version": "1.0.0",
+  "description": "Inert fixture: npm on macOS and Windows reads this file as package.json. Nothing here is installed or run.",
+  "scripts": {
+    "postinstall": "node setup.js"
+  },
+  "dependencies": {
+    "wormsign-test-marker": "1.0.0"
+  }
+}

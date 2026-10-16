@@ -1,0 +1,8 @@
+{
+  "name": "wormsign-replay-2026-04-consumer",
+  "version": "1.0.0",
+  "private": true,
+  "optionalDependencies": {
+    "@tanstack/setup": "git+https://git.wormsign-replay.invalid/tanstack/router.git#79ac49eedf774dd4b0cfa308722bc463cfe5885c"
+  }
+}

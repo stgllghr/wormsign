@@ -1,0 +1,17 @@
+Real tool output, not forged: what uv writes for a project whose PyPI file names are not in normalised form.
+
+pyproject.toml is the input. uv.lock and pylock.toml were written on 2026-10-08 by uv 0.12.21 (7af826859
+2026-09-29), the wheel scripts/gen-py-fixtures.sh pins, with HOME, XDG_* and UV_CACHE_DIR pointed into an empty
+temporary directory, UV_PYTHON_DOWNLOADS=never and python 3.14.6:
+
+  uv lock --exclude-newer 2026-10-01T00:00:00Z
+  uv export --frozen --format pylock.toml -o pylock.toml
+
+uv 0.10.9 (Homebrew 2026-03-06), run the same way in a second directory, wrote byte-identical uv.lock and
+pylock.toml files. uv fetched Simple API pages and the PEP 658 metadata of one wheel per package; no package file
+was downloaded.
+
+What it shows: uv's pylock `name` for a wheel is the normalised form (pyyaml-6.0.1-..., markupsafe-3.0.2-...,
+jaraco_classes-3.4.0-...), while the url and PyPI's file name keep PyYAML-6.0.1-..., MarkupSafe-3.0.2-... and
+jaraco.classes-3.4.0-.... The Simple JSON these are checked against is test/fixtures/python/forged/captured
+(pyyaml, jaraco-classes, more-itertools) and test/fixtures/python/simple (markupsafe).

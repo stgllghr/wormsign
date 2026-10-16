@@ -1,0 +1,135 @@
+# Release: on a pushed tag vX.Y.Z, verify the tag, build the npm tarball, attest its build provenance and publish a
+# GitHub Release with the tarball and its SHA-256 checksum. Nothing is published to npm.
+#
+# The tag is made by scripts/ci-release-tag.sh: one commit on top of a main commit that adds only the compiled
+# dist/src the GitHub Action runs. The build job refuses the tag unless dist/src is exactly what the tagged source
+# compiles to (scripts/ci-verify-release.sh).
+#
+# Two jobs, so write access never meets the build: `build` installs dev dependencies and compiles with read-only
+# permissions; `publish` only hashes, attests and uploads the finished tarball, and runs no npm code.
+#
+# Verifying a release (with the GitHub CLI):
+#   gh release download vX.Y.Z --repo stgllghr/wormsign
+#   sha256sum -c SHA256SUMS
+#   gh attestation verify wormsign-X.Y.Z.tgz --repo stgllghr/wormsign \
+#     --signer-workflow stgllghr/wormsign/.github/workflows/release.yml
+# The attestation proves the tarball was built in this repository by the release.yml in the tagged commit
+# (https://docs.github.com/en/actions/how-tos/secure-your-work/use-artifact-attestations/use-artifact-attestations).
+# A tag push runs the tag's own copy of this file, so these checks are only as good as that copy: a tag that edits
+# it can drop them. docs/installation.md ("Check a release tag yourself") checks with the user's own git that the tag
+# is main plus dist/src only, runs main's copy of the verifier, and binds the attestation to that commit.
+#
+# Attestations need a public repository on GitHub Free, Pro and Team plans (actions/attest-build-provenance README).
+# If the attestation step fails, no release is created: an unattested release is never published by this workflow.
+name: release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read # check out the tag and main's history
+    outputs:
+      tarball: ${{ steps.pack.outputs.tarball }}
+      commit: ${{ steps.pack.outputs.commit }}
+    steps:
+      # Full history, so the verification can check that the tag's parent is on main.
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - name: Verify the tag (main + reproducible dist/src)
+        env:
+          TAG: ${{ github.ref_name }}
+        run: scripts/ci-verify-release.sh "$TAG" origin/main
+      # npm test rebuilds dist/ (identical, as just verified). npm pack runs no prepack under ignore-scripts, so it
+      # packs this build.
+      - run: npm test
+      - run: npm run check-files
+      - id: pack
+        name: npm pack
+        run: |
+          tarball="$(npm pack --silent | tail -n 1)"
+          echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
+          echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+      - name: Tarball smoke test
+        env:
+          TARBALL: ${{ steps.pack.outputs.tarball }}
+        run: scripts/ci-pack-smoke.sh "$TARBALL"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: tarball
+          path: ${{ steps.pack.outputs.tarball }}
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write # create the GitHub Release and upload its assets
+      id-token: write # request the OIDC token Sigstore exchanges for the attestation's signing certificate
+      attestations: write # store the build provenance attestation in this repository
+    steps:
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: tarball
+      - name: Checksum
+        env:
+          TARBALL: ${{ needs.build.outputs.tarball }}
+        run: |
+          sha256sum "$TARBALL" > SHA256SUMS
+          cat SHA256SUMS
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@4d101475d8b20a2381f78447822ac1eab6504dd8 # v4.2.2
+        with:
+          subject-path: ${{ needs.build.outputs.tarball }}
+      - name: Create the GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          COMMIT: ${{ needs.build.outputs.commit }}
+          TARBALL: ${{ needs.build.outputs.tarball }}
+        # The notes verify before they install, and install the verified local file with scripts off, as
+        # docs/installation.md does; never an install straight from a URL, which skips both checks.
+        run: |
+          fence='```'
+          {
+            echo "Download and verify the tarball:"
+            echo
+            echo "${fence}sh"
+            echo "gh release download $TAG --repo $GITHUB_REPOSITORY"
+            echo "sha256sum -c SHA256SUMS"
+            echo "gh attestation verify $TARBALL --repo $GITHUB_REPOSITORY \\"
+            echo "  --signer-workflow $GITHUB_REPOSITORY/.github/workflows/release.yml"
+            echo "$fence"
+            echo
+            echo "Install the verified tarball, with install scripts off:"
+            echo
+            echo "${fence}sh"
+            echo "npm install -g --ignore-scripts ./$TARBALL"
+            echo "$fence"
+            echo
+            echo "GitHub Action: \`uses: $GITHUB_REPOSITORY@$COMMIT # $TAG\`"
+          } > notes.md
+          prerelease=()
+          case "$TAG" in *-*) prerelease=(--prerelease) ;; esac
+          gh release create "$TAG" "$TARBALL" SHA256SUMS --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "wormsign $TAG" --notes-file notes.md "${prerelease[@]}"

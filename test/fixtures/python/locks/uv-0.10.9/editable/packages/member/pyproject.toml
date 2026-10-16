@@ -1,0 +1,9 @@
+[project]
+name = "member"
+version = "0.2.0"
+requires-python = ">=3.9"
+dependencies = ["certifi"]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

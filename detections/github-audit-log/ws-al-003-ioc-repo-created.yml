@@ -1,0 +1,70 @@
+# WS-AL-003 as one Sigma rule. Fields are GitHub's audit-log event fields, except enriched_description,
+# which your pipeline adds (repo.create carries no description).
+title: Repository created with a worm exfiltration name or description
+id: bf37bf56-65dd-4ff3-8653-794e59a19fd6
+name: ws_al_003_ioc_repo_created
+status: experimental
+description: >-
+  Every Shai-Hulud wave exfiltrates through a new public GitHub repository created with the victim's
+  token: a repository named "Shai-Hulud" (2025-09), 18-character random names described
+  "Sha1-Hulud: The Second Coming." (2025-11), and repositories described "A Mini Shai-Hulud has
+  Appeared" (2026-04) or "Shai-Hulud: Here We Go Again" (2026-08). The values are the patterns of
+  data/iocs/repos.json, which `wormsign audit-org` also uses; the test fails if one is missing here.
+  Sigma compares case-insensitively, so the *Exact patterns also match other capitalisations.
+  repo.create has no description field: enrich every public repo.create with the description from
+  GET /repos/{owner}/{repo}, as enriched_description. Without the enrichment only the name matches,
+  so alert separately when that call fails. Coverage gap: the worm usually creates the repository in
+  the victim's personal account (CISA: "via the GitHub/user/repos API"), which an organization audit
+  log never sees. This rule fires only when the token creates the repository inside a monitored
+  organization or an Enterprise Managed Users enterprise. wormsign id WS-AL-003.
+references:
+  - https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://www.picussecurity.com/resource/blog/mini-shai-hulud-the-npm-supply-chain-worm-explained
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  # GitHub audit-log event schema (repo.create and its fields), retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#repo
+author: wormsign
+date: 2026-10-14
+tags:
+  - attack.exfiltration
+  - attack.t1567.001
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log, and enriched_description added from GET /repos/{owner}/{repo}.
+detection:
+  selection:
+    action: repo.create
+    visibility: public
+  ioc_name:
+    # nameExact: repo is "owner/name".
+    repo|endswith: /Shai-Hulud
+  ioc_description_exact:
+    enriched_description:
+      - Shai-Hulud Migration
+      - 'Sha1-Hulud: The Second Coming.'
+  ioc_description_contains:
+    enriched_description|contains:
+      - 'Sha1-Hulud: The Continued Coming'
+      - A Mini Shai-Hulud has Appeared
+      - 'Shai-Hulud: Here We Go Again'
+  condition: selection and 1 of ioc_*
+falsepositives:
+  - Security researchers creating repositories that collect Shai-Hulud samples or IOCs under these names.
+level: critical
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes. Synthetic events:
+# enriched_description is what the enrichment returns, and @timestamp in epoch milliseconds is
+# illustrative, since GitHub does not document its format.
+examples:
+  positive: |
+    {"action":"repo.create","actor":"victim-dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/Shai-Hulud","visibility":"public"}
+    {"action":"repo.create","actor":"victim-dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/q7k2m9x4v1b8n3c6z5","visibility":"public","enriched_description":"Sha1-Hulud: The Second Coming."}
+    {"action":"repo.create","actor":"victim-dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/x4v1b8n3c6z5q7k2m9","visibility":"public","enriched_description":"Shai-Hulud: Here We Go Again!"}
+  negative: |
+    {"action":"repo.create","actor":"dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/q7k2m9x4v1b8n3c6z5","visibility":"public","enriched_description":"Scratch space"}
+    {"action":"repo.create","actor":"dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/payments-api","visibility":"private"}
+    {"action":"repo.create","actor":"dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/Shai-Hulud","visibility":"private"}
+    {"action":"repo.create","actor":"researcher","@timestamp":1790900000000,"org":"example-org","repo":"example-org/shai-hulud-iocs","visibility":"public","enriched_description":"Notes on the Sha1-Hulud: The Second Coming. wave"}

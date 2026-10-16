@@ -1,0 +1,8 @@
+{
+  "name": "wormsign-replay-2026-04",
+  "version": "1.0.1",
+  "description": "Inert reconstruction of a package republished by the Mini Shai-Hulud wave (April 2026). Not a sample.",
+  "scripts": {
+    "preinstall": "node setup.mjs"
+  }
+}

@@ -1,0 +1,2 @@
+--require-hashes
+-r included/hash#x.txt

@@ -1,0 +1,123 @@
+# WS-AL-001 as three Sigma documents: the correlation rule (the alert), the base rule it counts, and a
+# lower-severity rule for a single change made with a token. Fields are GitHub's audit-log event fields.
+title: Several repositories made public by one actor within an hour
+id: 5085e2ba-c539-4a41-840a-a3e427515ddc
+name: ws_al_001_mass_visibility_flip
+status: experimental
+description: >-
+  Shai-Hulud 2.0 published victims' private repositories using stolen tokens (Wiz, "Sha1-Hulud: The
+  Continued Coming"), and MITRE ATT&CK records Shai-Hulud changing private repositories to public.
+  A burst of private-to-public changes by one actor is rare in normal operation. This counts
+  distinct repositories per actor that went from private or internal to public, and fires at 3
+  within 60 minutes. The threshold and window are the defaults of `wormsign audit-org`, which counts
+  something else: every change to public across the organization, whatever the actor. Put every
+  repo, programmatic_access_type and hashed_token in the alert so a stolen token can be revoked and
+  traced. wormsign id WS-AL-001.
+references:
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://attack.mitre.org/software/S9008/
+  # GitHub audit-log event schema (repo.access and its fields), retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#repo
+author: wormsign
+date: 2026-10-14
+tags:
+  - attack.persistence
+  - attack.t1098
+correlation:
+  type: value_count
+  rules:
+    - ws_al_001_repo_made_public
+  group-by:
+    - actor
+  timespan: 1h
+  condition:
+    field: repo
+    gte: 3
+falsepositives:
+  - Planned open-sourcing of several repositories at once. Suppress by actor and change ticket, not by repository.
+  - Organization migrations run by an admin script with a token.
+level: high
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes. For a correlation the
+# positive events are one stream that must raise the alert, every event in it, and the negative events
+# one stream that must raise none. Synthetic: @timestamp in epoch milliseconds is illustrative, since
+# GitHub does not document its format.
+examples:
+  positive: |
+    {"action":"repo.access","actor":"victim-dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/payments-api","previous_visibility":"private","visibility":"public","programmatic_access_type":"Personal access token (classic)"}
+    {"action":"repo.access","actor":"victim-dev","@timestamp":1790900120000,"org":"example-org","repo":"example-org/infra-terraform","previous_visibility":"private","visibility":"public","programmatic_access_type":"Personal access token (classic)"}
+    {"action":"repo.access","actor":"victim-dev","@timestamp":1790900240000,"org":"example-org","repo":"example-org/mobile-app","previous_visibility":"internal","visibility":"public","programmatic_access_type":"Personal access token (classic)"}
+  negative: |
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900000000,"org":"example-org","repo":"example-org/docs-site","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900060000,"org":"example-org","repo":"example-org/old-prototype","previous_visibility":"internal","visibility":"private"}
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900090000,"org":"example-org","repo":"example-org/internal-wiki","previous_visibility":"private","visibility":"internal"}
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900120000,"org":"example-org","repo":"example-org/docs-site","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900180000,"org":"example-org","repo":"example-org/docs-site","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"release-lead","@timestamp":1790900000000,"org":"example-org","repo":"example-org/sdk-js","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"release-lead","@timestamp":1790901800000,"org":"example-org","repo":"example-org/sdk-py","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"release-lead","@timestamp":1790903660000,"org":"example-org","repo":"example-org/sdk-go","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"admin-a","@timestamp":1790900000000,"org":"example-org","repo":"example-org/cli","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"admin-b","@timestamp":1790900060000,"org":"example-org","repo":"example-org/web","previous_visibility":"private","visibility":"public"}
+---
+title: Repository made public
+id: ad5f539b-9ee2-4f07-b006-73b3c8318851
+name: ws_al_001_repo_made_public
+description: The base rule WS-AL-001 counts. On its own it raises no alert.
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log.
+detection:
+  selection:
+    action: repo.access
+    visibility: public
+    previous_visibility:
+      - private
+      - internal
+  condition: selection
+---
+title: Repository made public with a token
+id: 57d2a7f1-b3b0-47d4-a1b2-84948eca8ebc
+name: ws_al_001_repo_made_public_with_token
+status: experimental
+description: >-
+  The lower-severity signal of WS-AL-001: one private or internal repository made public where
+  programmatic_access_type is set, meaning the change was made with a token or an app, as the worm's
+  are, rather than in the web UI. It assumes GitHub leaves the field out for web-UI changes, which it
+  does not document; check that against your own stream. wormsign id WS-AL-001.
+references:
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://attack.mitre.org/software/S9008/
+  # GitHub audit-log event schema (repo.access and its fields), retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#repo
+author: wormsign
+date: 2026-10-14
+tags:
+  - attack.persistence
+  - attack.t1098
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log.
+detection:
+  selection:
+    action: repo.access
+    visibility: public
+    previous_visibility:
+      - private
+      - internal
+    programmatic_access_type|exists: true
+  condition: selection
+falsepositives:
+  - Planned open-sourcing done with a token. Suppress by actor and change ticket, not by repository.
+  - Organization migrations run by an admin script with a token.
+level: medium
+examples:
+  positive: |
+    {"action":"repo.access","actor":"victim-dev","@timestamp":1790900000000,"org":"example-org","repo":"example-org/payments-api","previous_visibility":"private","visibility":"public","programmatic_access_type":"Personal access token (classic)"}
+  negative: |
+    {"action":"repo.access","actor":"oss-maintainer","@timestamp":1790900000000,"org":"example-org","repo":"example-org/docs-site","previous_visibility":"private","visibility":"public"}
+    {"action":"repo.access","actor":"victim-dev","@timestamp":1790900060000,"org":"example-org","repo":"example-org/old-prototype","previous_visibility":"internal","visibility":"private","programmatic_access_type":"Personal access token (classic)"}

@@ -1,0 +1,2 @@
+--require-hashes
+-r included/cycle-a.txt

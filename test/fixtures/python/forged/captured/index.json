@@ -1,0 +1,34 @@
+{
+  "accept": "application/vnd.pypi.simple.v1+json",
+  "from": "https://pypi.org/simple/<project>/",
+  "note": "JSON metadata only; no package file was downloaded.",
+  "projects": {
+    "jaraco-classes": {
+      "api-version": "1.4",
+      "captured": "2026-10-08T18:23:02Z",
+      "content-type": "application/vnd.pypi.simple.v1+json",
+      "file": "jaraco-classes.json",
+      "files": 37,
+      "sha256": "fd4825bb00c153c8c57dfb0d22f6fb433d9f5d709cf5255c03d5298f5f79a6d6",
+      "why": "a dotted project name: PyPI names the 3.4.0 wheel jaraco.classes-3.4.0-py3-none-any.whl, uv writes jaraco_classes-3.4.0-py3-none-any.whl (forged/uv-export-names)."
+    },
+    "more-itertools": {
+      "api-version": "1.4",
+      "captured": "2026-10-08T18:23:02Z",
+      "content-type": "application/vnd.pypi.simple.v1+json",
+      "file": "more-itertools.json",
+      "files": 113,
+      "sha256": "afe6e8c72d009d13f35647daa1b018d657ee5c58f739e4c9f26d6e50eb3f2a3c",
+      "why": "jaraco.classes 3.4.0 depends on it (forged/uv-export-names)."
+    },
+    "pyyaml": {
+      "api-version": "1.4",
+      "captured": "2026-10-08T16:46:47Z",
+      "content-type": "application/vnd.pypi.simple.v1+json",
+      "file": "pyyaml.json",
+      "files": 582,
+      "sha256": "7f10670c864a08ae7ffc5f911d85af1c515f6db7d14d74d4429a9a5396b4835b",
+      "why": "a real release whose files were uploaded months apart: PyYAML 6.0.1's first file 2023-07-17T23:57:04Z, its cp312 manylinux aarch64 wheel 2024-01-18T20:40:22Z (pypi-research digest, 2026-10-08). JSON metadata only; no package file was downloaded."
+    }
+  }
+}

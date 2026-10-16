@@ -1,0 +1,197 @@
+title: Node.js Spawns TruffleHog or Bun (Shai-Hulud Install-Time Payload)
+id: f73e17d6-c16e-4616-8e66-6c754886cfa1
+name: ws_ep_001_node_spawns_trufflehog_or_bun
+status: experimental
+description: >-
+  Detects the install-time payload: a node process starting the TruffleHog secret scanner or the Bun
+  runtime, Bun starting TruffleHog, Bun running one of the waves' payload files, and TruffleHog run from
+  the worm's cache directory. Shai-Hulud packages run a preinstall/postinstall script with node. In
+  2025-09 that script downloads TruffleHog and runs it through child_process.exec, which puts /bin/sh
+  (cmd.exe on Windows) between node and TruffleHog. That shell-wrapped "trufflehog filesystem ... --json"
+  is matched as the shell's own process when node or bun started it, and as TruffleHog when its working
+  directory is under node_modules, where npm, pnpm, Yarn and Bun run a dependency's lifecycle scripts. A
+  secret-scanning CI job that runs the same command from a shell in its workspace matches neither;
+  without CurrentDirectory in the telemetry, only the shell's own process matches. In 2025-11
+  (setup_bun.js), 2026-04 (Mini Shai-Hulud) and 2026-08 (setup.mjs) the loader starts Bun, as a detached
+  process in 2025-11 (Socket) and again from a VS Code task or a Claude Code hook in 2026-08 (WS-EP-002).
+  Bun started by a shell is matched in install context, and Bun running bun_environment.js,
+  tanstack_runner.js, .claude/execution.js or math_init.js is matched whatever started it. The 2025-11 Bun
+  payload then fetches TruffleHog into ~/.truffler-cache and runs it, so its parent is bun: both the bun
+  parent and the cache path catch that scan. pm2 and nodemon, node programs that keep Bun apps running,
+  are filtered by their command line. pm2's daemon renames itself PM2 v<version>, but an EDR that records
+  the command line at exec time, and Windows, where process.title sets only the console title, show
+  node .../pm2/lib/Daemon.js, which is filtered too. Bun asked only for its version is filtered:
+  oven-sh/setup-bun runs bun --revision from the runner's node on every CI run. So is Bun run as node:
+  with no Node.js installed, or under bun --bun, a node link to Bun comes first on PATH, and a
+  dependency's node install.js runs as bun. It still matches when it runs a wave's loader, setup_bun.js
+  or setup.mjs. The payload-name, cache-path and shell-scan branches take no filter. Not covered: the Actions runner the worm installs under
+  ~/.dev-env (WS-CI-004 reads its config.sh command line), the runner's job process running a
+  discussion's body as a command, and the home-folder wipe. wormsign id WS-EP-001.
+references:
+  - https://www.stepsecurity.io/blog/ctrl-tinycolor-and-40-npm-packages-compromised
+  - https://socket.dev/blog/shai-hulud-strikes-again-v2
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://www.picussecurity.com/resource/blog/mini-shai-hulud-the-npm-supply-chain-worm-explained
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  - https://attack.mitre.org/software/S9008/
+  # setup-bun's getRevision runs the binary with --revision, then --version; a node24 action. Retrieved 2026-10-15.
+  - https://github.com/oven-sh/setup-bun/blob/main/src/action.ts
+  # pm2's daemon sets process.title to "PM2 v<version>: God Daemon (...)" once running. Retrieved 2026-10-15.
+  - https://github.com/Unitech/pm2/blob/master/lib/Daemon.js
+  # bun run --bun: "via symlinking node". Retrieved 2026-10-15.
+  - https://bun.com/docs/cli/run
+author: wormsign
+date: 2026-10-02
+modified: 2026-10-15
+tags:
+  - attack.persistence
+  - attack.t1546.016
+  - attack.command-and-control
+  - attack.t1105
+  - attack.credential-access
+  - attack.t1552.001
+logsource:
+  category: process_creation
+detection:
+  child_trufflehog:
+    Image|endswith:
+      - '/trufflehog'
+      - '\trufflehog.exe'
+  child_bun:
+    Image|endswith:
+      - '/bun'
+      - '\bun.exe'
+  parent_node:
+    ParentImage|endswith:
+      - '/node'
+      - '\node.exe'
+  parent_bun:
+    # 2025-11: the Bun payload starts TruffleHog itself.
+    ParentImage|endswith:
+      - '/bun'
+      - '\bun.exe'
+  parent_shell:
+    # child_process.exec runs its command through /bin/sh, or cmd.exe on Windows.
+    ParentImage|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '\cmd.exe'
+  parent_scan_args:
+    ParentCommandLine|contains|all:
+      - 'trufflehog'
+      - 'filesystem'
+      - '--json'
+  install_context:
+    # Package managers run a dependency's lifecycle script in that package's directory under node_modules.
+    CurrentDirectory|contains:
+      - '/node_modules/'
+      - '\node_modules\'
+  shell_scan_from_node:
+    # The shell's own process: node or bun ran sh -c (or cmd.exe /c) "trufflehog filesystem ... --json".
+    Image|endswith:
+      - '/sh'
+      - '/bash'
+      - '/dash'
+      - '\cmd.exe'
+    ParentImage|endswith:
+      - '/node'
+      - '/bun'
+      - '\node.exe'
+      - '\bun.exe'
+    CommandLine|contains|all:
+      - 'trufflehog'
+      - 'filesystem'
+      - '--json'
+  payload_by_bun:
+    # The waves' Bun payload files (data/iocs/files.json, Picus for 2026-04), however bun was started.
+    Image|endswith:
+      - '/bun'
+      - '\bun.exe'
+    CommandLine|contains:
+      - 'bun_environment.js'
+      - 'tanstack_runner.js'
+      - '.claude/execution.js'
+      - '.claude\execution.js'
+      - 'math_init.js'
+  worm_cache:
+    Image|contains:
+      - '/.truffler-cache/'
+      - '\.truffler-cache\'
+  loader_script:
+    # The waves' install-time loaders (data/iocs/files.json for 2025-11, JFrog for 2026-08; WS-CI-001).
+    CommandLine|contains:
+      - 'setup_bun.js'
+      - 'setup.mjs'
+  filter_bun_version_check:
+    # Bun asked for its version and nothing else: oven-sh/setup-bun runs bun --revision, then --version, and the
+    # `bun` npm package's postinstall (node install.js) runs its own binary with --version. The flag must follow
+    # the binary, so `bun payload.js --version` still matches.
+    Image|endswith:
+      - '/bun'
+      - '\bun.exe'
+    CommandLine|endswith:
+      - 'bun --version'
+      - 'bun --revision'
+      - 'bun.exe --version'
+      - 'bun.exe --revision'
+      - 'bun.exe" --version'
+      - 'bun.exe" --revision'
+  filter_bun_as_node:
+    # Bun run as node (argv[0]): with no Node.js installed, or under bun --bun, Bun puts a node link to itself first
+    # on PATH for package scripts.
+    Image|endswith:
+      - '/bun'
+      - '\bun.exe'
+    CommandLine|startswith: 'node '
+  filter_process_manager:
+    # pm2's daemon and nodemon are node programs that start and restart long-running apps, Bun ones included. pm2's
+    # daemon renames itself "PM2 v<version>: God Daemon"; at exec time, and on Windows, it is node pm2/lib/Daemon.js.
+    ParentCommandLine|contains:
+      - 'PM2 v'
+      - 'pm2/lib/Daemon.js'
+      - 'pm2\lib\Daemon.js'
+      - '/nodemon'
+      - '\nodemon'
+  condition: ((child_trufflehog and (parent_node or parent_bun)) or (child_bun and parent_node and not filter_process_manager) or (parent_shell and install_context and ((child_bun and (loader_script or not filter_bun_as_node)) or (child_trufflehog and parent_scan_args)))) and not filter_bun_version_check or shell_scan_from_node or payload_by_bun or worm_cache
+falsepositives:
+  - Node-based developer tooling that deliberately starts Bun (for example a script that shells out to bunx).
+  - Secret-scanning wrappers that node starts, such as a pre-commit hook, a JavaScript CI action or an npm script (npm run scan) running trufflehog filesystem --json. node is the parent of TruffleHog or of its shell, so this still fires.
+  - A shell-wrapped trufflehog filesystem --json scan run from a working directory inside node_modules.
+  - A dependency whose own install script runs bun (for example postinstall bun build.ts), or a node program other than pm2 and nodemon that supervises a Bun app.
+  - A dependency whose install script runs setup.mjs under Bun with no Node.js installed (Bun standing in for node is filtered unless it runs a loader name).
+level: high
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes and `sigma check`
+# accepts them. Inert, synthetic process_creation events, one JSON object per line, written to fit the rule rather
+# than captured. Two negatives are a CI secret-scanning job: TruffleHog started by sh -c in the workspace, and that
+# shell started by bash.
+examples:
+  positive: |
+    {"Image":"/home/runner/.truffler-cache/trufflehog","ParentImage":"/home/runner/.bun/bin/bun","CommandLine":"/home/runner/.truffler-cache/trufflehog filesystem /home/runner --json","ParentCommandLine":"bun bun_environment.js"}
+    {"Image":"/usr/local/bin/trufflehog","ParentImage":"/bin/sh","CommandLine":"trufflehog filesystem / --json","ParentCommandLine":"/bin/sh -c trufflehog filesystem / --json","CurrentDirectory":"/home/dev/app/node_modules/@ctrl/tinycolor"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/usr/local/bin/node","CommandLine":"/home/dev/.bun/bin/bun bun_environment.js","ParentCommandLine":"node setup_bun.js"}
+    {"Image":"C:\\Users\\dev\\.bun\\bin\\bun.exe","ParentImage":"C:\\Program Files\\nodejs\\node.exe","CommandLine":"bun.exe bun_environment.js","ParentCommandLine":"node setup_bun.js"}
+    {"Image":"/bin/sh","ParentImage":"/usr/bin/node","CommandLine":"/bin/sh -c trufflehog filesystem / --json","ParentCommandLine":"node bundle.js","CurrentDirectory":"/home/dev/app/node_modules/@ctrl/tinycolor"}
+    {"Image":"/usr/local/bin/trufflehog","ParentImage":"/home/dev/.bun/bin/bun","CommandLine":"/usr/local/bin/trufflehog filesystem /home/dev --json","ParentCommandLine":"/home/dev/.bun/bin/bun bun_environment.js","CurrentDirectory":"/home/dev"}
+    {"Image":"/home/dev/.cache/bun/bin/bun","ParentImage":"/bin/sh","CommandLine":"/home/dev/.cache/bun/bin/bun ./payload.js","ParentCommandLine":"sh -c /home/dev/.cache/bun/bin/bun ./payload.js","CurrentDirectory":"/home/dev/app/node_modules/example-pkg"}
+    {"Image":"/tmp/bun-1.3.13/bun","ParentImage":"/bin/bash","CommandLine":"/tmp/bun-1.3.13/bun /home/dev/repo/.claude/math_init.js","ParentCommandLine":"bash -c nohup /tmp/bun-1.3.13/bun /home/dev/repo/.claude/math_init.js","CurrentDirectory":"/home/dev/repo"}
+    {"Image":"C:\\Windows\\System32\\cmd.exe","ParentImage":"C:\\Program Files\\nodejs\\node.exe","CommandLine":"C:\\Windows\\system32\\cmd.exe /d /s /c \"trufflehog filesystem C:\\Users\\dev --json\"","ParentCommandLine":"node bundle.js","CurrentDirectory":"C:\\Users\\dev\\app\\node_modules\\@ctrl\\tinycolor"}
+    {"Image":"C:\\Tools\\trufflehog.exe","ParentImage":"C:\\Windows\\System32\\cmd.exe","CommandLine":"trufflehog filesystem C:\\Users\\dev --json","ParentCommandLine":"C:\\Windows\\system32\\cmd.exe /d /s /c \"trufflehog filesystem C:\\Users\\dev --json\"","CurrentDirectory":"C:\\Users\\dev\\app\\node_modules\\@ctrl\\tinycolor"}
+    {"Image":"C:\\Users\\dev\\.truffler-cache\\trufflehog.exe","ParentImage":"C:\\Windows\\System32\\cmd.exe","CommandLine":"C:\\Users\\dev\\.truffler-cache\\trufflehog.exe filesystem C:\\Users\\dev --json","ParentCommandLine":"cmd.exe /c scan.cmd","CurrentDirectory":"C:\\Users\\dev"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/bin/sh","CommandLine":"node setup_bun.js","ParentCommandLine":"sh -c node setup_bun.js","CurrentDirectory":"/home/dev/app/node_modules/@ctrl/tinycolor"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/bin/sh","CommandLine":"node setup.mjs","ParentCommandLine":"sh -c node setup.mjs","CurrentDirectory":"/home/dev/app/node_modules/example-pkg"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/usr/local/bin/node","CommandLine":"/home/dev/.bun/bin/bun ./stage2.js --version","ParentCommandLine":"node setup_bun.js"}
+  negative: |
+    {"Image":"/home/dev/app/node_modules/@oven/bun-linux-x64/bin/bun","ParentImage":"/usr/bin/node","CommandLine":"/home/dev/app/node_modules/@oven/bun-linux-x64/bin/bun --version","ParentCommandLine":"node install.js"}
+    {"Image":"/opt/homebrew/bin/trufflehog","ParentImage":"/bin/zsh","CommandLine":"trufflehog git file://. --json","ParentCommandLine":"-zsh"}
+    {"Image":"/home/dev/app/node_modules/@esbuild/linux-x64/bin/esbuild","ParentImage":"/usr/bin/node","CommandLine":"esbuild --version","ParentCommandLine":"node install.js"}
+    {"Image":"/usr/local/bin/trufflehog","ParentImage":"/bin/sh","CommandLine":"trufflehog filesystem . --json --no-update","ParentCommandLine":"/bin/sh -c trufflehog filesystem . --json --no-update","CurrentDirectory":"/home/runner/work/app/app"}
+    {"Image":"/bin/sh","ParentImage":"/usr/bin/bash","CommandLine":"/bin/sh -c trufflehog filesystem . --json --no-update","ParentCommandLine":"/usr/bin/bash -e /home/runner/work/_temp/0f3c2a.sh","CurrentDirectory":"/home/runner/work/app/app"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/usr/bin/node","CommandLine":"/home/dev/.bun/bin/bun /srv/app/server.ts","ParentCommandLine":"PM2 v5.4.2: God Daemon (/home/dev/.pm2)","CurrentDirectory":"/srv/app"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/usr/bin/node","CommandLine":"bun src/index.ts","ParentCommandLine":"node /home/dev/app/node_modules/.bin/nodemon --exec bun src/index.ts","CurrentDirectory":"/home/dev/app"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/bin/sh","CommandLine":"bun run build","ParentCommandLine":"sh -c bun run build","CurrentDirectory":"/home/dev/app"}
+    {"Image":"C:\\Windows\\System32\\cmd.exe","ParentImage":"C:\\Program Files\\nodejs\\node.exe","CommandLine":"C:\\Windows\\system32\\cmd.exe /d /s /c \"git status --porcelain\"","ParentCommandLine":"node scripts/release.js","CurrentDirectory":"C:\\Users\\dev\\app"}
+    {"Image":"/home/runner/.bun/bin/bun","ParentImage":"/home/runner/actions-runner/cached/externals/node24/bin/node","CommandLine":"/home/runner/.bun/bin/bun --revision","ParentCommandLine":"/home/runner/actions-runner/cached/externals/node24/bin/node /home/runner/work/_actions/oven-sh/setup-bun/v2/dist/setup/index.js","CurrentDirectory":"/home/runner/work/app/app"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/bin/sh","CommandLine":"node install.js","ParentCommandLine":"sh -c node install.js","CurrentDirectory":"/home/dev/app/node_modules/esbuild"}
+    {"Image":"C:\\Users\\dev\\.bun\\bin\\bun.exe","ParentImage":"C:\\Program Files\\nodejs\\node.exe","CommandLine":"C:\\Users\\dev\\.bun\\bin\\bun.exe C:\\srv\\app\\server.ts","ParentCommandLine":"\"C:\\Program Files\\nodejs\\node.exe\" C:\\Users\\dev\\AppData\\Roaming\\npm\\node_modules\\pm2\\lib\\Daemon.js","CurrentDirectory":"C:\\srv\\app"}
+    {"Image":"/home/dev/.bun/bin/bun","ParentImage":"/usr/bin/node","CommandLine":"/home/dev/.bun/bin/bun /srv/app/server.ts","ParentCommandLine":"node /usr/lib/node_modules/pm2/lib/Daemon.js","CurrentDirectory":"/srv/app"}

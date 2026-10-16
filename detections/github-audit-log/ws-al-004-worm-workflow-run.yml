@@ -1,0 +1,233 @@
+# WS-AL-004 as three Sigma rules: a new workflow's first run deleted with a token within the hour (critical, a
+# correlation over two base rules); a run on a worm branch (critical); and a job started on a worm branch (critical).
+# Fields are GitHub's audit-log event fields. An earlier rule for runs started by a bot, which gave the file its old
+# name, was removed: the worm pushes with the victim's own token, so it runs as a human actor.
+title: Job started on a Shai-Hulud worm branch
+id: 9d226234-b0d1-43ac-a8de-11e460159a8c
+name: ws_al_004_worm_branch_job
+status: experimental
+description: >-
+  Each wave pushes a workflow that serializes every secret, ${{ toJSON(secrets) }}, on a branch of its own:
+  shai-hulud-workflow.yml on shai-hulud (2025-09), formatter_123456789.yml on add-linter-workflow-<ms>
+  (2025-11), and codeql_analysis.yml ("Run Copilot") on dependabot/github_actions/format/setup-formatter,
+  committed as github-advanced-security[bot] (2026-08). It pushes with the victim's stolen token, so the
+  run's actor is the victim, a human: an earlier version of this rule, which watched for first runs started
+  by a bot, missed the worm and fired once per repository on Dependabot's own first run. This rule watches
+  workflows.prepared_workflow_job, which GitHub describes as a job that started and lists the secrets
+  provided to it in secrets_passed: the list of secrets to rotate. secrets_passed is for the responder, not a
+  condition. It is a JSON array, which Splunk's JSON extraction may name secrets_passed{} (the spath path
+  of an array's values), so a test of secrets_passed could never match there; and a worm job in a
+  repository without secrets is still the worm. GitHub lists job_workflow_ref without defining its value,
+  so the rule matches the branch after the @ in two forms: refs/heads/<branch>, as in the Actions OIDC
+  claim of that name (owner/repo/path@ref), and the bare branch. Neither was checked against a real event,
+  so this rule's recall is unverified: a value in another form, such as a commit SHA after the @, never
+  matches, and nothing says so. ws_al_004_worm_branch_run reads the documented head_branch of the same
+  runs. The branches are those of data/iocs/repos.json; the test fails if one is missing here, in either
+  form. wormsign id WS-AL-004.
+references:
+  - https://www.stepsecurity.io/blog/ctrl-tinycolor-and-40-npm-packages-compromised
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  - https://attack.mitre.org/software/S9008/
+  # GitHub audit-log event schema (workflows.prepared_workflow_job: job_workflow_ref, secrets_passed), retrieved 2026-10-15.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#workflows
+  # Splunk spath: a location path names the values of an array with {} (commits{}.id), retrieved 2026-10-15.
+  - https://help.splunk.com/en/splunk-enterprise/search/spl-search-reference/10.6/search-commands/spath
+author: wormsign
+date: 2026-10-15
+tags:
+  - attack.execution
+  - attack.t1677
+  - attack.credential-access
+  - attack.t1528
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log; workflows.prepared_workflow_job is not shown in the web UI.
+detection:
+  selection:
+    action: workflows.prepared_workflow_job
+  worm_ref_exact:
+    job_workflow_ref|endswith:
+      - '@refs/heads/shai-hulud'
+      - '@shai-hulud'
+      - '@refs/heads/dependabot/github_actions/format/setup-formatter'
+      - '@dependabot/github_actions/format/setup-formatter'
+  worm_ref_prefix:
+    job_workflow_ref|contains:
+      - '@refs/heads/add-linter-workflow-'
+      - '@add-linter-workflow-'
+  condition: selection and 1 of worm_ref_*
+falsepositives:
+  - A branch given one of these names on purpose, for example to test this rule or to replay the worm.
+level: critical
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes. Synthetic events:
+# @timestamp in epoch milliseconds is illustrative, since GitHub does not document its format, and so are the
+# values of job_workflow_ref and secrets_passed.
+examples:
+  positive: |
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790900030000,"repo":"example-org/api","workflow_run_id":555,"job_name":"format","job_workflow_ref":"example-org/api/.github/workflows/codeql_analysis.yml@refs/heads/dependabot/github_actions/format/setup-formatter","runner_name":"GitHub Actions 7","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN","AWS_SECRET_ACCESS_KEY"]}
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790900030000,"repo":"example-org/web","workflow_run_id":556,"job_name":"lint","job_workflow_ref":"example-org/web/.github/workflows/formatter_123456789.yml@refs/heads/add-linter-workflow-1764000000000","runner_name":"GitHub Actions 8","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790800030000,"repo":"example-org/lib","workflow_run_id":554,"job_name":"process","job_workflow_ref":"example-org/lib/.github/workflows/shai-hulud-workflow.yml@refs/heads/shai-hulud","runner_name":"GitHub Actions 9","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790800030000,"repo":"example-org/new-lib","workflow_run_id":553,"job_name":"process","job_workflow_ref":"example-org/new-lib/.github/workflows/shai-hulud-workflow.yml@refs/heads/shai-hulud","runner_name":"GitHub Actions 13","is_hosted_runner":true}
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790900030000,"repo":"example-org/cli","workflow_run_id":558,"job_name":"lint","job_workflow_ref":"example-org/cli/.github/workflows/formatter_123456789.yml@add-linter-workflow-1764000000000","runner_name":"GitHub Actions 14","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"victim-dev","@timestamp":1790900030000,"repo":"example-org/sdk","workflow_run_id":559,"job_name":"format","job_workflow_ref":"example-org/sdk/.github/workflows/codeql_analysis.yml@dependabot/github_actions/format/setup-formatter","runner_name":"GitHub Actions 15","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+  negative: |
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790900030000,"repo":"example-org/api","workflow_run_id":557,"job_name":"test","job_workflow_ref":"example-org/api/.github/workflows/ci.yml@refs/heads/main","runner_name":"GitHub Actions 10","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790900030000,"repo":"example-org/api","workflow_run_id":560,"job_name":"lint","job_workflow_ref":"example-org/api/.github/workflows/lint.yml@refs/heads/feature/add-linter-workflow-1","runner_name":"GitHub Actions 11","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790900030000,"repo":"example-org/docs","workflow_run_id":561,"job_name":"build","job_workflow_ref":"example-org/docs/.github/workflows/docs.yml@refs/heads/shai-hulud-notes","runner_name":"GitHub Actions 12","is_hosted_runner":true,"secrets_passed":["DOCS_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790900030000,"repo":"example-org/api","workflow_run_id":563,"job_name":"lint","job_workflow_ref":"example-org/api/.github/workflows/lint.yml@feature/add-linter-workflow-1","runner_name":"GitHub Actions 16","is_hosted_runner":true,"secrets_passed":["NPM_TOKEN"]}
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790900030000,"repo":"example-org/docs","workflow_run_id":564,"job_name":"build","job_workflow_ref":"example-org/docs/.github/workflows/docs.yml@shai-hulud-notes","runner_name":"GitHub Actions 17","is_hosted_runner":true,"secrets_passed":["DOCS_TOKEN"]}
+---
+title: New workflow's run deleted with a token within the hour
+id: a2e06dd7-a39e-473d-bde8-e26748c25154
+name: ws_al_004_new_workflow_run_deleted_by_token
+status: experimental
+description: >-
+  A workflow runs for the first time and, within the hour, that first run is deleted with a token: the
+  2026-08 wave deletes its workflow run and its branch afterwards (JFrog), which also deletes the run's
+  log. For 2025-11, Wiz reports that it deletes "the workflow" and the branch, which does not say whether
+  the run is deleted, so this may not fire for that wave. The audit log has no event that names an added
+  file: git.push carries no paths, and GitHub leaves Git events made through the REST or GraphQL APIs (how
+  the worm writes files) out of exports and REST results. So the first run stands for the new workflow:
+  run_number is 1 only on a workflow's first run (GitHub's Actions contexts reference), assumed to be the
+  same number the audit log reports. delete_workflow_run carries run_number, workflow_id and started_at
+  itself, but a single-event rule cannot replace this correlation: Sigma cannot compare two fields, so it
+  could not require the deletion to come within the hour of the run, and a retention script that deletes
+  old runs with a token would fire once for every workflow's first run. Deleted with a token means
+  programmatic_access_type is set, which assumes GitHub leaves the field out for web-UI deletions; GitHub
+  does not document that. If the worm's workflow file has the path of an existing workflow, its run is
+  not a first run and this does not fire. For each alert, fetch the workflow file at head_sha: `wormsign
+  scan` flags toJSON(secrets) and IOC workflow names in it. wormsign id WS-AL-004.
+references:
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://attack.mitre.org/software/S9008/
+  # GitHub audit-log event schema (workflows events and their fields; delete_workflow_run's run_number,
+  # workflow_id and started_at), retrieved 2026-10-14 and 2026-10-15.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#workflows
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/reviewing-the-audit-log-for-your-organization
+  # github.run_number: "begins at 1 for the workflow's first run", retrieved 2026-10-14.
+  - https://docs.github.com/en/actions/reference/workflows-and-actions/contexts
+author: wormsign
+date: 2026-10-14
+modified: 2026-10-15
+tags:
+  - attack.execution
+  - attack.t1677
+correlation:
+  # temporal, not temporal_ordered: no run of a workflow can be deleted before its first run exists, and the
+  # Splunk and ES|QL backends convert only temporal.
+  type: temporal
+  rules:
+    - ws_al_004_new_workflow_first_run
+    - ws_al_004_workflow_run_deleted_by_token
+  group-by:
+    - repo
+    - workflow_id
+  timespan: 1h
+falsepositives:
+  - Release automation that deletes its own runs with a token. Only a deletion of a workflow's first run within the hour after it fires, which keeps this rare.
+level: critical
+examples:
+  positive: |
+    {"action":"workflows.created_workflow_run","actor":"victim-dev","@timestamp":1790900000000,"repo":"example-org/api","workflow_id":9001,"workflow_run_id":555,"run_number":1,"name":"Run Copilot","head_branch":"dependabot/github_actions/format/setup-formatter","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"victim-dev","@timestamp":1790900400000,"repo":"example-org/api","workflow_id":9001,"workflow_run_id":555,"run_number":1,"programmatic_access_type":"OAuth access token"}
+  negative: |
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/a","workflow_id":21,"workflow_run_id":601,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"dev","@timestamp":1790907300000,"repo":"example-org/a","workflow_id":21,"workflow_run_id":601,"run_number":1,"programmatic_access_type":"OAuth access token"}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/b","workflow_id":22,"workflow_run_id":602,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"dev","@timestamp":1790900300000,"repo":"example-org/b","workflow_id":22,"workflow_run_id":602,"run_number":1}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/c","workflow_id":23,"workflow_run_id":603,"run_number":40,"name":"Release","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"release-bot","@timestamp":1790900060000,"repo":"example-org/c","workflow_id":23,"workflow_run_id":603,"run_number":40,"programmatic_access_type":"GitHub App server-to-server token"}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/e","workflow_id":25,"workflow_run_id":606,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"dev","@timestamp":1790900060000,"repo":"example-org/e","workflow_id":26,"workflow_run_id":607,"run_number":1,"programmatic_access_type":"OAuth access token"}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/f","workflow_id":27,"workflow_run_id":608,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"dev","@timestamp":1790900060000,"repo":"example-org/g","workflow_id":27,"workflow_run_id":609,"run_number":1,"programmatic_access_type":"OAuth access token"}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/h","workflow_id":28,"workflow_run_id":610,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"cleanup-app[bot]","@timestamp":1790900600000,"repo":"example-org/h","workflow_id":28,"workflow_run_id":611,"run_number":2,"programmatic_access_type":"GitHub App server-to-server token"}
+---
+title: A workflow's first run
+id: f647a75a-b752-402b-adfa-fbc5b7939a1b
+name: ws_al_004_new_workflow_first_run
+description: Base rule of the WS-AL-004 deletion correlation. On its own it raises no alert.
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log; workflows.created_workflow_run is not shown in the web UI.
+detection:
+  selection:
+    action: workflows.created_workflow_run
+    run_number: 1
+  condition: selection
+---
+title: A workflow's first run deleted with a token
+id: df96c020-0440-414b-91c9-cef61a171f69
+name: ws_al_004_workflow_run_deleted_by_token
+description: Base rule of the WS-AL-004 deletion correlation. On its own it raises no alert.
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log.
+detection:
+  selection:
+    action: workflows.delete_workflow_run
+    run_number: 1
+    programmatic_access_type|exists: true
+  condition: selection
+---
+title: Workflow run on a Shai-Hulud worm branch
+id: f9bf1836-2261-4272-a30a-935dbf3e9790
+name: ws_al_004_worm_branch_run
+status: experimental
+description: >-
+  A workflow run on a branch name one of the waves uses: shai-hulud (2025-09),
+  add-linter-workflow-<ms> (2025-11) or dependabot/github_actions/format/setup-formatter (2026-08).
+  The values are the branches of data/iocs/repos.json; the test fails if one is missing here. The
+  2025-11 and 2026-08 payloads delete the branch after the run, so the audit log may be the only
+  place it is still visible. wormsign id WS-AL-004.
+references:
+  - https://www.stepsecurity.io/blog/ctrl-tinycolor-and-40-npm-packages-compromised
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  # GitHub audit-log event schema (workflows events and their fields), retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#workflows
+author: wormsign
+date: 2026-10-14
+tags:
+  - attack.execution
+  - attack.t1677
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log; workflows.created_workflow_run is not shown in the web UI.
+detection:
+  selection:
+    action: workflows.created_workflow_run
+  worm_branch_exact:
+    head_branch:
+      - shai-hulud
+      - dependabot/github_actions/format/setup-formatter
+  worm_branch_prefix:
+    head_branch|startswith: add-linter-workflow-
+  condition: selection and 1 of worm_branch_*
+falsepositives:
+  - A branch given one of these names on purpose, for example to test this rule.
+level: critical
+examples:
+  positive: |
+    {"action":"workflows.created_workflow_run","actor":"victim-dev","@timestamp":1790800000000,"repo":"example-org/lib","workflow_id":8001,"workflow_run_id":554,"run_number":1,"name":".github/workflows/shai-hulud-workflow.yml","head_branch":"shai-hulud","event":"push","actor_is_bot":false}
+    {"action":"workflows.created_workflow_run","actor":"victim-dev","@timestamp":1790900000000,"repo":"example-org/api","workflow_id":9001,"workflow_run_id":555,"run_number":1,"name":"Run Copilot","head_branch":"dependabot/github_actions/format/setup-formatter","event":"push","actor_is_bot":false}
+    {"action":"workflows.created_workflow_run","actor":"template-sync[bot]","@timestamp":1790900000000,"repo":"example-org/web","workflow_id":9002,"workflow_run_id":556,"run_number":1,"name":"Code Formatter","head_branch":"add-linter-workflow-1764000000000","event":"push","actor_is_bot":true}
+  negative: |
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/api","workflow_id":12,"workflow_run_id":557,"run_number":1,"name":"CI","head_branch":"main","event":"push","actor_is_bot":false}
+    {"action":"workflows.created_workflow_run","actor":"dev","@timestamp":1790900000000,"repo":"example-org/api","workflow_id":12,"workflow_run_id":560,"run_number":2,"name":"CI","head_branch":"feature/add-linter-workflow-1","event":"push","actor_is_bot":false}
+    {"action":"workflows.delete_workflow_run","actor":"victim-dev","@timestamp":1790900400000,"repo":"example-org/lib","workflow_id":8001,"workflow_run_id":554,"run_number":1,"head_branch":"shai-hulud","programmatic_access_type":"OAuth access token"}

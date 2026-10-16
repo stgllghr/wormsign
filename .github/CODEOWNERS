@@ -1,0 +1,26 @@
+# Code owners: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+# GitHub reads this file from the pull request's base branch, and the last matching pattern wins. Review by an
+# owner is requested automatically; it is required only where branch protection turns on "Require review from
+# Code Owners".
+
+# Everything.
+*                         @stgllghr
+
+# Named again so that these lines survive if the catch-all above is ever narrowed or delegated. Each one can
+# switch off or rewrite the checks themselves, so a change to it needs the owner's review, not only a green CI:
+# - .wormsign-baseline.json suppresses findings. A new entry silences a finding in every scan of main after merge
+#   (wormsign diff reads the baseline from the base branch, so it cannot silence the pull request that adds it).
+# - .github/ holds the workflows, which run with repository tokens and run wormsign's own gate, plus this file.
+#   A workflow change can weaken the gate, widen permissions or swap a pinned action.
+# - data/iocs/ is what every user's scan matches against, and what update-iocs serves from main. A removed or
+#   wrong entry hides a compromise for everyone.
+# - THIRD_PARTY_NOTICES.md is the attribution the Apache-2.0 IOC data requires; it must change with data/iocs/.
+# - action.yml is what other repositories run when they use this Action; its inputs and steps run in their CI.
+# - src/vendor/ is third-party code that runs inside wormsign (the vendored TOML parser). It must stay
+#   byte-identical to the pinned npm tarball (src/vendor/smol-toml/VENDORED.json, scripts/verify-vendor.mjs).
+/.wormsign-baseline.json  @stgllghr
+/.github/                 @stgllghr
+/data/iocs/               @stgllghr
+/THIRD_PARTY_NOTICES.md   @stgllghr
+/action.yml               @stgllghr
+/src/vendor/              @stgllghr

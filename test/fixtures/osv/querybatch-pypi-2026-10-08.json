@@ -1,0 +1,82 @@
+{
+  "_about": {
+    "fetched": "2026-10-08T16:20:15Z",
+    "request": "POST https://api.osv.dev/v1/querybatch",
+    "status": 200,
+    "note": "Real read-only response; content unmodified, only re-indented. The full records of the versions with a GHSA id are recorded in query/."
+  },
+  "request": {
+    "queries": [
+      {
+        "package": {
+          "name": "num2words",
+          "ecosystem": "PyPI"
+        },
+        "version": "0.5.15"
+      },
+      {
+        "package": {
+          "name": "requests",
+          "ecosystem": "PyPI"
+        },
+        "version": "2.31.0"
+      },
+      {
+        "package": {
+          "name": "six",
+          "ecosystem": "PyPI"
+        },
+        "version": "1.17.0"
+      }
+    ]
+  },
+  "response": {
+    "results": [
+      {
+        "vulns": [
+          {
+            "id": "GHSA-jxr6-qrxx-2ph2",
+            "modified": "2026-07-30T05:15:37.523417Z"
+          },
+          {
+            "id": "MAL-2025-6794",
+            "modified": "2026-07-23T07:53:03.562857Z"
+          },
+          {
+            "id": "PYSEC-2025-72",
+            "modified": "2025-08-06T04:27:26.046626Z"
+          }
+        ]
+      },
+      {
+        "vulns": [
+          {
+            "id": "GHSA-9hjg-9r4m-mvj7",
+            "modified": "2026-09-10T03:50:25.139398Z"
+          },
+          {
+            "id": "GHSA-9wx4-h78v-vm56",
+            "modified": "2026-09-10T03:50:13.740879Z"
+          },
+          {
+            "id": "GHSA-gc5v-m9x4-r6x2",
+            "modified": "2026-09-10T03:50:39.207922Z"
+          },
+          {
+            "id": "PYSEC-2026-1872",
+            "modified": "2026-07-07T17:47:00.332079Z"
+          },
+          {
+            "id": "PYSEC-2026-1873",
+            "modified": "2026-07-07T17:46:36.762141Z"
+          },
+          {
+            "id": "PYSEC-2026-2275",
+            "modified": "2026-07-13T07:15:43.964902Z"
+          }
+        ]
+      },
+      {}
+    ]
+  }
+}

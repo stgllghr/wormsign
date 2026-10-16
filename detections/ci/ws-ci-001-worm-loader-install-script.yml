@@ -1,0 +1,62 @@
+id: WS-CI-001
+title: Dependency install script runs a known Shai-Hulud loader
+severity: critical
+description: >-
+  Infected package versions add a preinstall script that starts the worm: it runs setup_bun.js,
+  which runs bun_environment.js with Bun (2025-11), or `node setup.mjs` (2026-04 and 2026-08).
+  The rule needs npm to print dependency scripts, which it reliably does only with
+  --loglevel=info; what each npm version prints is in "Make install output visible" in
+  detections/README.md. A match on npm 12's "npm warn install-scripts" line means the loader
+  arrived and was blocked. setup.mjs is a common file name, so it only counts on the same line
+  as the word preinstall: a bare "node setup.mjs" command line could be the project's own
+  preinstall, and this rule leaves it alone (see known_miss).
+attack:
+  - id: T1546.016
+    name: "Event Triggered Execution: Installer Packages"
+    url: https://attack.mitre.org/techniques/T1546/016/
+  - id: T1195.001
+    name: "Supply Chain Compromise: Compromise Software Dependencies and Development Tools"
+    url: https://attack.mitre.org/techniques/T1195/001/
+data_source: >-
+  CI job logs of dependency-install steps (npm ci / npm install), run with --loglevel=info. pnpm and
+  Yarn output formats were not checked.
+iocs:
+  - data/iocs/files.json: setup_bun.js
+  - data/iocs/files.json: bun_environment.js
+  - data/iocs/files.json: setup.mjs
+pattern: '\b(setup_bun|bun_environment)\.js\b|preinstall\b.*\bnode setup\.mjs\b'
+logic: |
+  Match pattern against each line of the install step's log. Alert with the package@version from the
+  same line (in --foreground-scripts output, from the "> pkg@version preinstall" or
+  "npm notice run pkg@version preinstall" line before it), then run wormsign scan on the lockfile to
+  list every affected package.
+false_positives:
+  - Security tools, including wormsign itself, that print these file names in their own reports. Scope the search to install steps.
+  - A legitimate dependency whose own preinstall runs `node setup.mjs`. Check its package@version against data/iocs/packages.json with wormsign scan, and the file's hash against data/iocs/files.json.
+sources:
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://socket.dev/blog/shai-hulud-strikes-again-v2
+  - https://unit42.paloaltonetworks.com/npm-supply-chain-attack/
+  - https://research.jfrog.com/post/shai-hulud-is-back-august/
+  - https://www.picussecurity.com/resource/blog/mini-shai-hulud-the-npm-supply-chain-worm-explained
+examples:
+  positive: |
+    npm info run example-pkg@1.0.1 preinstall node_modules/example-pkg node setup_bun.js
+    npm warn install-scripts   example-pkg@1.0.1 (preinstall: node setup_bun.js)
+    > node setup_bun.js
+    npm notice run node setup_bun.js
+    npm info run example-pkg@1.0.1 preinstall node_modules/example-pkg node bun_environment.js
+    npm warn install-scripts   example-pkg@2.3.5 (preinstall: node setup.mjs)
+    npm info run example-pkg@2.3.5 preinstall node_modules/example-pkg node setup.mjs
+  negative: |
+    > myproj@1.0.0 preinstall
+    npm info run example-pkg@2.3.5 preinstall { code: 0, signal: null }
+    npm info run esbuild@0.25.0 postinstall node_modules/esbuild node install.js
+    > node scripts/setup.mjs --generate-types
+    added 812 packages, and audited 813 packages in 14s
+  # The 2026 loader in --foreground-scripts output (npm 10.9.2, then npm 12.2.0). npm prints the
+  # project's own `node setup.mjs` preinstall the same way, so these lines alone are not evidence;
+  # use --loglevel=info instead.
+  known_miss: |
+    > node setup.mjs
+    npm notice run node setup.mjs

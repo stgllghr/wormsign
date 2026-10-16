@@ -1,0 +1,7 @@
+# /// script
+# dependencies = ["six==1.17.0"]
+# [tool.uv]
+# exclude-newer = "2026-10-01T00:00:00Z"
+# ///
+import six
+print("crlf", six.__version__)

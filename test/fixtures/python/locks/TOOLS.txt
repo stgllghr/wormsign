@@ -1,0 +1,5 @@
+pip 26.2.1
+uv 0.10.9 (f675560f3 2026-03-06)
+uv 0.12.21 (7af826859 2026-09-29 aarch64-apple-darwin)
+python 3.14.6
+exclude-newer 2026-10-01T00:00:00Z

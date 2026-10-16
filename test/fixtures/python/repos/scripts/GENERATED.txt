@@ -1,0 +1,10 @@
+deploy.lock and crlf.txt.lock were written by uv 0.12.21 (7af826859 2026-09-29), from deploy and crlf.txt as they
+are here, in an isolated HOME with UV_NO_CONFIG=1:
+
+  uv lock --script deploy      # an extensionless script with a `uv -q run --script` shebang -> deploy.lock
+  uv lock --script crlf.txt    # a .txt file whose `# /// script` block has CRLF line endings -> crlf.txt.lock
+
+uv 0.10.9 (Homebrew 2026-03-06) wrote byte-identical locks. Both show that a script's lock is `<script path>.lock`
+whatever the script's name, and that uv reads a CRLF block. Each block pins six==1.17.0 with
+exclude-newer = "2026-10-01T00:00:00Z", so the lock is the same on a later run. Only six (a benign, long-published
+project) is locked.

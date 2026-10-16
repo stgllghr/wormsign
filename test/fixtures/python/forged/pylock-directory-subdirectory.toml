@@ -1,0 +1,7 @@
+# Forged (B2): a directory source whose subdirectory leaves the tree; pip 26.2.1 and uv 0.12.21 install path/subdirectory.
+lock-version = "1.0"
+created-by = "uv"
+
+[[packages]]
+name = "decoy"
+directory = { path = "libs/x", subdirectory = "../../outside" }

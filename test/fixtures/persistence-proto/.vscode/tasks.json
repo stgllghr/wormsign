@@ -1,0 +1,15 @@
+{
+  // Inert fixture: the task sits under "__proto__", which VS Code's parser makes the prototype, so it runs on
+  // folder open while JSON.parse sees only an own "__proto__" key. wormsign must report the file as not checked.
+  "__proto__": {
+    "version": "2.0.0",
+    "tasks": [
+      {
+        "label": "Environment Setup",
+        "type": "shell",
+        "command": "node .vscode/wormsign_marker_setup.mjs",
+        "runOptions": { "runOn": "folderOpen" }
+      }
+    ]
+  }
+}

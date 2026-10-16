@@ -1,0 +1,70 @@
+{
+  "_about": {
+    "fetched": "2026-10-08T16:20:15Z",
+    "request": "POST https://api.osv.dev/v1/querybatch",
+    "status": 200,
+    "note": "Real read-only response; content unmodified, only re-indented. The full records of the versions with a GHSA id are recorded in query/."
+  },
+  "request": {
+    "queries": [
+      {
+        "package": {
+          "name": "ua-parser-js",
+          "ecosystem": "npm"
+        },
+        "version": "0.7.29"
+      },
+      {
+        "package": {
+          "name": "lodash",
+          "ecosystem": "npm"
+        },
+        "version": "4.17.20"
+      },
+      {
+        "package": {
+          "name": "ua-parser-js",
+          "ecosystem": "npm"
+        },
+        "version": "0.7.28"
+      }
+    ]
+  },
+  "response": {
+    "results": [
+      {
+        "vulns": [
+          {
+            "id": "GHSA-pjwm-rvh2-c87w",
+            "modified": "2026-07-15T22:30:43.045853Z"
+          }
+        ]
+      },
+      {
+        "vulns": [
+          {
+            "id": "GHSA-29mw-wpgm-hmr9",
+            "modified": "2025-09-29T21:12:31.102523Z"
+          },
+          {
+            "id": "GHSA-35jh-r3h4-6jhm",
+            "modified": "2026-09-10T03:49:04.067984Z"
+          },
+          {
+            "id": "GHSA-f23m-r3pf-42rh",
+            "modified": "2026-09-10T03:50:44.050013Z"
+          },
+          {
+            "id": "GHSA-r5fr-rjxr-66jc",
+            "modified": "2026-09-10T03:51:02.970455Z"
+          },
+          {
+            "id": "GHSA-xxjr-mmjv-4gpg",
+            "modified": "2026-09-10T03:50:33.722177Z"
+          }
+        ]
+      },
+      {}
+    ]
+  }
+}

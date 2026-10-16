@@ -1,0 +1,235 @@
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
+import { parseLockfileText } from "../src/lockfile/index.js";
+import type { ParsedLockfile } from "../src/lockfile/index.js";
+import { checkLockfile } from "../src/checks/lockfile.js";
+import { splitPnpmKey } from "../src/lockfile/pnpm.js";
+import { registryTarball } from "../src/lockfile/tarball.js";
+import { fx, testCtx } from "./helpers.js";
+
+const load = (d: string, f: string) => parseLockfileText(f, readFileSync(fx("lockfiles", d, f), "utf8"));
+
+test("npm lockfile v3: names, versions, integrity, install-script flag", () => {
+  const l = load("npm", "package-lock.json");
+  assert.equal(l?.kind, "npm");
+  const byName = new Map(l?.packages.map((p) => [p.name, p]));
+  assert.equal(byName.get("is-number")?.version, "7.0.0");
+  assert.ok(byName.get("@sindresorhus/is"), "scoped package name is recovered from the path");
+  assert.equal(byName.get("esbuild")?.hasInstallScript, true);
+  assert.equal(byName.get("is-number")?.hasInstallScript, undefined);
+  assert.match(byName.get("is-number")?.integrity ?? "", /^sha512-/);
+  assert.ok(!l?.packages.some((p) => p.name === ""), "root project entry is skipped");
+});
+
+test("npm lockfile v1 nested dependencies are flattened", () => {
+  const l = parseLockfileText("package-lock.json", JSON.stringify({ lockfileVersion: 1, dependencies: { a: { version: "1.0.0", integrity: "sha512-x", dependencies: { b: { version: "2.0.0" } } } } }));
+  assert.deepEqual(l?.packages.map((p) => `${p.name}@${p.version}`), ["a@1.0.0", "b@2.0.0"]);
+});
+
+test("pnpm lockfile v9", () => {
+  const l = load("pnpm", "pnpm-lock.yaml");
+  assert.equal(l?.kind, "pnpm");
+  const p = l?.packages.find((x) => x.name === "is-number");
+  assert.equal(p?.version, "7.0.0");
+  assert.match(p?.integrity ?? "", /^sha512-/);
+  assert.ok(l?.packages.some((x) => x.name === "@esbuild/aix-ppc64"));
+});
+
+test("pnpm key forms: v9, v6 and v5, with peer suffixes", () => {
+  assert.deepEqual(splitPnpmKey("'@a/b@1.2.3(react@18.0.0)'"), { name: "@a/b", version: "1.2.3" });
+  assert.deepEqual(splitPnpmKey("/@a/b@1.2.3"), { name: "@a/b", version: "1.2.3" });
+  assert.deepEqual(splitPnpmKey("/left-pad/1.3.0"), { name: "left-pad", version: "1.3.0" });
+  // v5 appends peers (or their hash) after an underscore
+  assert.deepEqual(splitPnpmKey("/react-dom/17.0.2_react@17.0.2"), { name: "react-dom", version: "17.0.2" });
+  assert.deepEqual(splitPnpmKey("/@ctrl/tinycolor/4.1.1_@types+react@18.2.0"), { name: "@ctrl/tinycolor", version: "4.1.1" });
+  assert.deepEqual(splitPnpmKey("/foo/1.0.0_3hd6xbqcpnj4j5q7ifsrdmnhzq"), { name: "foo", version: "1.0.0" });
+  // v9 non-registry keys: the name ends at the first '@'
+  assert.deepEqual(splitPnpmKey("x@git+ssh://git@github.com/o/x.git#abc"), { name: "x", version: "git+ssh://git@github.com/o/x.git#abc" });
+});
+
+test("pnpm: tarball and git resolutions are surfaced", () => {
+  const text = [
+    "lockfileVersion: '9.0'", "", "packages:", "",
+    "  foo@https://evil.example.invalid/foo.tgz:", "    resolution: {tarball: https://evil.example.invalid/foo.tgz}", "    version: 1.0.0", "",
+    "  bar@1.0.0:", "    resolution: {integrity: sha512-x}", "    requiresBuild: true", "",
+    "snapshots:", "", "  bar@1.0.0: {}", "",
+  ].join("\n");
+  const l = parseLockfileText("pnpm-lock.yaml", text);
+  assert.equal(l?.packages.length, 2, "snapshots section must not create extra entries");
+  assert.equal(l?.packages[0]?.resolved, "https://evil.example.invalid/foo.tgz");
+  assert.equal(l?.packages[1]?.hasInstallScript, true);
+});
+
+test("yarn classic: resolved loses its sha1 fragment, integrity kept", () => {
+  const l = load("yarn1", "yarn.lock");
+  assert.equal(l?.kind, "yarn-classic");
+  const p = l?.packages.find((x) => x.name === "is-number");
+  assert.equal(p?.version, "7.0.0");
+  assert.equal(p?.resolved, "https://registry.yarnpkg.com/is-number/-/is-number-7.0.0.tgz");
+  assert.match(p?.integrity ?? "", /^sha512-/);
+});
+
+test("yarn berry: detected by __metadata, npm protocol means registry", () => {
+  const l = load("berry", "yarn.lock");
+  assert.equal(l?.kind, "yarn-berry");
+  assert.ok(l?.packages.find((x) => x.name === "is-number" && x.version === "7.0.0"));
+  assert.ok(l?.packages.every((p) => p.resolved === undefined));
+});
+
+test("yarn berry: git and workspace resolutions", () => {
+  const text = '__metadata:\n  version: 8\n\n"a@https://example.invalid/a.tgz":\n  version: 1.0.0\n  resolution: "a@https://example.invalid/a.tgz"\n\n"w@workspace:.":\n  version: 0.0.0-use.local\n  resolution: "w@workspace:."\n';
+  const l = parseLockfileText("yarn.lock", text);
+  assert.equal(l?.packages[0]?.resolved, "https://example.invalid/a.tgz");
+  assert.equal(l?.packages[1]?.local, true);
+});
+
+/** The lockfile Yarn 4.18.1 wrote for a link:, a portal: and a workspace whose names are not npm names (babel locks "$repo-utils@link:"). */
+const ODD_LOCAL = `# This file is generated by running "yarn install" inside your project.
+# Manual changes might be lost - proceed with caution!
+
+__metadata:
+  version: 10
+  cacheKey: 10c0
+
+"$portal-x@portal:./portal::locator=proj%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "$portal-x@portal:./portal::locator=proj%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"$repo-utils@link:./utils::locator=proj%40workspace%3A.":
+  version: 0.0.0-use.local
+  resolution: "$repo-utils@link:./utils::locator=proj%40workspace%3A."
+  languageName: node
+  linkType: soft
+
+"$ws@workspace:ws":
+  version: 0.0.0-use.local
+  resolution: "$ws@workspace:ws"
+  languageName: unknown
+  linkType: soft
+
+"proj@workspace:.":
+  version: 0.0.0-use.local
+  resolution: "proj@workspace:."
+  dependencies:
+    $portal-x: "portal:./portal"
+    $repo-utils: "link:./utils"
+  languageName: unknown
+  linkType: soft
+`;
+const WITH_IOC = `${ODD_LOCAL}\n"wormsign-test-marker@npm:1.0.0":\n  version: 1.0.0\n  resolution: "wormsign-test-marker@npm:1.0.0"\n  languageName: node\n  linkType: hard\n`;
+
+test("yarn berry: link:, portal: and workspace: entries are local whatever their name, and the rest of the lockfile is checked", () => {
+  const l = parseLockfileText("yarn.lock", WITH_IOC);
+  assert.deepEqual(l?.packages.map((p) => `${p.name}${p.local ? " local" : ""}`), ["$portal-x local", "$repo-utils local", "$ws local", "proj local", "wormsign-test-marker"]);
+  // The whole file was read, so a compromised registry version beside the odd names is still found.
+  assert.deepEqual(checkLockfile(l as ParsedLockfile, testCtx()).map((f) => `${f.ruleId} ${f.key}`), ["WS-LK-001 wormsign-test-marker@1.0.0"]);
+});
+
+test("yarn berry: a name that is not an npm name still fails the lockfile closed outside a soft link", () => {
+  const bad: [string, string][] = [
+    ["a registry locator", '"$evil@npm:1.0.0":\n  version: 1.0.0\n  resolution: "$evil@npm:1.0.0"\n'],
+    ["a file: directory (linkType hard)", '"$evil@file:./evil::locator=proj%40workspace%3A.":\n  version: 1.0.0\n  resolution: "$evil@file:./evil#./evil::hash=1&locator=proj%40workspace%3A."\n'],
+    ["a URL tarball", '"$evil@https://example.invalid/e.tgz":\n  version: 1.0.0\n  resolution: "$evil@https://example.invalid/e.tgz"\n'],
+    // YAML reads a tagged npm locator here; this reader would see a link named `!t`.
+    ["YAML syntax before a link: locator", '"x@npm:1.0.0":\n  version: 1.0.0\n  resolution: !t@link:x "wormsign-test-marker@npm:1.0.0"\n'],
+    ["an anchor before a link: locator", '"x@link:./x":\n  version: 0.0.0-use.local\n  resolution: &a x@link:./x\n'],
+  ];
+  for (const [why, entry] of bad) {
+    assert.throws(() => parseLockfileText("yarn.lock", `${ODD_LOCAL}\n${entry}`), /is not a package name/, why);
+  }
+});
+
+test("malformed npm lockfile throws instead of reporting zero packages", () => {
+  assert.throws(() => parseLockfileText("package-lock.json", "{not json"));
+});
+
+/* ---- fail closed: a lockfile the parser cannot fully read throws; it never parses to fewer packages ---- */
+const real = (d: string, f: string) => readFileSync(fx("lockfiles", "protocols", d, f), "utf8");
+const pnpm = real("pnpm11", "pnpm-lock.yaml");
+
+// pnpm 11.16 installs with --frozen-lockfile from the first four variants (checked in a temp HOME).
+// The parser must read a layout pnpm writes or throw; it must never parse to fewer packages.
+test("pnpm: reformatted lockfiles throw instead of hiding packages", () => {
+  assert.equal(parseLockfileText("pnpm-lock.yaml", pnpm)?.packages.length, 22, "control: the unmodified lockfile");
+  const isNumber = /^ {2}is-number@7\.0\.0:\n {4}resolution: (\{[^\n]*\})\n {4}engines: (\{[^\n]*\})$/m;
+  assert.match(pnpm, isNumber);
+  const variants: Record<string, string> = {
+    "doubled indentation": pnpm.replace(/^( +)/gm, "$1$1"),
+    "comment after packages:": pnpm.replace(/^packages:$/m, "packages: # reviewed"),
+    "quoted packages key": pnpm.replace(/^packages:$/m, "'packages':"),
+    "flow-mapping entry": pnpm.replace(isNumber, "  is-number@7.0.0: {resolution: $1, engines: $2}"),
+    "fields indented six": pnpm.replace(/^ {4}resolution:/gm, "      resolution:"),
+    "tab-indented entry": pnpm.replace(/^ {2}is-number@7\.0\.0:$/m, "\tis-number@7.0.0:"),
+    "packages section removed": pnpm.replace(/^packages:[\s\S]*?(?=^snapshots:)/m, ""),
+  };
+  for (const [name, text] of Object.entries(variants)) {
+    assert.notEqual(text, pnpm, `${name}: the variant must change the file`);
+    assert.throws(() => parseLockfileText("pnpm-lock.yaml", text), Error, name);
+  }
+});
+
+test("pnpm: a block-style resolution (which pnpm writes for runtimes) reads like the flow form", () => {
+  const block = pnpm.replace(/^ {4}resolution: \{integrity: (\S+)\}$/gm, "    resolution:\n      integrity: $1");
+  assert.notEqual(block, pnpm);
+  assert.deepEqual(parseLockfileText("pnpm-lock.yaml", block)?.packages, parseLockfileText("pnpm-lock.yaml", pnpm)?.packages);
+});
+
+// pnpm 11.16 and yarn 1.22 decode these escapes and install is-number from them (checked in a temp HOME).
+test("escape sequences in double-quoted keys and values throw instead of hiding the package", () => {
+  const yarn1 = real("yarn1", "yarn.lock");
+  const variants: [string, string, string][] = [
+    ["pnpm-lock.yaml", pnpm, pnpm.replace(/^ {2}is-number@7\.0\.0:$/gm, '  "is\\x2Dnumber@7.0.0":')],
+    ["yarn.lock", yarn1, yarn1.replace(/^is-number@7\.0\.0, /m, '"is\\x2Dnumber@7.0.0", ')],
+    ["yarn.lock", yarn1, yarn1.replace(/^(is-number@7\.0\.0, is-number@\^7\.0\.0:\n {2}version )"7\.0\.0"$/m, '$1"7\\x2E0.0"')],
+  ];
+  for (const [file, orig, text] of variants) {
+    assert.notEqual(text, orig);
+    assert.throws(() => parseLockfileText(file, text), /escape sequences are not supported/, text.slice(0, 40));
+  }
+});
+
+test("yarn: re-indented entries throw instead of being dropped", () => {
+  for (const [dir, line] of [["yarn1", /^ {2}version "/m], ["yarn4", /^ {2}version: /m]] as const) {
+    const text = real(dir, "yarn.lock");
+    assert.match(text, line);
+    assert.throws(() => parseLockfileText("yarn.lock", text.replace(/^ {2}(?=version)/gm, "    ")), Error, dir);
+  }
+  assert.throws(() => parseLockfileText("yarn.lock", '__metadata:\n  version: 8\n\n"a@npm:1.0.0":\n  version: 1.0.0\n'), /no resolution/);
+  assert.throws(() => parseLockfileText("yarn.lock", "# yarn lockfile v1\n\n  version \"1.0.0\"\n"), /outside an entry/);
+});
+
+test("npm: unknown layouts and entries without a version throw", () => {
+  assert.throws(() => parseLockfileText("package-lock.json", "{}"), /unsupported lockfileVersion/);
+  assert.throws(() => parseLockfileText("package-lock.json", "null"), /unsupported lockfileVersion/);
+  assert.throws(() => parseLockfileText("package-lock.json", JSON.stringify({ lockfileVersion: 4, packages: { "": {} } })), /unsupported lockfileVersion/);
+  assert.throws(() => parseLockfileText("package-lock.json", JSON.stringify({ lockfileVersion: 3 })), /no "packages" map/);
+  assert.throws(() => parseLockfileText("package-lock.json", JSON.stringify({ lockfileVersion: 3, packages: { "": {}, "node_modules/a": { resolved: "https://registry.npmjs.org/a/-/a-1.0.0.tgz" } } })), /no version/);
+  assert.throws(() => parseLockfileText("package-lock.json", JSON.stringify({ lockfileVersion: 1, dependencies: { a: { resolved: "x" } } })), /no version/);
+});
+
+test("a leading byte-order mark does not hide the lockfile", () => {
+  assert.equal(parseLockfileText("package-lock.json", `\uFEFF${real("npm10", "package-lock.json")}`)?.packages.length, 26);
+  assert.equal(parseLockfileText("pnpm-lock.yaml", `\uFEFF${pnpm}`)?.packages.length, 22);
+});
+
+test("yarn berry: a registry package's version is the one in its resolution, which is what Yarn fetches", () => {
+  const text = '__metadata:\n  version: 8\n\n"a@npm:^1.0.0":\n  version: 1.0.0\n  resolution: "a@npm:2.0.0"\n';
+  assert.deepEqual(parseLockfileText("yarn.lock", text)?.packages, [{ name: "a", version: "2.0.0" }]);
+});
+
+test("yarn berry: an npm resolution with __archiveUrl reports that URL as its source", () => {
+  const text = '__metadata:\n  version: 8\n\n"a@npm:^1.0.0":\n  version: 1.0.0\n  resolution: "a@npm:1.0.0::__archiveUrl=https%3A%2F%2Fevil.example.invalid%2Fa-1.0.0.tgz"\n';
+  assert.deepEqual(parseLockfileText("yarn.lock", text)?.packages, [{ name: "a", version: "1.0.0", resolved: "https://evil.example.invalid/a-1.0.0.tgz" }]);
+});
+
+test("registry tarball URLs: scoped, %2f-encoded and path-prefixed registries; other URLs are not read", () => {
+  assert.deepEqual(registryTarball("https://registry.npmjs.org/@nodelib/fs.stat/-/fs.stat-2.0.5.tgz"), { name: "@nodelib/fs.stat", version: "2.0.5" });
+  assert.deepEqual(registryTarball("https://registry.yarnpkg.com/@nodelib%2ffs.stat/-/fs.stat-2.0.5.tgz"), { name: "@nodelib/fs.stat", version: "2.0.5" });
+  assert.deepEqual(registryTarball("https://r.example/api/npm/npm/@s/p/-/p-1.0.0-beta.1.tgz?x=1"), { name: "@s/p", version: "1.0.0-beta.1" });
+  assert.equal(registryTarball("https://registry.npmjs.org/is-number/-/left-pad-7.0.0.tgz"), undefined);
+  assert.equal(registryTarball("https://codeload.github.com/o/r/tar.gz/abc"), undefined);
+  assert.equal(registryTarball("file:libs/tardep-1.0.0.tgz"), undefined);
+});

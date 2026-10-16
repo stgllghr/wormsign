@@ -1,0 +1,8 @@
+{
+  "name": "wormsign-replay-2026-08",
+  "version": "1.0.1",
+  "description": "Inert reconstruction of a package republished by the August 2026 wave. Not a sample.",
+  "scripts": {
+    "preinstall": "node setup.mjs"
+  }
+}

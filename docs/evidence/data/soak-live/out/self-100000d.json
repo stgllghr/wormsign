@@ -1,0 +1,1735 @@
+{
+  "tool": "wormsign",
+  "version": "0.1.0",
+  "command": "soak",
+  "findings": [
+    {
+      "ruleId": "WS-SK-004",
+      "severity": "medium",
+      "message": ".npmrc: min-release-age = 7 days is 7.0d, shorter than the required 100000.0d",
+      "file": ".npmrc",
+      "key": "npm:min-release-age=7 days",
+      "fingerprint": "0f6c5d5246ce34d187f51ff81a0feebc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@cacheable/memory@2.2.0 was published 104.3d ago, inside the required 100000.0d soak window (published 2026-06-27T18:19:57.669Z)",
+      "file": "package-lock.json",
+      "key": "@cacheable/memory@2.2.0",
+      "fingerprint": "9ddf520b1623e1137c9ba6fbae9f61d9"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@cacheable/utils@2.5.0 was published 104.3d ago, inside the required 100000.0d soak window (published 2026-06-27T18:19:51.509Z)",
+      "file": "package-lock.json",
+      "key": "@cacheable/utils@2.5.0",
+      "fingerprint": "642913127900eb582133da65d31685be"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint-community/eslint-utils@4.10.1 was published 79.5d ago, inside the required 100000.0d soak window (published 2026-07-22T13:06:59.259Z)",
+      "file": "package-lock.json",
+      "key": "@eslint-community/eslint-utils@4.10.1",
+      "fingerprint": "9ce36a00dd25ff62bbf4e35047bdc5eb"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint-community/regexpp@4.12.2 was published 352.5d ago, inside the required 100000.0d soak window (published 2025-10-22T11:56:00.818Z)",
+      "file": "package-lock.json",
+      "key": "@eslint-community/regexpp@4.12.2",
+      "fingerprint": "2d27df228ccddbd81fd39009bbb7e085"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/config-array@0.23.5 was published 184.7d ago, inside the required 100000.0d soak window (published 2026-04-08T09:22:37.796Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/config-array@0.23.5",
+      "fingerprint": "6f1dd2932f5178119b349f33b23020be"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/config-helpers@0.7.0 was published 80.7d ago, inside the required 100000.0d soak window (published 2026-07-21T08:10:35.250Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/config-helpers@0.7.0",
+      "fingerprint": "c14c2a864ef8d5537fee77dc6311af7a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/core@1.2.1 was published 184.7d ago, inside the required 100000.0d soak window (published 2026-04-08T09:22:28.287Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/core@1.2.1",
+      "fingerprint": "7293eed66d088f9090e773da9dabe8f2"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/js@10.0.1 was published 245.1d ago, inside the required 100000.0d soak window (published 2026-02-06T22:34:56.290Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/js@10.0.1",
+      "fingerprint": "e2f9775f4f4950be96bb7876577e8d3a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/object-schema@3.0.5 was published 184.7d ago, inside the required 100000.0d soak window (published 2026-04-08T09:22:34.549Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/object-schema@3.0.5",
+      "fingerprint": "a82f6d65d8351853c6b89c6824e53fd5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@eslint/plugin-kit@0.7.3 was published 36.3d ago, inside the required 100000.0d soak window (published 2026-09-03T18:10:03.592Z)",
+      "file": "package-lock.json",
+      "key": "@eslint/plugin-kit@0.7.3",
+      "fingerprint": "b16a80e3c50e46b850270723031de217"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@humanfs/core@0.19.2 was published 175.2d ago, inside the required 100000.0d soak window (published 2026-04-17T20:51:11.882Z)",
+      "file": "package-lock.json",
+      "key": "@humanfs/core@0.19.2",
+      "fingerprint": "0f08439a1a6009d5ebab1869ee8eb0bc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@humanfs/node@0.16.8 was published 175.2d ago, inside the required 100000.0d soak window (published 2026-04-17T20:51:26.959Z)",
+      "file": "package-lock.json",
+      "key": "@humanfs/node@0.16.8",
+      "fingerprint": "e5898182a5ebd7680273da114aa68c6e"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@humanfs/types@0.15.0 was published 760.2d ago, inside the required 100000.0d soak window (published 2024-09-09T19:44:08.000Z)",
+      "file": "package-lock.json",
+      "key": "@humanfs/types@0.15.0",
+      "fingerprint": "73107687fc9179628f6cc532f3ec7c3e"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@humanwhocodes/module-importer@1.0.1 was published 1513.3d ago, inside the required 100000.0d soak window (published 2022-08-18T17:55:51.038Z)",
+      "file": "package-lock.json",
+      "key": "@humanwhocodes/module-importer@1.0.1",
+      "fingerprint": "a72c5e2a3f0980712595b5c089bff744"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@humanwhocodes/retry@0.4.3 was published 520.4d ago, inside the required 100000.0d soak window (published 2025-05-07T14:25:57.372Z)",
+      "file": "package-lock.json",
+      "key": "@humanwhocodes/retry@0.4.3",
+      "fingerprint": "008051e117a4042691a8214f186a0b3b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@keyv/bigmap@1.3.1 was published 262.0d ago, inside the required 100000.0d soak window (published 2026-01-21T00:47:42.392Z)",
+      "file": "package-lock.json",
+      "key": "@keyv/bigmap@1.3.1",
+      "fingerprint": "52f4bb6588a0863e1aeb416c663007fb"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@keyv/serialize@1.1.1 was published 394.4d ago, inside the required 100000.0d soak window (published 2025-09-10T16:09:07.731Z)",
+      "file": "package-lock.json",
+      "key": "@keyv/serialize@1.1.1",
+      "fingerprint": "aaf95467f885c8eda8ec396e83054884"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@types/esrecurse@4.3.1 was published 447.9d ago, inside the required 100000.0d soak window (published 2025-07-19T03:47:09.775Z)",
+      "file": "package-lock.json",
+      "key": "@types/esrecurse@4.3.1",
+      "fingerprint": "c90becd6d7a16556202d7f55ae02dab1"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@types/estree@1.0.9 was published 156.2d ago, inside the required 100000.0d soak window (published 2026-05-06T21:01:00.975Z)",
+      "file": "package-lock.json",
+      "key": "@types/estree@1.0.9",
+      "fingerprint": "7a907ad78b5b20fc937fc47223096c70"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@types/json-schema@7.0.15 was published 1067.7d ago, inside the required 100000.0d soak window (published 2023-11-07T08:49:23.527Z)",
+      "file": "package-lock.json",
+      "key": "@types/json-schema@7.0.15",
+      "fingerprint": "4f3b7037a4fc9a072123414bac03c158"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@types/node@22.20.4 was published 21.0d ago, inside the required 100000.0d soak window (published 2026-09-19T00:12:01.551Z)",
+      "file": "package-lock.json",
+      "key": "@types/node@22.20.4",
+      "fingerprint": "efe9d5a2e9ffe5c55710680dafb436b8"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/eslint-plugin@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:13:54.998Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/eslint-plugin@8.71.0",
+      "fingerprint": "7afd427d5864de77adcb1b224bb0503b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/parser@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:09:20.244Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/parser@8.71.0",
+      "fingerprint": "dffabe667de18733b66faf5c4a02d192"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/project-service@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:10:11.330Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/project-service@8.71.0",
+      "fingerprint": "6813ec761a71509d04d266adf3891143"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/scope-manager@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:10:56.909Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/scope-manager@8.71.0",
+      "fingerprint": "343d2d707ef463755b79b1bd72ba33c6"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/tsconfig-utils@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:10:36.326Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/tsconfig-utils@8.71.0",
+      "fingerprint": "2c1de44acfab99658131a58dc0d5d672"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/type-utils@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:13:41.427Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/type-utils@8.71.0",
+      "fingerprint": "3359253b36045fc860878fa8a614b619"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/types@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:10:05.092Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/types@8.71.0",
+      "fingerprint": "cbc3276864644a406508eba868ff3ef5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/typescript-estree@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:09:07.991Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/typescript-estree@8.71.0",
+      "fingerprint": "cea62fdc787585d01629e78e5fa4d321"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/utils@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:10:33.688Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/utils@8.71.0",
+      "fingerprint": "13ab5cad0854fabc317d226b43fddf41"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "@typescript-eslint/visitor-keys@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:11:14.198Z)",
+      "file": "package-lock.json",
+      "key": "@typescript-eslint/visitor-keys@8.71.0",
+      "fingerprint": "ecf4da33214859625140d263093e6d54"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "acorn-jsx@5.3.2 was published 1919.0d ago, inside the required 100000.0d soak window (published 2021-07-09T01:15:57.512Z)",
+      "file": "package-lock.json",
+      "key": "acorn-jsx@5.3.2",
+      "fingerprint": "5b809c9bef72814bc4cfece71881babc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "acorn@8.18.0 was published 73.8d ago, inside the required 100000.0d soak window (published 2026-07-28T06:47:49.255Z)",
+      "file": "package-lock.json",
+      "key": "acorn@8.18.0",
+      "fingerprint": "a3822a567fd248a3a49a7757a1924236"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "ajv@6.15.0 was published 169.4d ago, inside the required 100000.0d soak window (published 2026-04-23T14:59:24.089Z)",
+      "file": "package-lock.json",
+      "key": "ajv@6.15.0",
+      "fingerprint": "a5ad72b3c92b34f3786ec1d7ffc1db39"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "balanced-match@4.0.4 was published 229.6d ago, inside the required 100000.0d soak window (published 2026-02-22T11:38:25.951Z)",
+      "file": "package-lock.json",
+      "key": "balanced-match@4.0.4",
+      "fingerprint": "2be7ba9349be0b629bf2f3b4fd412245"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "brace-expansion@5.0.12 was published 25.1d ago, inside the required 100000.0d soak window (published 2026-09-14T21:59:00.288Z)",
+      "file": "package-lock.json",
+      "key": "brace-expansion@5.0.12",
+      "fingerprint": "0d6274763b72e06c5ebc72a377692bd4"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "cacheable@2.5.0 was published 104.3d ago, inside the required 100000.0d soak window (published 2026-06-27T18:20:16.235Z)",
+      "file": "package-lock.json",
+      "key": "cacheable@2.5.0",
+      "fingerprint": "713fd99116c92ac623285620db9fc01e"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "cross-spawn@7.0.6 was published 690.5d ago, inside the required 100000.0d soak window (published 2024-11-18T13:59:52.129Z)",
+      "file": "package-lock.json",
+      "key": "cross-spawn@7.0.6",
+      "fingerprint": "325eabf0a420b79cc9a7b7a7c4bf8d9f"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "debug@4.4.3 was published 391.3d ago, inside the required 100000.0d soak window (published 2025-09-13T17:25:19.732Z)",
+      "file": "package-lock.json",
+      "key": "debug@4.4.3",
+      "fingerprint": "bcd31b4a2cf8e0f5b752b17eb246958d"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "deep-is@0.1.4 was published 1861.3d ago, inside the required 100000.0d soak window (published 2021-09-04T16:55:20.731Z)",
+      "file": "package-lock.json",
+      "key": "deep-is@0.1.4",
+      "fingerprint": "852a7a4ca2ef511a59b6b1135a3796d2"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "escape-string-regexp@4.0.0 was published 2360.7d ago, inside the required 100000.0d soak window (published 2020-04-23T07:31:25.491Z)",
+      "file": "package-lock.json",
+      "key": "escape-string-regexp@4.0.0",
+      "fingerprint": "b5470336b92fc0967e5cf18ad7ccf411"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "eslint-scope@9.1.2 was published 217.1d ago, inside the required 100000.0d soak window (published 2026-03-06T22:32:49.946Z)",
+      "file": "package-lock.json",
+      "key": "eslint-scope@9.1.2",
+      "fingerprint": "41022b28277d23ee626f8b023f8b3ba4"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "eslint-visitor-keys@3.4.3 was published 1155.4d ago, inside the required 100000.0d soak window (published 2023-08-11T14:49:54.383Z)",
+      "file": "package-lock.json",
+      "key": "eslint-visitor-keys@3.4.3",
+      "fingerprint": "bd0df007902294dc9fd2845a773d1b56"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "eslint-visitor-keys@5.0.1 was published 231.4d ago, inside the required 100000.0d soak window (published 2026-02-20T14:40:47.824Z)",
+      "file": "package-lock.json",
+      "key": "eslint-visitor-keys@5.0.1",
+      "fingerprint": "91405cbc033baa1dd2f3c4586a656229"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "eslint@10.11.0 was published 21.2d ago, inside the required 100000.0d soak window (published 2026-09-18T20:15:36.485Z)",
+      "file": "package-lock.json",
+      "key": "eslint@10.11.0",
+      "fingerprint": "df28db67b065f32c022f27e98d5cc97d"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "espree@11.2.0 was published 217.1d ago, inside the required 100000.0d soak window (published 2026-03-06T22:32:40.951Z)",
+      "file": "package-lock.json",
+      "key": "espree@11.2.0",
+      "fingerprint": "ac4178ab79fcf71a4fcafc8d17b605db"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "esquery@1.7.0 was published 282.4d ago, inside the required 100000.0d soak window (published 2025-12-31T15:44:57.664Z)",
+      "file": "package-lock.json",
+      "key": "esquery@1.7.0",
+      "fingerprint": "c99fee5f8e598fd73b3ddbe4fe011e6a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "esrecurse@4.3.0 was published 2230.3d ago, inside the required 100000.0d soak window (published 2020-08-31T18:21:44.794Z)",
+      "file": "package-lock.json",
+      "key": "esrecurse@4.3.0",
+      "fingerprint": "048e09525853b0adf099fb6cf6d15661"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "estraverse@5.3.0 was published 1810.5d ago, inside the required 100000.0d soak window (published 2021-10-25T12:18:17.722Z)",
+      "file": "package-lock.json",
+      "key": "estraverse@5.3.0",
+      "fingerprint": "65dee986c1f73bc460dd776044cb52eb"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "esutils@2.0.3 was published 2628.0d ago, inside the required 100000.0d soak window (published 2019-07-31T01:10:54.228Z)",
+      "file": "package-lock.json",
+      "key": "esutils@2.0.3",
+      "fingerprint": "547cd37c5df7c666ea3298ad8af0fdc5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "fast-deep-equal@3.1.3 was published 2314.7d ago, inside the required 100000.0d soak window (published 2020-06-08T07:27:28.474Z)",
+      "file": "package-lock.json",
+      "key": "fast-deep-equal@3.1.3",
+      "fingerprint": "ced1c5d9ff08dd8f03bca61af98911ac"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "fast-json-stable-stringify@2.1.0 was published 2491.4d ago, inside the required 100000.0d soak window (published 2019-12-14T16:17:57.583Z)",
+      "file": "package-lock.json",
+      "key": "fast-json-stable-stringify@2.1.0",
+      "fingerprint": "fc69980021177db153959979e1158dcd"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "fast-levenshtein@2.0.6 was published 3573.2d ago, inside the required 100000.0d soak window (published 2016-12-27T21:15:07.820Z)",
+      "file": "package-lock.json",
+      "key": "fast-levenshtein@2.0.6",
+      "fingerprint": "b6caa8906577c978c26b76ffe2da3423"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "fdir@6.5.0 was published 421.3d ago, inside the required 100000.0d soak window (published 2025-08-14T16:56:03.948Z)",
+      "file": "package-lock.json",
+      "key": "fdir@6.5.0",
+      "fingerprint": "4b3e3ae6a5d34cfd1db32e54bf329792"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "file-entry-cache@11.1.5 was published 104.3d ago, inside the required 100000.0d soak window (published 2026-06-27T18:20:33.507Z)",
+      "file": "package-lock.json",
+      "key": "file-entry-cache@11.1.5",
+      "fingerprint": "152307513af0f7dbc44a753483e5827f"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "find-up@5.0.0 was published 2250.3d ago, inside the required 100000.0d soak window (published 2020-08-11T18:44:24.748Z)",
+      "file": "package-lock.json",
+      "key": "find-up@5.0.0",
+      "fingerprint": "24a0d23695a2bf537c9a43b798441ce2"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "flat-cache@6.1.23 was published 104.3d ago, inside the required 100000.0d soak window (published 2026-06-27T18:20:27.613Z)",
+      "file": "package-lock.json",
+      "key": "flat-cache@6.1.23",
+      "fingerprint": "69640e08f977cd3730c9c3361d23dcbc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "flatted@3.4.4 was published 71.6d ago, inside the required 100000.0d soak window (published 2026-07-30T09:53:10.155Z)",
+      "file": "package-lock.json",
+      "key": "flatted@3.4.4",
+      "fingerprint": "dc725fe9e91935daaa68cfd8e6eff48b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "glob-parent@6.0.2 was published 1836.1d ago, inside the required 100000.0d soak window (published 2021-09-29T22:14:24.467Z)",
+      "file": "package-lock.json",
+      "key": "glob-parent@6.0.2",
+      "fingerprint": "360f0abeafa15d3f9ca9f0dde2d17fe6"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "hashery@1.5.1 was published 202.3d ago, inside the required 100000.0d soak window (published 2026-03-21T18:01:50.476Z)",
+      "file": "package-lock.json",
+      "key": "hashery@1.5.1",
+      "fingerprint": "c59868caf2f5a01229fd68b75f6be3a9"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "hookified@1.15.1 was published 251.2d ago, inside the required 100000.0d soak window (published 2026-01-31T20:19:44.222Z)",
+      "file": "package-lock.json",
+      "key": "hookified@1.15.1",
+      "fingerprint": "9c02769d45e88d885d42ec7be46c5fd5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "hookified@2.2.0 was published 166.1d ago, inside the required 100000.0d soak window (published 2026-04-26T22:05:22.580Z)",
+      "file": "package-lock.json",
+      "key": "hookified@2.2.0",
+      "fingerprint": "3b4d9b78bd7a8e93ccfdea88a025ebe0"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "ignore@5.3.2 was published 788.7d ago, inside the required 100000.0d soak window (published 2024-08-12T08:51:00.065Z)",
+      "file": "package-lock.json",
+      "key": "ignore@5.3.2",
+      "fingerprint": "e283b0f64f04e03dd1d0151e3eff8c3a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "ignore@7.0.10 was published 17.4d ago, inside the required 100000.0d soak window (published 2026-09-22T15:24:41.119Z)",
+      "file": "package-lock.json",
+      "key": "ignore@7.0.10",
+      "fingerprint": "501ed9da79c4dd44aaaa2382924c651a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "imurmurhash@0.1.4 was published 4794.2d ago, inside the required 100000.0d soak window (published 2013-08-24T20:45:23.169Z)",
+      "file": "package-lock.json",
+      "key": "imurmurhash@0.1.4",
+      "fingerprint": "ff88fbdac0b65a44206b453e034b89c5"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "is-extglob@2.1.1 was published 3589.9d ago, inside the required 100000.0d soak window (published 2016-12-11T04:04:24.390Z)",
+      "file": "package-lock.json",
+      "key": "is-extglob@2.1.1",
+      "fingerprint": "bd51860a01a209cc64c351f3f82a47fc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "is-glob@4.0.3 was published 1836.3d ago, inside the required 100000.0d soak window (published 2021-09-29T16:52:47.977Z)",
+      "file": "package-lock.json",
+      "key": "is-glob@4.0.3",
+      "fingerprint": "68d1bba3fc201a4aeebf26bb12babe8c"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "isexe@2.0.0 was published 3488.0d ago, inside the required 100000.0d soak window (published 2017-03-23T00:53:16.356Z)",
+      "file": "package-lock.json",
+      "key": "isexe@2.0.0",
+      "fingerprint": "229073aa60e18a00629cd92cd5e76517"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "json-schema-traverse@0.4.1 was published 3043.7d ago, inside the required 100000.0d soak window (published 2018-06-10T08:42:05.056Z)",
+      "file": "package-lock.json",
+      "key": "json-schema-traverse@0.4.1",
+      "fingerprint": "707918a1635ecc2c681a665ac1c7cb20"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "json-stable-stringify-without-jsonify@1.0.1 was published 3585.1d ago, inside the required 100000.0d soak window (published 2016-12-15T22:00:35.805Z)",
+      "file": "package-lock.json",
+      "key": "json-stable-stringify-without-jsonify@1.0.1",
+      "fingerprint": "0ba9faa12d38cf14cd4a19727ae5fb87"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "keyv@5.6.0 was published 262.0d ago, inside the required 100000.0d soak window (published 2026-01-21T00:39:26.982Z)",
+      "file": "package-lock.json",
+      "key": "keyv@5.6.0",
+      "fingerprint": "484e7b85f01645bfd2e7cc438ec3844a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "levn@0.4.1 was published 2380.0d ago, inside the required 100000.0d soak window (published 2020-04-04T02:05:31.527Z)",
+      "file": "package-lock.json",
+      "key": "levn@0.4.1",
+      "fingerprint": "3256c54a5fc0badce2808d4b816166c4"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "locate-path@6.0.0 was published 2251.3d ago, inside the required 100000.0d soak window (published 2020-08-10T17:49:10.766Z)",
+      "file": "package-lock.json",
+      "key": "locate-path@6.0.0",
+      "fingerprint": "81f75efce78cd60c7eadb54095339298"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "minimatch@10.2.6 was published 74.3d ago, inside the required 100000.0d soak window (published 2026-07-27T19:00:09.469Z)",
+      "file": "package-lock.json",
+      "key": "minimatch@10.2.6",
+      "fingerprint": "3c6c7246a336d974b7236db5629f1be0"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "ms@2.1.3 was published 2131.5d ago, inside the required 100000.0d soak window (published 2020-12-08T13:54:35.223Z)",
+      "file": "package-lock.json",
+      "key": "ms@2.1.3",
+      "fingerprint": "d0e2bdc88003d82199f808b9610f4537"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "natural-compare@1.4.0 was published 3731.2d ago, inside the required 100000.0d soak window (published 2016-07-22T20:48:12.217Z)",
+      "file": "package-lock.json",
+      "key": "natural-compare@1.4.0",
+      "fingerprint": "ad975d91ce6b9ea45faf5ea16d0d1a24"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "optionator@0.9.4 was published 896.1d ago, inside the required 100000.0d soak window (published 2024-04-26T22:17:51.408Z)",
+      "file": "package-lock.json",
+      "key": "optionator@0.9.4",
+      "fingerprint": "b1abaa7d193974b022386cb7f3c0e43c"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "p-limit@3.1.0 was published 2144.7d ago, inside the required 100000.0d soak window (published 2020-11-25T07:42:37.364Z)",
+      "file": "package-lock.json",
+      "key": "p-limit@3.1.0",
+      "fingerprint": "10814feea35dc55cd79b5ba04458378b"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "p-locate@5.0.0 was published 2251.3d ago, inside the required 100000.0d soak window (published 2020-08-10T17:42:34.692Z)",
+      "file": "package-lock.json",
+      "key": "p-locate@5.0.0",
+      "fingerprint": "ab54dc11dacfb3e82bae769a4fe557bc"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "path-exists@4.0.0 was published 2745.9d ago, inside the required 100000.0d soak window (published 2019-04-04T03:29:16.887Z)",
+      "file": "package-lock.json",
+      "key": "path-exists@4.0.0",
+      "fingerprint": "ac615575a8fb7d03155d46ceb0168021"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "path-key@3.1.1 was published 2513.3d ago, inside the required 100000.0d soak window (published 2019-11-22T16:47:18.153Z)",
+      "file": "package-lock.json",
+      "key": "path-key@3.1.1",
+      "fingerprint": "af24d4f066d76a6e7a39565ac60cd2a9"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "picomatch@4.0.7 was published 46.4d ago, inside the required 100000.0d soak window (published 2026-08-24T14:36:23.690Z)",
+      "file": "package-lock.json",
+      "key": "picomatch@4.0.7",
+      "fingerprint": "ea33a50f89290a919152b9c3a713b76a"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "prelude-ls@1.2.1 was published 2381.1d ago, inside the required 100000.0d soak window (published 2020-04-02T22:53:40.710Z)",
+      "file": "package-lock.json",
+      "key": "prelude-ls@1.2.1",
+      "fingerprint": "7a5d438b87ffeb67f18f6cdbf229f070"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "punycode@2.3.1 was published 1075.3d ago, inside the required 100000.0d soak window (published 2023-10-30T18:28:32.512Z)",
+      "file": "package-lock.json",
+      "key": "punycode@2.3.1",
+      "fingerprint": "c1fcbf1864474a2ca85fa8d81802af96"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "qified@0.10.1 was published 168.1d ago, inside the required 100000.0d soak window (published 2026-04-24T22:37:10.101Z)",
+      "file": "package-lock.json",
+      "key": "qified@0.10.1",
+      "fingerprint": "91fdd5216397f9f7ffd5382c832e7965"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "semver@7.8.5 was published 112.3d ago, inside the required 100000.0d soak window (published 2026-06-19T18:32:48.972Z)",
+      "file": "package-lock.json",
+      "key": "semver@7.8.5",
+      "fingerprint": "50750b2a0a047dc3809b6a7c84878bd6"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "shebang-command@2.0.0 was published 2590.4d ago, inside the required 100000.0d soak window (published 2019-09-06T14:53:25.901Z)",
+      "file": "package-lock.json",
+      "key": "shebang-command@2.0.0",
+      "fingerprint": "c3fcb67c441ec430c64b629626f95aee"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "shebang-regex@3.0.0 was published 2722.6d ago, inside the required 100000.0d soak window (published 2019-04-27T10:46:19.256Z)",
+      "file": "package-lock.json",
+      "key": "shebang-regex@3.0.0",
+      "fingerprint": "9cd84bb17a67443b3f305f2bf5c78976"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "tinyglobby@0.2.17 was published 132.2d ago, inside the required 100000.0d soak window (published 2026-05-30T19:57:21.717Z)",
+      "file": "package-lock.json",
+      "key": "tinyglobby@0.2.17",
+      "fingerprint": "e7c5859e95a7ea27170c86b9b386d2dd"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "ts-api-utils@2.5.0 was published 204.9d ago, inside the required 100000.0d soak window (published 2026-03-19T02:50:49.789Z)",
+      "file": "package-lock.json",
+      "key": "ts-api-utils@2.5.0",
+      "fingerprint": "a547506516e60aa8e9f222b2e80e3941"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "type-check@0.4.0 was published 2380.9d ago, inside the required 100000.0d soak window (published 2020-04-03T03:02:37.249Z)",
+      "file": "package-lock.json",
+      "key": "type-check@0.4.0",
+      "fingerprint": "f132e0d51a5c81e01ca1d1a20f83dac1"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "typescript-eslint@8.71.0 was published 11.3d ago, inside the required 100000.0d soak window (published 2026-09-28T17:12:00.356Z)",
+      "file": "package-lock.json",
+      "key": "typescript-eslint@8.71.0",
+      "fingerprint": "00b666d0017721098eef187579368beb"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "typescript@6.0.3 was published 176.1d ago, inside the required 100000.0d soak window (published 2026-04-16T23:38:27.905Z)",
+      "file": "package-lock.json",
+      "key": "typescript@6.0.3",
+      "fingerprint": "da400f3460eb6eefb496ee511a80bd60"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "undici-types@6.21.0 was published 695.5d ago, inside the required 100000.0d soak window (published 2024-11-13T13:37:09.135Z)",
+      "file": "package-lock.json",
+      "key": "undici-types@6.21.0",
+      "fingerprint": "fbe92fb5621d493999d420d3fbd9869d"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "uri-js@4.4.1 was published 2099.0d ago, inside the required 100000.0d soak window (published 2021-01-10T00:43:12.666Z)",
+      "file": "package-lock.json",
+      "key": "uri-js@4.4.1",
+      "fingerprint": "f9f0c169f420bc7346abf90add7fb832"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "which@2.0.2 was published 2517.1d ago, inside the required 100000.0d soak window (published 2019-11-18T22:26:15.325Z)",
+      "file": "package-lock.json",
+      "key": "which@2.0.2",
+      "fingerprint": "8ead9aaa3b5ba4f6d6578820ad04010e"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "word-wrap@1.2.5 was published 1175.4d ago, inside the required 100000.0d soak window (published 2023-07-22T14:37:38.795Z)",
+      "file": "package-lock.json",
+      "key": "word-wrap@1.2.5",
+      "fingerprint": "c9956577edef9a185c0aacbd946183d9"
+    },
+    {
+      "ruleId": "WS-SK-001",
+      "severity": "high",
+      "message": "yocto-queue@0.1.0 was published 2145.8d ago, inside the required 100000.0d soak window (published 2020-11-24T06:05:35.875Z)",
+      "file": "package-lock.json",
+      "key": "yocto-queue@0.1.0",
+      "fingerprint": "bce63013ab34cf363e789ebc6271da0a"
+    }
+  ],
+  "notes": [
+    "registry signals read for 11 package version(s) published in the last 14 days; older versions not read",
+    "98 package version(s) checked against OSV for malicious-package records",
+    "98 package version(s) checked against https://registry.npmjs.org"
+  ],
+  "extra": {
+    "evidence": [
+      {
+        "name": "@cacheable/memory",
+        "version": "2.2.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-27T18:19:57.669Z",
+        "ageHours": 2502.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@cacheable/utils",
+        "version": "2.5.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-27T18:19:51.509Z",
+        "ageHours": 2502.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint-community/eslint-utils",
+        "version": "4.10.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-07-22T13:06:59.259Z",
+        "ageHours": 1907.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint-community/regexpp",
+        "version": "4.12.2",
+        "ecosystem": "npm",
+        "publishedAt": "2025-10-22T11:56:00.818Z",
+        "ageHours": 8461.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/config-array",
+        "version": "0.23.5",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-08T09:22:37.796Z",
+        "ageHours": 4431.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/config-helpers",
+        "version": "0.7.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-07-21T08:10:35.250Z",
+        "ageHours": 1936.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/core",
+        "version": "1.2.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-08T09:22:28.287Z",
+        "ageHours": 4431.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/js",
+        "version": "10.0.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-02-06T22:34:56.290Z",
+        "ageHours": 5882.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/object-schema",
+        "version": "3.0.5",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-08T09:22:34.549Z",
+        "ageHours": 4431.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@eslint/plugin-kit",
+        "version": "0.7.3",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-03T18:10:03.592Z",
+        "ageHours": 870.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@humanfs/core",
+        "version": "0.19.2",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-17T20:51:11.882Z",
+        "ageHours": 4204.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@humanfs/node",
+        "version": "0.16.8",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-17T20:51:26.959Z",
+        "ageHours": 4204.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@humanfs/types",
+        "version": "0.15.0",
+        "ecosystem": "npm",
+        "publishedAt": "2024-09-09T19:44:08.000Z",
+        "ageHours": 18245.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@humanwhocodes/module-importer",
+        "version": "1.0.1",
+        "ecosystem": "npm",
+        "publishedAt": "2022-08-18T17:55:51.038Z",
+        "ageHours": 36319.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@humanwhocodes/retry",
+        "version": "0.4.3",
+        "ecosystem": "npm",
+        "publishedAt": "2025-05-07T14:25:57.372Z",
+        "ageHours": 12490.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@keyv/bigmap",
+        "version": "1.3.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-01-21T00:47:42.392Z",
+        "ageHours": 6288.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@keyv/serialize",
+        "version": "1.1.1",
+        "ecosystem": "npm",
+        "publishedAt": "2025-09-10T16:09:07.731Z",
+        "ageHours": 9464.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@types/esrecurse",
+        "version": "4.3.1",
+        "ecosystem": "npm",
+        "publishedAt": "2025-07-19T03:47:09.775Z",
+        "ageHours": 10749.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@types/estree",
+        "version": "1.0.9",
+        "ecosystem": "npm",
+        "publishedAt": "2026-05-06T21:01:00.975Z",
+        "ageHours": 3748,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@types/json-schema",
+        "version": "7.0.15",
+        "ecosystem": "npm",
+        "publishedAt": "2023-11-07T08:49:23.527Z",
+        "ageHours": 25624.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@types/node",
+        "version": "22.20.4",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-19T00:12:01.551Z",
+        "ageHours": 504.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/eslint-plugin",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:13:54.998Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/parser",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:09:20.244Z",
+        "ageHours": 271.9,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/project-service",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:10:11.330Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/scope-manager",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:10:56.909Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/tsconfig-utils",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:10:36.326Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/type-utils",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:13:41.427Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/types",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:10:05.092Z",
+        "ageHours": 271.9,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/typescript-estree",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:09:07.991Z",
+        "ageHours": 271.9,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/utils",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:10:33.688Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "@typescript-eslint/visitor-keys",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:11:14.198Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "acorn",
+        "version": "8.18.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-07-28T06:47:49.255Z",
+        "ageHours": 1770.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "acorn-jsx",
+        "version": "5.3.2",
+        "ecosystem": "npm",
+        "publishedAt": "2021-07-09T01:15:57.512Z",
+        "ageHours": 46055.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "ajv",
+        "version": "6.15.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-23T14:59:24.089Z",
+        "ageHours": 4066,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "balanced-match",
+        "version": "4.0.4",
+        "ecosystem": "npm",
+        "publishedAt": "2026-02-22T11:38:25.951Z",
+        "ageHours": 5509.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "brace-expansion",
+        "version": "5.0.12",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-14T21:59:00.288Z",
+        "ageHours": 603,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "cacheable",
+        "version": "2.5.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-27T18:20:16.235Z",
+        "ageHours": 2502.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "cross-spawn",
+        "version": "7.0.6",
+        "ecosystem": "npm",
+        "publishedAt": "2024-11-18T13:59:52.129Z",
+        "ageHours": 16571,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "debug",
+        "version": "4.4.3",
+        "ecosystem": "npm",
+        "publishedAt": "2025-09-13T17:25:19.732Z",
+        "ageHours": 9391.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "deep-is",
+        "version": "0.1.4",
+        "ecosystem": "npm",
+        "publishedAt": "2021-09-04T16:55:20.731Z",
+        "ageHours": 44672.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "escape-string-regexp",
+        "version": "4.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-04-23T07:31:25.491Z",
+        "ageHours": 56657.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "eslint",
+        "version": "10.11.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-18T20:15:36.485Z",
+        "ageHours": 508.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "eslint-scope",
+        "version": "9.1.2",
+        "ecosystem": "npm",
+        "publishedAt": "2026-03-06T22:32:49.946Z",
+        "ageHours": 5210.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "eslint-visitor-keys",
+        "version": "3.4.3",
+        "ecosystem": "npm",
+        "publishedAt": "2023-08-11T14:49:54.383Z",
+        "ageHours": 27730.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "eslint-visitor-keys",
+        "version": "5.0.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-02-20T14:40:47.824Z",
+        "ageHours": 5554.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "espree",
+        "version": "11.2.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-03-06T22:32:40.951Z",
+        "ageHours": 5210.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "esquery",
+        "version": "1.7.0",
+        "ecosystem": "npm",
+        "publishedAt": "2025-12-31T15:44:57.664Z",
+        "ageHours": 6777.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "esrecurse",
+        "version": "4.3.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-08-31T18:21:44.794Z",
+        "ageHours": 53526.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "estraverse",
+        "version": "5.3.0",
+        "ecosystem": "npm",
+        "publishedAt": "2021-10-25T12:18:17.722Z",
+        "ageHours": 43452.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "esutils",
+        "version": "2.0.3",
+        "ecosystem": "npm",
+        "publishedAt": "2019-07-31T01:10:54.228Z",
+        "ageHours": 63071.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "fast-deep-equal",
+        "version": "3.1.3",
+        "ecosystem": "npm",
+        "publishedAt": "2020-06-08T07:27:28.474Z",
+        "ageHours": 55553.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "fast-json-stable-stringify",
+        "version": "2.1.0",
+        "ecosystem": "npm",
+        "publishedAt": "2019-12-14T16:17:57.583Z",
+        "ageHours": 59792.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "fast-levenshtein",
+        "version": "2.0.6",
+        "ecosystem": "npm",
+        "publishedAt": "2016-12-27T21:15:07.820Z",
+        "ageHours": 85755.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "fdir",
+        "version": "6.5.0",
+        "ecosystem": "npm",
+        "publishedAt": "2025-08-14T16:56:03.948Z",
+        "ageHours": 10112.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "file-entry-cache",
+        "version": "11.1.5",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-27T18:20:33.507Z",
+        "ageHours": 2502.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "find-up",
+        "version": "5.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-08-11T18:44:24.748Z",
+        "ageHours": 54006.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "flat-cache",
+        "version": "6.1.23",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-27T18:20:27.613Z",
+        "ageHours": 2502.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "flatted",
+        "version": "3.4.4",
+        "ecosystem": "npm",
+        "publishedAt": "2026-07-30T09:53:10.155Z",
+        "ageHours": 1719.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "glob-parent",
+        "version": "6.0.2",
+        "ecosystem": "npm",
+        "publishedAt": "2021-09-29T22:14:24.467Z",
+        "ageHours": 44066.8,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "hashery",
+        "version": "1.5.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-03-21T18:01:50.476Z",
+        "ageHours": 4855,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "hookified",
+        "version": "1.15.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-01-31T20:19:44.222Z",
+        "ageHours": 6028.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "hookified",
+        "version": "2.2.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-26T22:05:22.580Z",
+        "ageHours": 3986.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "ignore",
+        "version": "5.3.2",
+        "ecosystem": "npm",
+        "publishedAt": "2024-08-12T08:51:00.065Z",
+        "ageHours": 18928.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "ignore",
+        "version": "7.0.10",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-22T15:24:41.119Z",
+        "ageHours": 417.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "imurmurhash",
+        "version": "0.1.4",
+        "ecosystem": "npm",
+        "publishedAt": "2013-08-24T20:45:23.169Z",
+        "ageHours": 115060.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "is-extglob",
+        "version": "2.1.1",
+        "ecosystem": "npm",
+        "publishedAt": "2016-12-11T04:04:24.390Z",
+        "ageHours": 86156.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "is-glob",
+        "version": "4.0.3",
+        "ecosystem": "npm",
+        "publishedAt": "2021-09-29T16:52:47.977Z",
+        "ageHours": 44072.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "isexe",
+        "version": "2.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2017-03-23T00:53:16.356Z",
+        "ageHours": 83712.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "json-schema-traverse",
+        "version": "0.4.1",
+        "ecosystem": "npm",
+        "publishedAt": "2018-06-10T08:42:05.056Z",
+        "ageHours": 73048.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "json-stable-stringify-without-jsonify",
+        "version": "1.0.1",
+        "ecosystem": "npm",
+        "publishedAt": "2016-12-15T22:00:35.805Z",
+        "ageHours": 86043,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "keyv",
+        "version": "5.6.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-01-21T00:39:26.982Z",
+        "ageHours": 6288.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "levn",
+        "version": "0.4.1",
+        "ecosystem": "npm",
+        "publishedAt": "2020-04-04T02:05:31.527Z",
+        "ageHours": 57118.9,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "locate-path",
+        "version": "6.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-08-10T17:49:10.766Z",
+        "ageHours": 54031.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "minimatch",
+        "version": "10.2.6",
+        "ecosystem": "npm",
+        "publishedAt": "2026-07-27T19:00:09.469Z",
+        "ageHours": 1782,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "ms",
+        "version": "2.1.3",
+        "ecosystem": "npm",
+        "publishedAt": "2020-12-08T13:54:35.223Z",
+        "ageHours": 51155.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "natural-compare",
+        "version": "1.4.0",
+        "ecosystem": "npm",
+        "publishedAt": "2016-07-22T20:48:12.217Z",
+        "ageHours": 89548.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "optionator",
+        "version": "0.9.4",
+        "ecosystem": "npm",
+        "publishedAt": "2024-04-26T22:17:51.408Z",
+        "ageHours": 21506.7,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "p-limit",
+        "version": "3.1.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-11-25T07:42:37.364Z",
+        "ageHours": 51473.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "p-locate",
+        "version": "5.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-08-10T17:42:34.692Z",
+        "ageHours": 54031.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "path-exists",
+        "version": "4.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2019-04-04T03:29:16.887Z",
+        "ageHours": 65901.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "path-key",
+        "version": "3.1.1",
+        "ecosystem": "npm",
+        "publishedAt": "2019-11-22T16:47:18.153Z",
+        "ageHours": 60320.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "picomatch",
+        "version": "4.0.7",
+        "ecosystem": "npm",
+        "publishedAt": "2026-08-24T14:36:23.690Z",
+        "ageHours": 1114.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "prelude-ls",
+        "version": "1.2.1",
+        "ecosystem": "npm",
+        "publishedAt": "2020-04-02T22:53:40.710Z",
+        "ageHours": 57146.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "punycode",
+        "version": "2.3.1",
+        "ecosystem": "npm",
+        "publishedAt": "2023-10-30T18:28:32.512Z",
+        "ageHours": 25806.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "qified",
+        "version": "0.10.1",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-24T22:37:10.101Z",
+        "ageHours": 4034.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "semver",
+        "version": "7.8.5",
+        "ecosystem": "npm",
+        "publishedAt": "2026-06-19T18:32:48.972Z",
+        "ageHours": 2694.5,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "shebang-command",
+        "version": "2.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2019-09-06T14:53:25.901Z",
+        "ageHours": 62170.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "shebang-regex",
+        "version": "3.0.0",
+        "ecosystem": "npm",
+        "publishedAt": "2019-04-27T10:46:19.256Z",
+        "ageHours": 65342.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "tinyglobby",
+        "version": "0.2.17",
+        "ecosystem": "npm",
+        "publishedAt": "2026-05-30T19:57:21.717Z",
+        "ageHours": 3173.1,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "ts-api-utils",
+        "version": "2.5.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-03-19T02:50:49.789Z",
+        "ageHours": 4918.2,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "type-check",
+        "version": "0.4.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-04-03T03:02:37.249Z",
+        "ageHours": 57142,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "typescript",
+        "version": "6.0.3",
+        "ecosystem": "npm",
+        "publishedAt": "2026-04-16T23:38:27.905Z",
+        "ageHours": 4225.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "typescript-eslint",
+        "version": "8.71.0",
+        "ecosystem": "npm",
+        "publishedAt": "2026-09-28T17:12:00.356Z",
+        "ageHours": 271.8,
+        "status": "too-new",
+        "registry": {
+          "comparedWith": "8.70.2-alpha.12",
+          "signals": []
+        },
+        "osv": []
+      },
+      {
+        "name": "undici-types",
+        "version": "6.21.0",
+        "ecosystem": "npm",
+        "publishedAt": "2024-11-13T13:37:09.135Z",
+        "ageHours": 16691.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "uri-js",
+        "version": "4.4.1",
+        "ecosystem": "npm",
+        "publishedAt": "2021-01-10T00:43:12.666Z",
+        "ageHours": 50376.3,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "which",
+        "version": "2.0.2",
+        "ecosystem": "npm",
+        "publishedAt": "2019-11-18T22:26:15.325Z",
+        "ageHours": 60410.6,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "word-wrap",
+        "version": "1.2.5",
+        "ecosystem": "npm",
+        "publishedAt": "2023-07-22T14:37:38.795Z",
+        "ageHours": 28210.4,
+        "status": "too-new",
+        "osv": []
+      },
+      {
+        "name": "yocto-queue",
+        "version": "0.1.0",
+        "ecosystem": "npm",
+        "publishedAt": "2020-11-24T06:05:35.875Z",
+        "ageHours": 51498.9,
+        "status": "too-new",
+        "osv": []
+      }
+    ],
+    "minAgeMs": 8640000000000
+  }
+}

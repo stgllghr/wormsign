@@ -1,0 +1,142 @@
+/**
+ * The mutation check's modules: every scripts/mutants-<module>.mjs is loaded, listed by --list-modules and run by its
+ * own job in ci.yml's mutation matrix, which is built from --list-modules, so a module file cannot go unrun and a
+ * deleted one leaves no job behind. No mutant is run.
+ *
+ * Never run --check against this repository here: during a mutation run this test runs in the mutated copy, where the
+ * mutated file no longer holds its mutant's text, so --check would fail and every mutant would count as killed.
+ * The --check behaviour is tested on a scratch copy instead; CI's "mutation list is current" job runs it for real.
+ */
+import { test } from "node:test";
+import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
+import { copyFileSync, mkdirSync, mkdtempSync, readFileSync, readdirSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { pathToFileURL } from "node:url";
+
+const ROOT = join(import.meta.dirname, "..", "..");
+
+function mutation(root: string, ...args: string[]): { status: number | null; out: string; err: string } {
+  const r = spawnSync(process.execPath, [join(root, "scripts", "mutation-check.mjs"), ...args], { encoding: "utf8" });
+  return { status: r.status, out: r.stdout, err: r.stderr };
+}
+
+const moduleFiles = (root: string): string[] =>
+  readdirSync(join(root, "scripts"))
+    .filter((f) => /^mutants-.*\.mjs$/.test(f))
+    .map((f) => f.slice("mutants-".length, -".mjs".length))
+    .sort();
+
+/** The text of one job in a workflow: its key line and every line indented under it. */
+function job(workflow: string, name: string): string {
+  const m = new RegExp(`^ {2}${name}:\\n((?: {4}.*\\n|\\n)*)`, "m").exec(workflow);
+  assert.ok(m, `job ${name}`);
+  return m[1] as string;
+}
+
+test("mutation: every module holds at most 18 mutants, so its CI job stays well within its timeout", async () => {
+  // Each mutant reruns the whole suite; scripts/mutation-check.mjs says how the cap follows from the suite's time.
+  const sizes: Record<string, number> = {};
+  for (const m of moduleFiles(ROOT)) sizes[m] = ((await import(pathToFileURL(join(ROOT, "scripts", `mutants-${m}.mjs`)).href)) as { default: unknown[] }).default.length;
+  assert.ok(Object.keys(sizes).length >= 20, `${Object.keys(sizes).length} modules`);
+  assert.deepEqual(Object.entries(sizes).filter(([, n]) => n > 18), [], "split a module that grows past 18 by area");
+  assert.match(readFileSync(join(ROOT, "scripts", "mutation-check.mjs"), "utf8"), /^const MAX_PER_MODULE = 18;$/m);
+});
+
+test("mutation: every scripts/mutants-*.mjs is listed by --list-modules, which is ci.yml's mutation matrix", () => {
+  const files = moduleFiles(ROOT);
+  const listed = mutation(ROOT, "--list-modules");
+  assert.equal(listed.status, 0, listed.err);
+  assert.deepEqual(JSON.parse(listed.out), files);
+
+  // The matrix is --list-modules' output, so a module file is a CI job with no edit to ci.yml.
+  const ci = readFileSync(join(ROOT, ".github", "workflows", "ci.yml"), "utf8");
+  const modules = job(ci, "mutation-modules");
+  // Both jobs run on the monthly schedule and on demand with `slow` only (each mutant reruns the whole suite), and with
+  // the same condition, so the matrix is listed exactly when the mutation job runs. A plain `gh workflow run ci.yml`,
+  // which a maintainer runs on a pull request the gate fails by design, starts none of them, nor the macOS job.
+  const when = /^ {4}if: github\.event_name == 'schedule' \|\| \(github\.event_name == 'workflow_dispatch' && inputs\.slow\)$/m;
+  assert.match(modules, when, "listed on the schedule and on demand with slow only, as the mutation job runs");
+  assert.match(job(ci, "harden-macos"), when, "the macOS job too");
+  assert.match(ci, /^ {2}workflow_dispatch:\n {4}inputs:\n {6}slow:\n {8}description: .+\n {8}type: boolean\n {8}default: false$/m, "slow is a boolean input that defaults to false");
+  assert.match(modules, /^ {4}outputs:\n {6}modules: \$\{\{ steps\.list\.outputs\.modules \}\}$/m, "the job's output is its list step's");
+  assert.match(modules, /^ {6}- id: list\n {8}run: \|\n {10}modules="\$\(node scripts\/mutation-check\.mjs --list-modules\)"\n {10}echo "modules=\$modules" >> "\$GITHUB_OUTPUT"$/m, "the list step writes --list-modules to its output, failing if the script fails");
+  const full = job(ci, "mutation");
+  assert.match(full, /^ {4}needs: mutation-modules$/m);
+  assert.match(full, when, "the mutation job runs on the schedule and on demand with slow only");
+  assert.match(full, /^ {6}fail-fast: false\n {6}matrix:\n {8}module: \$\{\{ fromJSON\(needs\.mutation-modules\.outputs\.modules\) \}\}$/m, "one job per listed module; one failing module does not cancel the others");
+  assert.match(full, /^ {6}- run: npm run mutation -- --module "\$MODULE"\n {8}env:\n {10}MODULE: \$\{\{ matrix\.module \}\}$/m, "each job runs only its module");
+  const minutes = Number(/^ {4}timeout-minutes: (\d+)$/m.exec(full)?.[1]);
+  assert.ok(minutes > 0 && minutes <= 120, `per-module timeout ${minutes} minutes`);
+  assert.match(job(ci, "mutation-list"), /^ {6}- run: npm run mutation -- --check$/m, "every pull request checks every module's list");
+});
+
+test("mutation: --module, --only and --check work across modules; bad module files stop the run", () => {
+  const d = mkdtempSync(join(tmpdir(), "ws-mutants-"));
+  mkdirSync(join(d, "scripts"));
+  mkdirSync(join(d, "src"));
+  copyFileSync(join(ROOT, "scripts", "mutation-check.mjs"), join(d, "scripts", "mutation-check.mjs"));
+  writeFileSync(join(d, "src", "a.ts"), "const a = 1;\n");
+  writeFileSync(join(d, "src", "b.ts"), "const b = 1;\nconst c = 1;\n");
+  writeFileSync(join(d, "scripts", "mutants-alpha.mjs"), 'export default [["A1", "src/a.ts", "const a = 1;", "const a = 2;"]];\n');
+  writeFileSync(join(d, "scripts", "mutants-beta-2.mjs"), 'export default [["B1", "src/b.ts", "const b = 1;", ""], ["B2", "src/b.ts", "const c = 1;", "const c = 2;"]];\n');
+
+  assert.deepEqual(JSON.parse(mutation(d, "--list-modules").out), ["alpha", "beta-2"]);
+  assert.equal(mutation(d, "--check").out, "3 mutants, every one names text that occurs exactly once\n");
+  assert.equal(mutation(d, "--module", "beta-2", "--check").out, "2 mutants, every one names text that occurs exactly once\n");
+  assert.equal(mutation(d, "--only", "A1,B2", "--check").out, "2 mutants, every one names text that occurs exactly once\n", "--only reaches every module");
+  const outside = mutation(d, "--module", "alpha", "--only", "B2", "--check");
+  assert.equal(outside.status, 1);
+  assert.match(outside.err, /--only names no mutant in module alpha: B2/);
+  const unknown = mutation(d, "--module", "gamma", "--check");
+  assert.equal(unknown.status, 1);
+  assert.match(unknown.err, /--module names no module: gamma \(modules: alpha, beta-2\)/);
+  assert.match(mutation(d, "--module").err, /--module needs a value/);
+  for (const typo of [["--modul", "alpha", "--check"], ["--modules", "alpha", "--check"], ["--chek"], ["alpha"]]) {
+    const r = mutation(d, ...typo);
+    assert.equal(r.status, 1, `${typo.join(" ")}: an unknown argument stops the run instead of running every module`);
+    assert.match(r.err, new RegExp(`^unknown argument: ${typo[0]}\\nusage: `), typo.join(" "));
+  }
+
+  // Sorted by module name, as moduleFiles() sorts: by file name "beta-2" (".mjs" after "-") would come before "beta".
+  writeFileSync(join(d, "scripts", "mutants-beta.mjs"), 'export default [["B0", "src/a.ts", "const a = 1;", ""]];\n');
+  assert.deepEqual(JSON.parse(mutation(d, "--list-modules").out), ["alpha", "beta", "beta-2"]);
+  assert.deepEqual(moduleFiles(d), ["alpha", "beta", "beta-2"]);
+  rmSync(join(d, "scripts", "mutants-beta.mjs"));
+
+  writeFileSync(join(d, "src", "a.ts"), "const a = 3;\n");
+  const stale = mutation(d, "--module", "beta-2", "--check");
+  assert.equal(stale.status, 0, "a stale mutant in another module does not fail --module beta-2");
+  const all = mutation(d, "--check");
+  assert.equal(all.status, 1);
+  assert.match(all.err, /^STALE {2}A1: src\/a\.ts no longer contains its text exactly once/m);
+  writeFileSync(join(d, "src", "a.ts"), "const a = 1;\n");
+
+  const bad: [file: string, text: string, error: RegExp][] = [
+    ["mutants-gamma.mjs", 'export default [["A1", "src/b.ts", "const c = 1;", ""]];\n', /two mutants are named "A1"/],
+    ["mutants-gamma.mjs", 'export default [["--g1 flag", "src/b.ts", "const c = 1;", ""]];\n', /a mutant is named "--g1 flag"; a name must not start with "--", or --only cannot select it/],
+    ["mutants-Gamma.mjs", 'export default [["G1", "src/b.ts", "const c = 1;", ""]];\n', /a module name is lower-case letters, digits and single hyphens/],
+    ["mutants-gamma.mjs", "export default [];\n", /must be a non-empty array/],
+    ["mutants-gamma.mjs", 'export default [["G1", "src/b.ts", "", "x"]];\n', /must be a non-empty array of \[name, file, search, replace\] strings/],
+    [
+      "mutants-gamma.mjs",
+      `export default ${JSON.stringify(Array.from({ length: 19 }, (_, i) => [`G${i}`, "src/b.ts", "const c = 1;", ""]))};\n`,
+      /^scripts\/mutants-gamma\.mjs: 19 mutants, more than the 18 a module may hold so that its CI job stays within its timeout; split it by area$/m,
+    ],
+  ];
+  for (const [file, text, error] of bad) {
+    writeFileSync(join(d, "scripts", file), text);
+    for (const args of [["--list-modules"], ["--check"]]) {
+      const r = mutation(d, ...args);
+      assert.equal(r.status, 1, `${file} ${args[0]}`);
+      assert.match(r.err, error, `${file} ${args[0]}`);
+    }
+    rmSync(join(d, "scripts", file));
+  }
+  // At the cap a module loads.
+  writeFileSync(join(d, "scripts", "mutants-gamma.mjs"), `export default ${JSON.stringify(Array.from({ length: 18 }, (_, i) => [`G${i}`, "src/b.ts", "const c = 1;", ""]))};\n`);
+  assert.deepEqual(JSON.parse(mutation(d, "--list-modules").out), ["alpha", "beta-2", "gamma"]);
+  rmSync(join(d, "scripts", "mutants-gamma.mjs"));
+  assert.deepEqual(moduleFiles(d), ["alpha", "beta-2"]);
+});

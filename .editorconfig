@@ -1,0 +1,15 @@
+# https://editorconfig.org. Matches the files already in the repository: UTF-8, LF line endings, a final
+# newline, no trailing whitespace, no tabs, two-space indentation.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 2
+
+# The IOC data is written by the import scripts with JSON.stringify(data, null, 1), so hand edits keep one space.
+[data/iocs/*.json]
+indent_size = 1

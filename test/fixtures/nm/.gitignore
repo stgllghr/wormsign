@@ -1,0 +1,2 @@
+# This fixture is an installed tree; the root .gitignore would drop it.
+!node_modules/

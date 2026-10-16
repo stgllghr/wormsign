@@ -1,0 +1,10 @@
+# Forged (B2): six 1.17.0 from uv 0.12.21's pylock.toml (test/fixtures/python/locks/uv-0.12.21/simple), with the wheel given by path, as an archive, from an index that is not --pypi-index.
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.9"
+
+[[packages]]
+name = "six"
+version = "1.17.0"
+index = "https://private.example/simple"
+archive = { path = "vendor/six-1.17.0-py2.py3-none-any.whl", hashes = { sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274" } }

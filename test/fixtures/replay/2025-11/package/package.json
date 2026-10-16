@@ -1,0 +1,8 @@
+{
+  "name": "wormsign-replay-2025-11",
+  "version": "1.0.1",
+  "description": "Inert reconstruction of a package republished by the November 2025 wave. Not a sample.",
+  "scripts": {
+    "preinstall": "node setup_bun.js"
+  }
+}

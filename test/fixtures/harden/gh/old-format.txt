@@ -1,0 +1,5 @@
+github.com
+  ✓ Logged in to github.com as octo-work (/home/u/.config/gh/hosts.yml)
+  ✓ Git operations for github.com configured to use https protocol.
+  ✓ Token: gho_************************************
+  ✓ Token scopes: delete_repo, gist, read:org, repo

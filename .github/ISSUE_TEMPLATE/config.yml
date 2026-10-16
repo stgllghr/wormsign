@@ -1,0 +1,10 @@
+# Issue template chooser. Syntax: https://docs.github.com/en/communities/using-templates-to-encourage-useful-issues-and-pull-requests/configuring-issue-templates-for-your-repository
+# Blank issues are off so that every report arrives with the details a template asks for.
+blank_issues_enabled: false
+contact_links:
+  - name: Report a security vulnerability
+    url: https://github.com/stgllghr/wormsign/security
+    about: Do not open an issue. Use private vulnerability reporting (Security tab, "Report a vulnerability"); see SECURITY.md.
+  - name: Contributing guide
+    url: https://github.com/stgllghr/wormsign/blob/main/CONTRIBUTING.md
+    about: Development setup, how to add an IOC or a rule, and the pull request process.

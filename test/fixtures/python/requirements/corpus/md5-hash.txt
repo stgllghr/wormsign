@@ -1,0 +1,2 @@
+--require-hashes
+six==1.17.0 --hash=md5:0123456789abcdef0123456789abcdef

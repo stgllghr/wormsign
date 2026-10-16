@@ -1,0 +1,10 @@
+backend/uv.lock was written by uv 0.10.9 (Homebrew 2026-03-06) from the pyproject.toml files here, in an isolated
+HOME with UV_NO_CONFIG=1 and --offline (every package is local, so nothing was fetched):
+
+  cd backend && uv lock --offline
+
+backend is a virtual project (tool.uv.package = false) that depends on its sibling shared/common through an editable
+path source (`../shared/common`); common depends on shared/leaf through a directory path source. The lock lists them
+as `source = { editable = "../shared/common" }` and `source = { directory = "../shared/leaf" }`: a lock in backend/
+pins the dependencies of directories that are not below it, so shared/common/pyproject.toml, which declares
+dependencies, is covered by backend/uv.lock.

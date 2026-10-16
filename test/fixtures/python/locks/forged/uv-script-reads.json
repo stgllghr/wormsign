@@ -1,0 +1,132 @@
+{
+  "script-bad-toml.py": {
+    "uv-0.10.9": {
+      "error": "error: TOML parse error at line 1, column 31",
+      "exit": 2
+    },
+    "uv-0.12.21": {
+      "error": "error: TOML parse error at line 1, column 30",
+      "exit": 2
+    }
+  },
+  "script-bare-cr.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-bom.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-closing-twice.py": {
+    "uv-0.10.9": {
+      "error": "error: TOML parse error at line 2, column 4",
+      "exit": 2
+    },
+    "uv-0.12.21": {
+      "error": "error: TOML parse error at line 2, column 4",
+      "exit": 2
+    }
+  },
+  "script-crlf.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": [
+        "six"
+      ]
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": [
+        "six"
+      ]
+    }
+  },
+  "script-indented.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-lf.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": [
+        "six"
+      ]
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": [
+        "six"
+      ]
+    }
+  },
+  "script-none.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-tag-in-string.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-trailing-space.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": []
+    },
+    "uv-0.12.21": {
+      "exit": 0,
+      "requirements": []
+    }
+  },
+  "script-two-blocks.py": {
+    "uv-0.10.9": {
+      "exit": 0,
+      "requirements": [
+        "six"
+      ]
+    },
+    "uv-0.12.21": {
+      "error": "error: The script contains multiple PEP 723 metadata blocks",
+      "exit": 2
+    }
+  },
+  "script-unclosed.py": {
+    "uv-0.10.9": {
+      "error": "error: An opening tag (`# /// script`) was found without a closing tag (`# ///`). Ensure that every line between the opening and closing tags (including empty lines) starts with a leading `#`.",
+      "exit": 2
+    },
+    "uv-0.12.21": {
+      "error": "error: An opening tag (`# /// script`) was found without a closing tag (`# ///`). Ensure that every line between the opening and closing tags (including empty lines) starts with a leading `#`.",
+      "exit": 2
+    }
+  }
+}

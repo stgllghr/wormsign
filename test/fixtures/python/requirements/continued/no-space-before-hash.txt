@@ -1,0 +1,3 @@
+--require-hashes
+six==1.16.0 --hash=sha256:97e740a07598fb0c89a63e237693bcee253e4b1f6abfed59389776d5ebbc766a#\
+evil==0.0.1 --hash=sha256:defa85a262526a7895e437287b066a7fc24ae5a093a59136ae6bb6deb86f899a

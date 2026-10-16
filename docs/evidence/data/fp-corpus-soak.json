@@ -1,0 +1,144 @@
+{
+  "retrieved": "2026-10-15T15:27:05.518Z",
+  "results": [
+    {
+      "repo": "babel/babel",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "eslint/eslint",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "expressjs/express",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "facebook/react",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "microsoft/TypeScript",
+      "findings": {
+        "WS-SK-002 high": 42
+      },
+      "files": [
+        "tsc/testdata/baselines/reference/compiler/assignmentStricterConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/conditionalTypeVarianceBigArrayConstraintsPerformance.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/constraints0.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/constraintsThatReferenceOtherContstraints1.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/distributiveConditionalTypeConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/genericConstraintSatisfaction1.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/genericTypeConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/indexedAccessConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/indexerConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/indexerConstraints2.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/infiniteConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/inlinedAliasAssignableToConstraintSameAsAlias.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/maxConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/nonIdenticalTypeConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/primitiveConstraints1.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/primitiveConstraints2.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/promiseIdentityWithConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/promisesWithConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/thisInTupleTypeParameterConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/typeParameterAssignmentWithConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/typeParameterConstraints1.errors.txt",
+        "tsc/testdata/baselines/reference/compiler/unspecializedConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/ExportClassWithAccessibleTypesInTypeParameterConstraintsClassHeritageListMemberTypeAnnotations.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/constraintSatisfactionWithAny.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/functionConstraintSatisfaction2.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithConstraintsTypeArgumentInference2.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithObjectTypeArgsAndConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithObjectTypeArgsAndConstraints2.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithObjectTypeArgsAndConstraints3.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithObjectTypeArgsAndConstraints4.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericCallWithObjectTypeArgsAndConstraints5.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/genericClassWithObjectTypeArgsAndConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/mappedTypeConstraints2.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/propertyAccessOnTypeParameterWithConstraints4.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/propertyAccessOnTypeParameterWithConstraints5.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/subtypesOfTypeParameterWithConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/subtypesOfTypeParameterWithConstraints2.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/subtypesOfTypeParameterWithConstraints4.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/subtypesOfTypeParameterWithRecursiveConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/twoGenericInterfacesWithDifferentConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/typeArgumentInferenceWithConstraints.errors.txt",
+        "tsc/testdata/baselines/reference/conformance/wrappedAndRecursiveConstraints4.errors.txt"
+      ],
+      "notes": []
+    },
+    {
+      "repo": "nestjs/nest",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "nodejs/undici",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "npm/cli",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "prettier/prettier",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "storybookjs/storybook",
+      "findings": {},
+      "files": [],
+      "notes": [
+        "443 PyPI file(s) of 16 version(s) checked against https://pypi.org/simple/",
+        "registry signals (WS-RG-*) are not implemented for PyPI",
+        "release-age settings of Python tools are not checked by soak; see harden-dev.sh"
+      ]
+    },
+    {
+      "repo": "sveltejs/svelte",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "vercel/next.js",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "vitejs/vite",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "webpack/webpack",
+      "findings": {},
+      "files": [],
+      "notes": []
+    },
+    {
+      "repo": "withastro/astro",
+      "findings": {},
+      "files": [],
+      "notes": []
+    }
+  ]
+}

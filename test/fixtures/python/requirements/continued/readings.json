@@ -1,0 +1,205 @@
+{
+ "recorded": "pip 26.1.2 (RequirementsFileParser with get_line_parser(None)) and uv 0.10.9 (uv pip install --dry-run --offline --no-index --find-links <wheels of the same names, built locally>), each file read in a directory holding it and those wheels under wheels/; not the pinned tools of scripts/gen-py-fixtures.sh",
+ "pip": "26.1.2",
+ "uv": "0.10.9",
+ "files": {
+  "comment-line-ending-in-backslash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0",
+     "evil==0.0.1"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "end-of-file.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "glued-hash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "glued-require-hashes.txt": {
+   "pip": {
+    "error": "RequirementsFileParseError: Invalid requirement: --require-hashesevil==0.0.1"
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "glued-version.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0",
+     "evil==0.0.1"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "middle-line.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "no-space-before-hash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "quoted-marker.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0 ; sys_platform != '#x'",
+     "evil==0.0.1"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "space-before-hash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "split-hash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "c926==1.0",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "tab-before-hash.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six==1.16.0"
+    ],
+    "error": null
+   }
+  },
+  "url-fragment.txt": {
+   "pip": {
+    "requirements": [
+     "six @ file:./wheels/six-1.16.0-py3-none-any.whl#sha256=97e740a07598fb0c89a63e237693bcee253e4b1f6abfed59389776d5ebbc766a",
+     "evil==0.0.1"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1",
+     "six"
+    ],
+    "error": null
+   }
+  },
+  "include/requirements.txt": {
+   "pip": {
+    "requirements": [
+     "six==1.16.0"
+    ]
+   },
+   "uv": {
+    "exit": 0,
+    "install": [
+     "evil==0.0.1"
+    ],
+    "error": null
+   },
+   "made": {
+    "a.txt ": "evil==0.0.1\n"
+   }
+  }
+ }
+}

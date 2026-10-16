@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "ignorePaths": [
+    {
+      "path": "test/fixtures",
+      "justification": "Inert synthetic test fixtures: they reproduce IOC names, malicious-shaped lifecycle scripts, lockfiles and workflows so every check has a positive control. Nothing in them is installed or run by GitHub, and wormsign diff still checks manifests, local actions and package-manager config under ignored paths."
+    },
+    {
+      "path": "test/golden",
+      "justification": "Golden SARIF and JSON outputs of scans over test/fixtures; they quote the fixtures' inert indicators by design."
+    },
+    {
+      "path": "data/iocs",
+      "justification": "The sourced IOC data the scanner matches against. It must hold every indicator verbatim, so scanning it would only report the IOC list itself."
+    }
+  ],
+  "entries": [
+    {
+      "fingerprint": "73002349c29590b10c82f746c090a3d7",
+      "justification": "test/iocs-data.test.ts holds a published exfiltration endpoint (the 2025-09 webhook.site URL) as a string, to prove the IOC data stores it defanged and the loader refangs it. It is test input, never requested."
+    },
+    {
+      "fingerprint": "136dc4190c5fbeb15215845e3128e3ee",
+      "justification": "test/checks.test.ts uses a made-up webhook.site URL as input to the generic-endpoint check (WS-EX-001); nothing requests it."
+    },
+    {
+      "fingerprint": "aecd8a3a8c37a546293b5f922481b93a",
+      "justification": "test/checks.test.ts uses a made-up webhook.site URL to prove node_modules mode skips generic endpoints; nothing requests it."
+    },
+    {
+      "fingerprint": "646332d24ce3f88644177cc01eb7c4cc",
+      "justification": "test/scanner-hardening.test.ts uses an upper-case made-up webhook.site URL to prove endpoint matching ignores case; nothing requests it."
+    },
+    {
+      "fingerprint": "b6e1c1539dd685aa67372e8289e0928f",
+      "justification": "test/scanner-hardening.test.ts builds 20,000 made-up webhook.site URLs to prove the exfil check stays linear; nothing requests them."
+    },
+    {
+      "fingerprint": "7410dd88cc97b9ccfd6a5a583d88572c",
+      "justification": "test/scanner-wiring.test.ts writes a made-up webhook.site URL into a temporary project to prove the scanner wiring reports it; nothing requests it."
+    },
+    {
+      "fingerprint": "15b16e474ed6ef12abcc6ebc969efd4e",
+      "justification": "test/cli-consistency.test.ts uses a made-up webhook.site URL to prove that an IOC endpoint below medium does not replace the medium generic finding (WS-EX-001); nothing requests it."
+    },
+    {
+      "fingerprint": "9900e7e8222266b44a7b8def32d24abb",
+      "justification": "docs/evidence/data/fp-corpus.json is the false-positive study's output. It quotes the WS-EX-001 finding the scan reported in astro's unit test (a made-up ngrok host used as an Origin header value, classified as a false positive in docs/evidence/false-positives.md). It is recorded data; nothing requests it."
+    }
+  ]
+}

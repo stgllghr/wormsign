@@ -1,0 +1,271 @@
+# Build, lint, test and package checks. The dogfood gate (wormsign on its own pull requests) is wormsign.yml.
+#
+# On a pull request this workflow does not start on its own: wormsign.yml calls it (workflow_call) once its gate job
+# has passed, because the jobs here install the change's dependencies and run their code (tsc, eslint), and a
+# malicious version must not run before the gate has checked it. A gate that fails skips every job here.
+#
+# Conventions for every workflow in this repository:
+# - Actions are pinned to full commit SHAs, with the release in a comment for Dependabot and for readers.
+# - actions/checkout runs with persist-credentials: false, so no job leaves a token in .git/config for later steps.
+# - npm never runs dependency install scripts: .npmrc sets ignore-scripts=true and every install passes
+#   --ignore-scripts as well. setup-node's dependency cache is off (package-manager-cache: false), so a cache entry
+#   written by one run can never feed another.
+# - Top-level permissions are contents: read; a job that needs more says so itself, with a reason per permission.
+name: ci
+
+on:
+  # Pull requests: called by wormsign.yml after its gate job (see above).
+  workflow_call:
+  push:
+    branches: [main]
+  schedule:
+    # Monthly, for the jobs that do not run per change: the mutation check, where each mutant reruns the whole test
+    # suite (one job of up to about 75 minutes per module, hours of runner time in all), and the macOS harden-dev.sh
+    # tests (the Ubuntu job runs them per change). Also re-derives the vendored parser from its npm tarball and
+    # catches breakage from runner image updates. The cadence is about run time: a change waits for no job that
+    # takes over an hour, and a release runs them all first (workflow_dispatch with slow).
+    - cron: "17 4 1 * *"
+  # On demand: `gh workflow run ci.yml --ref <branch>` runs the per-change jobs only (lint, test, package, ...), as a
+  # maintainer does on a pull request the gate fails by design; `-f slow=true` adds the slow jobs (the mutation check,
+  # one job per module (`--list-modules` names them) of up to about 75 minutes, and macOS), as before a release.
+  workflow_dispatch:
+    inputs:
+      slow:
+        description: "Also run the slow jobs: the full mutation check (one job per module) and the macOS harden-dev.sh tests"
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+
+concurrency:
+  # A pull request has one group, and a newer push to it cancels the older run. Every other run (push to main,
+  # schedule) gets a group of its own, github.run_id: in a shared group a run waits behind the one in progress, and
+  # GitHub cancels a run already pending there when another queues, so with the 120-minute mutation job below a
+  # main commit between two quick merges would never get a result. A unique group means main runs never queue
+  # behind or cancel each other (https://docs.github.com/en/actions/reference/workflows-and-actions/workflow-syntax#concurrency).
+  group: ci-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  test:
+    name: lint and test (Node ${{ matrix.node }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read # check out the repository
+    env:
+      # The Python differential tests (test/python-differential.test.ts) compare the readers with tomllib and with
+      # the packaging library pip vendors. Locally they skip, naming the python3 they looked for; here a missing or
+      # too old python3 fails them.
+      WORMSIGN_REQUIRE_PYTHON: "1"
+    strategy:
+      fail-fast: false
+      matrix:
+        # 24 is what CI and the release use; 22 proves engines ">=22" holds. The soak gate that needs npm 11.10 or
+        # newer (min-release-age) is wormsign.yml, which sets check-latest.
+        node: [24, 22]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      # python3 with tomllib (3.11 or later) and pip, for the differential tests. No cache input: nothing is installed.
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.14"
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
+      - run: npm test
+
+  mutation-list:
+    name: mutation list is current
+    # Every mutant in every scripts/mutants-<module>.mjs must still name text that occurs exactly once in the file it
+    # mutates, and no module may hold more than 18, so the lists cannot rot, or outgrow a job, between runs of the
+    # full check below. Reads files only: no install, no tests.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm run mutation -- --check
+
+  package:
+    name: npm pack and tarball smoke test
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      # npm skips the prepack script under ignore-scripts, so build and check the files list explicitly.
+      - run: npm run build && npm run check-files
+      - run: npm pack
+      - run: scripts/ci-pack-smoke.sh wormsign-*.tgz
+
+  verify-vendor:
+    name: vendored parser matches its npm tarball
+    # scripts/verify-vendor.mjs re-derives src/vendor/smol-toml/ from the npm tarball VENDORED.json pins (network): the
+    # tarball's sha512, every file byte for byte, and the commit the registry's provenance names. The offline checks
+    # (npm run build, test/vendor-integrity.test.ts) compare the copy with VENDORED.json only, which a change could
+    # edit as well; this compares both with the registry. Runs on every event, the monthly schedule included.
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: node scripts/verify-vendor.mjs
+
+  shellcheck:
+    name: shellcheck
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # shellcheck is preinstalled on ubuntu-24.04 (ubuntu-latest), per the runner image's software list:
+      # https://github.com/actions/runner-images/blob/main/images/ubuntu/Ubuntu2404-Readme.md
+      # Default severity, so info-level findings (such as SC2016) fail too; a deliberate one is waived in the script
+      # with a `# shellcheck disable=` directive next to it, never here.
+      - run: shellcheck --version && shellcheck harden-dev.sh scripts/*.sh
+
+  # The script supports Linux (bash 5, GNU tools) and macOS (bash 3.2, BSD tools). Linux runs for every change.
+  harden:
+    name: harden-dev.sh tests (ubuntu-latest)
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm run test:harden
+
+  # On the monthly schedule and on demand with slow (workflow_dispatch -f slow=true), see the schedule comment above:
+  # run it by hand before a release or after a change to harden-dev.sh. A separate job, not a matrix entry, because a
+  # job-level if cannot read the matrix context.
+  harden-macos:
+    name: harden-dev.sh tests (macos-latest)
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.slow)
+    runs-on: macos-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm run test:harden
+
+  self-scan:
+    name: wormsign self-scan with positive control
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # check out the repository
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      # This change's own CLI and baseline must pass, and must fail once an IOC-named workflow is added. The gate a
+      # pull request cannot edit is wormsign.yml, which runs the CLI built from the base branch.
+      - run: npm run self-scan
+
+  mutation-modules:
+    name: mutation modules
+    # The module names, one per scripts/mutants-<module>.mjs, as --list-modules prints them (a JSON array), for the
+    # matrix of the mutation job below: a new module file gets its own job without an edit here. Reads files only.
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.slow)
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read # check out the repository
+    outputs:
+      modules: ${{ steps.list.outputs.modules }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      # The assignment fails the step (bash -e) when the script fails; an empty output would only fail later, in fromJSON.
+      - id: list
+        run: |
+          modules="$(node scripts/mutation-check.mjs --list-modules)"
+          echo "modules=$modules" >> "$GITHUB_OUTPUT"
+
+  mutation:
+    name: mutation check (${{ matrix.module }})
+    # Each mutant reruns the whole suite, so this runs on the monthly schedule and on demand with slow, not per change:
+    # run it by hand before a release (`gh workflow run ci.yml -f slow=true`), or after a change to a rule or a
+    # fail-closed path (`npm run mutation` locally is free).
+    # One job per module. A module holds at most 18 mutants (scripts/mutation-check.mjs refuses more), about 75
+    # minutes at twice the local suite time (about two minutes); 120 minutes is the backstop. The per-change check that every mutant still
+    # names real text is the mutation-list job above.
+    needs: mutation-modules
+    if: github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.slow)
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    permissions:
+      contents: read # check out the repository
+    strategy:
+      fail-fast: false
+      matrix:
+        module: ${{ fromJSON(needs.mutation-modules.outputs.modules) }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - run: npm run mutation -- --module "$MODULE"
+        env:
+          MODULE: ${{ matrix.module }}

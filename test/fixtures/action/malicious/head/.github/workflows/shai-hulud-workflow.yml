@@ -1,0 +1,10 @@
+# INERT TEST FIXTURE for wormsign's action self-test. GitHub runs only the repository's root .github/workflows,
+# so this file never runs. Its name is a published Shai-Hulud IOC (data/iocs); the content does nothing.
+name: inert-fixture
+on: workflow_dispatch
+permissions: {}
+jobs:
+  inert:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "inert wormsign test fixture"

@@ -1,0 +1,7 @@
+name: new
+on: push
+jobs:
+  y:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo new

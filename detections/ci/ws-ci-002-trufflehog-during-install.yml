@@ -1,0 +1,40 @@
+id: WS-CI-002
+title: TruffleHog downloaded or run during a dependency install
+severity: high
+description: >-
+  The 2025-09 payload runs `trufflehog filesystem / --json` (StepSecurity) and the 2025-11 payload
+  downloads TruffleHog from its GitHub releases into ~/.truffler-cache and runs
+  `trufflehog filesystem $HOME --json` (Socket). TruffleHog is a legitimate scanner, so the signal is
+  where it runs: inside a dependency-install step, or from the worm's cache directory. The worm runs
+  it quietly and npm hides lifecycle output by default (see WS-CI-001), so job logs show it only when
+  install output is verbose. Process telemetry from the runner is the more dependable source; the
+  Sigma rule WS-EP-001 covers that.
+attack:
+  - id: T1552.001
+    name: "Unsecured Credentials: Credentials In Files"
+    url: https://attack.mitre.org/techniques/T1552/001/
+  - id: T1105
+    name: Ingress Tool Transfer
+    url: https://attack.mitre.org/techniques/T1105/
+data_source: >-
+  CI job logs of dependency-install steps, and process command lines or egress logs from the CI
+  runner where available.
+pattern: 'trufflehog(\.exe)? filesystem|\.truffler-cache|github\.com/trufflesecurity/trufflehog/releases'
+logic: |
+  Match pattern against each line logged by a dependency-install step, or against process command
+  lines and URLs observed while that step runs. Ignore steps that are a deliberate secret scan.
+false_positives:
+  - A pipeline step that deliberately runs `trufflehog filesystem`. Scope the search to install steps; the TruffleHog GitHub Action uses `trufflehog git`, which does not match.
+sources:
+  - https://www.stepsecurity.io/blog/ctrl-tinycolor-and-40-npm-packages-compromised
+  - https://socket.dev/blog/shai-hulud-strikes-again-v2
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://attack.mitre.org/software/S9008/
+examples:
+  positive: |
+    /home/runner/.truffler-cache/trufflehog filesystem /home/runner --json
+    trufflehog filesystem / --json
+    GET https://github.com/trufflesecurity/trufflehog/releases/download/v3.0.0/trufflehog_3.0.0_linux_amd64.tar.gz
+  negative: |
+    trufflehog git file:///github/workspace --since-commit HEAD~1 --results=verified
+    added 812 packages, and audited 813 packages in 14s

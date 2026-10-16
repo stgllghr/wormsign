@@ -1,0 +1,7 @@
+name: synthetic IOC-named workflow
+on: push
+jobs:
+  x:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo inert

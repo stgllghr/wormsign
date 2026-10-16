@@ -1,0 +1,11 @@
+{
+  "name": "wormsign",
+  "owner": { "name": "stgllghr" },
+  "plugins": [
+    {
+      "name": "wormsign",
+      "source": "./plugins/wormsign",
+      "description": "Precautions for installing packages, and how to check them with wormsign."
+    }
+  ]
+}

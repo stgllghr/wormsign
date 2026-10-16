@@ -1,0 +1,20 @@
+{
+  "name": "casefold-fixture",
+  "version": "1.0.0",
+  "lockfileVersion": 3,
+  "requires": true,
+  "packages": {
+    "": {
+      "name": "casefold-fixture",
+      "version": "1.0.0",
+      "dependencies": {
+        "wormsign-test-marker": "1.0.0"
+      }
+    },
+    "node_modules/wormsign-test-marker": {
+      "version": "1.0.0",
+      "resolved": "https://registry.npmjs.org/wormsign-test-marker/-/wormsign-test-marker-1.0.0.tgz",
+      "integrity": "sha512-AAAA"
+    }
+  }
+}

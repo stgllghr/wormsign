@@ -1,0 +1,8 @@
+#!/usr/bin/env -S uv -q run --script
+# /// script
+# dependencies = ["six==1.17.0"]
+# [tool.uv]
+# exclude-newer = "2026-10-01T00:00:00Z"
+# ///
+import six
+print("ok", six.__version__)

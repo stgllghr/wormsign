@@ -1,0 +1,2 @@
+--require-hashes
+git+https://github.com/benjaminp/six@1.17.0#egg=six

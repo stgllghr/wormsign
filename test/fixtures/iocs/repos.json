@@ -1,0 +1,6 @@
+{"schema":1,
+ "patterns":[
+  {"id":"t-name","name":"wormsign-marker-repo","match":"nameExact","severity":"high","wave":"test","source":"https://example.test/synthetic-ioc"},
+  {"id":"t-desc","description":"WORMSIGN synthetic description","match":"descriptionExact","severity":"critical","wave":"test","source":"https://example.test/synthetic-ioc"},
+  {"id":"t-regex","nameRegex":"^[0-9a-z]{18}$","description":"WORMSIGN synthetic description","match":"nameRegexAndDescriptionExact","severity":"critical","wave":"test","source":"https://example.test/synthetic-ioc"}],
+ "branches":[]}

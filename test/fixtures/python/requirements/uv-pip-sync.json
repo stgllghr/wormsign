@@ -1,0 +1,1831 @@
+{
+  "command": "uv pip sync --dry-run --python <venv> --exclude-newer 2026-10-01T00:00:00Z <file>",
+  "files": {
+    "abbreviated-hash.txt": {
+      "uv-0.10.9": {
+        "error": "error: Expected `--hash`, found `\"--has=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274\"` at abbreviated-hash.txt:2:13",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `abbreviated-hash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Expected `--hash`, found `\"--has=sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274\"` at abbreviated-hash.txt:2:13",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "abbreviated-require-hashes.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at abbreviated-require-hashes.txt:1:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at abbreviated-require-hashes.txt:1:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "coding-latin1.txt": {
+      "uv-0.10.9": {
+        "error": "error: failed to decode file coding-latin1.txt: stream did not contain valid UTF-8",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": "error: failed to decode file coding-latin1.txt: stream did not contain valid UTF-8",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "comment-ends-with-backslash.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `comment-ends-with-backslash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "config-settings.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at config-settings.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `config-settings.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at config-settings.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "continuation-broken-by-comment.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at continuation-broken-by-comment.txt:4:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `continuation-broken-by-comment.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at continuation-broken-by-comment.txt:4:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ctl-delete.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ctl-delete.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Invalid hash digest length (expected 64 hexadecimal characters, found 65)",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ctl-start-of-heading.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ctl-start-of-heading.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ctl-start-of-heading.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ctl-start-of-heading.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "double-backslash.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\\', expected '-c', '-e', '-r' or the start of a requirement at double-backslash.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `double-backslash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\\', expected '-c', '-e', '-r' or the start of a requirement at double-backslash.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "double-dash.txt": {
+      "uv-0.10.9": {
+        "error": "error: Expected `--hash`, found `\"--\"` at double-dash.txt:2:13",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `double-dash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Expected `--hash`, found `\"--\"` at double-dash.txt:2:13",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "editable.txt": {
+      "uv-0.10.9": {
+        "error": "error: <corpus> does not appear to be a Python project, as neither `pyproject.toml` nor `setup.py` are present in the directory",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `editable.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have a hash, but none were provided for: file://<corpus>",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "empty-comments.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Requirements file `empty-comments.txt` does not contain any dependencies"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Requirements file `empty-comments.txt` does not contain any dependencies"
+        ]
+      }
+    },
+    "empty-file.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Requirements file `empty-file.txt` does not contain any dependencies"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Requirements file `empty-file.txt` does not contain any dependencies"
+        ]
+      }
+    },
+    "env-var-in-comment.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `env-var-in-comment.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "env-var.txt": {
+      "uv-0.10.9": {
+        "error": "error: Couldn't parse requirement in `env-var.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `env-var.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Couldn't parse requirement in `env-var.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "extra-index-url.txt": {
+      "uv-0.10.9": {
+        "error": "error: Request failed after 3 retries",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `extra-index-url.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Request failed after 3 retries",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "find-links.txt": {
+      "uv-0.10.9": {
+        "error": "error: Invalid URL in `find-links.txt` at position 0: `./wheels`",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": "error: Invalid URL in `find-links.txt` at position 0: `./wheels`",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "hash-before-requirement.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at hash-before-requirement.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `hash-before-requirement.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at hash-before-requirement.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "hash-on-own-line.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at hash-on-own-line.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `hash-on-own-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '-', expected '-c', '-e', '-r' or the start of a requirement at hash-on-own-line.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "include-and-require-hashes.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-and-require-hashes.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)",
+          "warning: Requirements file `include-and-require-hashes.txt` does not contain any dependencies"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "include-attached.txt": {
+      "uv-0.10.9": {
+        "error": "error: Expected '=' or whitespace, found Some('i') at include-attached.txt:2:3",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-attached.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Expected '=' or whitespace, found Some('i') at include-attached.txt:2:3",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "include-cycle.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-cycle.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "include-equals.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-equals.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "include-hash-in-path.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-hash-in-path.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "include-missing.txt": {
+      "uv-0.10.9": {
+        "error": "error: Error parsing included file in `include-missing.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-missing.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Error parsing included file in `include-missing.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "include-on-requirement-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-on-requirement-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "include-outside.txt": {
+      "uv-0.10.9": {
+        "error": "error: Error parsing included file in `include-outside.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-outside.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Error parsing included file in `include-outside.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "include-twice-on-a-line.txt": {
+      "uv-0.10.9": {
+        "error": "error: Error parsing included file in `include-twice-on-a-line.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-twice-on-a-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Error parsing included file in `include-twice-on-a-line.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "include-url.txt": {
+      "uv-0.10.9": {
+        "error": "error: Error parsing included file in `include-url.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `include-url.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Error parsing included file in `include-url.txt` at position 17",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "included/=eq.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/base.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/constraint-with-r.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "included/constraints.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "packaging==25.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "packaging==25.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/cycle-a.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/cycle-b.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/eq.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "included/equals.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "included/hash": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "included/hash#x.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "included/reqs-in-constraint.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "included/require-hashes-only.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `included/require-hashes-only.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)",
+          "warning: Requirements file `included/require-hashes-only.txt` does not contain any dependencies"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "included/with-require-hashes.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `included/with-require-hashes.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10"
+        ],
+        "warnings": []
+      }
+    },
+    "index-url.txt": {
+      "uv-0.10.9": {
+        "error": "error: Request failed after 3 retries",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `index-url.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Request failed after 3 retries",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "invalid-utf8.txt": {
+      "uv-0.10.9": {
+        "error": "error: failed to decode file invalid-utf8.txt: stream did not contain valid UTF-8",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": "error: failed to decode file invalid-utf8.txt: stream did not contain valid UTF-8",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "leftover-text.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 1,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `leftover-text.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have their versions pinned with `==`, but found: junk",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "local-version.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 1,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `local-version.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: No solution found when resolving dependencies",
+        "exit": 1,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "lock-coding-utf8.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-coding-utf8.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-comments.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-comments.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-constraint.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-constraint.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-continuation.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-continuation.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-crlf.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-crlf.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-extras-marker.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-extras-marker.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-hash-space-value.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-hash-space-value.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-include.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-include.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-one-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "packaging==25.0",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-one-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "packaging==25.0",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-only-require-hashes.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-only-require-hashes.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)",
+          "warning: Requirements file `lock-only-require-hashes.txt` does not contain any dependencies"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "lock-require-hashes-in-include.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `included/with-require-hashes.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-spaces-around-eq.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-spaces-around-eq.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-trailing-backslash-eof.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\\', expected '-c', '-e', '-r' or the start of a requirement at lock-trailing-backslash-eof.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-trailing-backslash-eof.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\\', expected '-c', '-e', '-r' or the start of a requirement at lock-trailing-backslash-eof.txt:2:171",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "lock-utf8-bom.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-utf8-bom.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-uv-export.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.20",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-uv-export.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.20",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "lock-uv-pip-compile.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "packaging==25.0",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `lock-uv-pip-compile.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "packaging==25.0",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "md5-hash.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `md5-hash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: `md5` hashes are insecure and cannot be used with `--require-hashes` but no other hashes are available for: six==1.17.0",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "mixed-hashes.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `mixed-hashes.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "nbsp-before-comment.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\u00a0', expected '-c', '-e', '-r' or the start of a requirement at nbsp-before-comment.txt:2:170",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `nbsp-before-comment.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\u00a0', expected '-c', '-e', '-r' or the start of a requirement at nbsp-before-comment.txt:2:170",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "no-binary.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `no-binary.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "no-index.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 1,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `no-index.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: No solution found when resolving dependencies",
+        "exit": 1,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "no-require-hashes.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "nul-byte.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at nul-byte.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `nul-byte.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at nul-byte.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "only-binary.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `only-binary.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "path-line.txt": {
+      "uv-0.10.9": {
+        "error": "error: Distribution not found at: file://<corpus>/vendor/six-1.17.0-py2.py3-none-any.whl",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `path-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Distribution not found at: file://<corpus>/vendor/six-1.17.0-py2.py3-none-any.whl",
+        "exit": 1,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "prefer-binary.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `prefer-binary.txt`: `--prefer-binary`",
+          "warning: Ignoring unsupported option in `prefer-binary.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `prefer-binary.txt`: `--prefer-binary`"
+        ]
+      }
+    },
+    "quoted-hash.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unsupported hash algorithm (expected one of: `md5`, `sha256`, `sha384`, `sha512`, or `blake2b`) on: `\"sha256`",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `quoted-hash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unsupported hash algorithm (expected one of: `md5`, `sha256`, `sha384`, `sha512`, or `blake2b`) on: `\"sha256`",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "require-hashes-in-constraint.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `included/require-hashes-only.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "require-hashes-in-include-unhashed.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `included/require-hashes-only.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have a hash, but none were provided for: six==1.17.0",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "require-hashes-on-requirement-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `require-hashes-on-requirement-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "requirements-in-constraint.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `requirements-in-constraint.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "sep-bare-cr.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-bare-cr.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "sep-escape-control.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-escape-control.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Invalid hash digest length (expected 64 hexadecimal characters, found 65)",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sep-file-separator.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-file-separator.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Invalid hash digest length (expected 64 hexadecimal characters, found 75)",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sep-form-feed.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-form-feed.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sep-line-separator.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-line-separator.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sep-next-line.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-next-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sep-vertical-tab.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at sep-vertical-tab.txt:2:170",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sep-vertical-tab.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at sep-vertical-tab.txt:2:170",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "sha512-only.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `sha512-only.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "tab-before-hash.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `tab-before-hash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "triple-equals.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `triple-equals.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "trusted-host.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `trusted-host.txt`: `--trusted-host` (hint: pass `--trusted-host` on the command line instead)",
+          "warning: Ignoring unsupported option in `trusted-host.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `trusted-host.txt`: `--trusted-host` (hint: pass `--trusted-host` on the command line instead)"
+        ]
+      }
+    },
+    "unhashed-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "idna==3.10",
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `unhashed-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have a hash, but none were provided for: idna==3.10",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "unpinned.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `unpinned.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have their versions pinned with `==`, but found: six>=1.16",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "uppercase-hash.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `uppercase-hash.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "url-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `url-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Conflicting archive URL hashes for `six @ https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl`: `sha256:4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274` conflicts with `sha256:ff70335d468e7eb6ec65b95b99d3a2836546063f63acc5171de367e834932a81`",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "utf16.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `utf16.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": []
+      }
+    },
+    "vcs-line.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `vcs-line.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have a hash, but none were provided for: git+https://github.com/benjaminp/six@1.17.0#egg=six",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "wildcard.txt": {
+      "uv-0.10.9": {
+        "error": null,
+        "exit": 0,
+        "install": [
+          "six==1.17.0"
+        ],
+        "warnings": [
+          "warning: Ignoring unsupported option in `wildcard.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: In `--require-hashes` mode, all requirements must have their versions pinned with `==`, but found: six==1.17.*",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-bom-comment.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\ufeff', expected '-c', '-e', '-r' or the start of a requirement at ws-bom-comment.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-bom-comment.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\ufeff', expected '-c', '-e', '-r' or the start of a requirement at ws-bom-comment.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-bom-middle.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\ufeff', expected '-c', '-e', '-r' or the start of a requirement at ws-bom-middle.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-bom-middle.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\ufeff', expected '-c', '-e', '-r' or the start of a requirement at ws-bom-middle.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-em-space-start.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\u2003', expected '-c', '-e', '-r' or the start of a requirement at ws-em-space-start.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-em-space-start.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\u2003', expected '-c', '-e', '-r' or the start of a requirement at ws-em-space-start.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-nbsp-start.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '\u00a0', expected '-c', '-e', '-r' or the start of a requirement at ws-nbsp-start.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-nbsp-start.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '\u00a0', expected '-c', '-e', '-r' or the start of a requirement at ws-nbsp-start.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-unit-separator-comment.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ws-unit-separator-comment.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-unit-separator-comment.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ws-unit-separator-comment.txt:2:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    },
+    "ws-unit-separator.txt": {
+      "uv-0.10.9": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ws-unit-separator.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": [
+          "warning: Ignoring unsupported option in `ws-unit-separator.txt`: `--require-hashes` (hint: pass `--require-hashes` on the command line instead)"
+        ]
+      },
+      "uv-0.12.21": {
+        "error": "error: Unexpected '', expected '-c', '-e', '-r' or the start of a requirement at ws-unit-separator.txt:3:1",
+        "exit": 2,
+        "install": [],
+        "warnings": []
+      }
+    }
+  },
+  "uv": [
+    "0.10.9",
+    "0.12.21"
+  ]
+}

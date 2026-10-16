@@ -1,0 +1,10 @@
+# Forged (B2): six 1.17.0 from uv 0.12.21's pylock.toml (test/fixtures/python/locks/uv-0.12.21/simple), with a sha512 of another file and a made-up sha3_256 beside the real sha256: pip accepts a file matching any of them.
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.9"
+
+[[packages]]
+name = "six"
+version = "1.17.0"
+index = "https://pypi.org/simple"
+wheels = [{ url = "https://files.pythonhosted.org/packages/b7/ce/149a00dd41f10bc29e5921b496af8b574d8413afcd5e30dfa0ed46c2cc5e/six-1.17.0-py2.py3-none-any.whl", upload-time = 2024-12-04T17:35:26Z, size = 11050, hashes = { sha256 = "4721f391ed90541fddacab5acf947aa0d3dc7d27b2e1e8eda2be8970586c3274", sha512 = "0c7c9ac74da2145c25b42e2332dbc1f1d44c4823828ff5938d0f81484defc8a39a8ec3b9a14888a5494d9fd2b19517f15a13e9042489b2b9275658ad6e64c1f7", sha3_256 = "anything" } }]

@@ -1,0 +1,39 @@
+{
+  "_fixture": {
+    "source": "https://registry.npmjs.org/microtime",
+    "fetched": "2026-10-02",
+    "note": "Real full packument (Accept: application/json), trimmed to these versions; per version only _npmUser (name, trustedPublisher), the preinstall/install/postinstall scripts and dist.attestations are kept. A version in time but not in versions is no longer on the registry."
+  },
+  "name": "microtime",
+  "time": {
+    "2.1.8": "2018-05-16T02:48:17.646Z",
+    "2.1.9": "2019-01-26T20:01:45.419Z",
+    "3.0.0-0": "2019-01-28T16:45:23.807Z"
+  },
+  "versions": {
+    "2.1.8": {
+      "_npmUser": {
+        "name": "wadey"
+      },
+      "scripts": {
+        "install": "prebuild-install || node-gyp rebuild"
+      }
+    },
+    "2.1.9": {
+      "_npmUser": {
+        "name": "wadey"
+      },
+      "scripts": {
+        "install": "prebuild-install || node-gyp rebuild"
+      }
+    },
+    "3.0.0-0": {
+      "_npmUser": {
+        "name": "wadey"
+      },
+      "scripts": {
+        "install": "node-gyp-build"
+      }
+    }
+  }
+}

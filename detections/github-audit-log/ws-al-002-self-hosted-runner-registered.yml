@@ -1,0 +1,122 @@
+# WS-AL-002 as two Sigma rules: a runner with the worm's name came online or took a job (critical), and a runner
+# registered by an identity not on your allowlist (medium). Fields are GitHub's audit-log event fields.
+title: Self-hosted runner with a worm runner name came online or took a job
+id: e80d612a-00b0-4c88-9bca-5ff6b5781857
+name: ws_al_002_worm_runner_online
+status: experimental
+description: >-
+  Shai-Hulud 2.0 installs the GitHub Actions runner under ~/.dev-env on infected machines and
+  registers it with `config.sh --name "SHA1HULUD"`, then adds a discussion-triggered workflow so the
+  attacker can run commands on the machine by opening a discussion (Datadog, Wiz). The registration
+  event does not carry the runner name, so the name is matched where GitHub records it: the runner
+  online events (repository, organization and enterprise runners) and workflows.prepared_workflow_job,
+  a job that started on that runner, which is the attacker using it. Sigma compares the name
+  case-insensitively. The names are the runnerNames entries of data/iocs/workflows.json. These events
+  are not shown in the web UI, only in the stream, the REST API and exports. Blind spot: Datadog shows
+  config.sh registering against https://github.com/<owner>/<repo> in the same code that creates the
+  exfiltration repository with the victim's token. The sources do not name that repository, but if it
+  is the exfiltration repository, in the victim's personal account, no organization audit log records
+  the runner, its coming online or its jobs. The rule then fires only for a runner registered on a
+  repository of a monitored organization, or on an enterprise. WS-CI-004 reads the infected host's
+  process command lines, wherever the runner registered. wormsign id WS-AL-002.
+references:
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://unit42.paloaltonetworks.com/npm-supply-chain-attack/
+  # GitHub audit-log event schema (repo and org runner events and their fields), retrieved 2026-10-14;
+  # workflows.prepared_workflow_job and its runner_name, retrieved 2026-10-15.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#repo
+  # enterprise.self_hosted_runner_online and its runner_name, retrieved 2026-10-15.
+  - https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/audit-log-events-for-your-enterprise
+author: wormsign
+date: 2026-10-14
+modified: 2026-10-15
+tags:
+  - attack.command-and-control
+  - attack.t1102.002
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log, and GET /enterprises/{enterprise}/audit-log for enterprise runners.
+detection:
+  selection:
+    action:
+      - repo.self_hosted_runner_online
+      - org.self_hosted_runner_online
+      - enterprise.self_hosted_runner_online
+      - workflows.prepared_workflow_job
+    runner_name: SHA1HULUD
+  condition: selection
+falsepositives:
+  - A runner given the worm's name on purpose, for example to test this rule.
+level: critical
+# Not part of the Sigma standard; pySigma keeps unknown keys as custom attributes. Synthetic events:
+# @timestamp in epoch milliseconds is illustrative, since GitHub does not document its format.
+examples:
+  positive: |
+    {"action":"repo.self_hosted_runner_online","actor":"victim-dev","@timestamp":1790900300000,"org":"example-org","repo":"example-org/tooling","runner_id":42,"runner_name":"SHA1HULUD"}
+    {"action":"org.self_hosted_runner_online","actor":"victim-dev","@timestamp":1790900300000,"org":"example-org","runner_id":43,"runner_name":"sha1hulud"}
+    {"action":"enterprise.self_hosted_runner_online","actor":"victim-dev","@timestamp":1790900300000,"business":"example-enterprise","runner_id":44,"runner_name":"SHA1HULUD"}
+    {"action":"workflows.prepared_workflow_job","actor":"attacker-account","@timestamp":1790990000000,"org":"example-org","repo":"example-org/tooling","workflow_run_id":901,"job_name":"process","runner_id":42,"runner_name":"SHA1HULUD","is_hosted_runner":false}
+  negative: |
+    {"action":"org.self_hosted_runner_online","actor":"runner-provisioner[bot]","@timestamp":1790900300000,"org":"example-org","runner_id":7,"runner_name":"linux-x64-build-07"}
+    {"action":"repo.register_self_hosted_runner","actor":"victim-dev","@timestamp":1790900290000,"org":"example-org","repo":"example-org/tooling"}
+    {"action":"workflows.prepared_workflow_job","actor":"dev","@timestamp":1790990000000,"org":"example-org","repo":"example-org/api","workflow_run_id":902,"job_name":"test","runner_id":3,"runner_name":"GitHub Actions 3","is_hosted_runner":true}
+---
+title: Self-hosted runner registered by an identity not on the allowlist
+id: 4106557b-0a2c-4832-aede-dab20ef0754a
+name: ws_al_002_runner_registered_off_allowlist
+status: experimental
+description: >-
+  The worm can register its runner under any name, so any registration outside your
+  runner-provisioning identities is reported, at lower severity. Repository-level registrations
+  deserve the most attention: the worm registers against a single repository URL. The registration
+  event has no runner fields; to get the name, join it to the next *.self_hosted_runner_online event
+  for the same repo. Replace the example identity in filter_allowlist with your own before deploying.
+  An event without an actor is reported, as Sigma's not filter passes it. The same blind spot as the
+  critical rule: a runner registered on a repository in the victim's personal account is in no
+  organization audit log. wormsign id WS-AL-002.
+references:
+  - https://securitylabs.datadoghq.com/articles/shai-hulud-2.0-npm-worm/
+  - https://www.wiz.io/blog/shai-hulud-2-0-ongoing-supply-chain-attack
+  - https://unit42.paloaltonetworks.com/npm-supply-chain-attack/
+  # GitHub audit-log event schema (repo and org runner events and their fields), retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/organizations/keeping-your-organization-secure/managing-security-settings-for-your-organization/audit-log-events-for-your-organization#repo
+  # The same for enterprise.register_self_hosted_runner, retrieved 2026-10-14.
+  - https://docs.github.com/en/enterprise-cloud@latest/admin/monitoring-activity-in-your-enterprise/reviewing-audit-logs-for-your-enterprise/audit-log-events-for-your-enterprise
+author: wormsign
+date: 2026-10-14
+tags:
+  - attack.command-and-control
+  - attack.t1102.002
+logsource:
+  product: github
+  service: audit
+  definition: >-
+    Requirements: GitHub Enterprise Cloud, with the audit log streamed to the SIEM or polled from
+    GET /orgs/{org}/audit-log.
+detection:
+  registration:
+    action:
+      - repo.register_self_hosted_runner
+      - org.register_self_hosted_runner
+      - enterprise.register_self_hosted_runner
+  filter_allowlist:
+    # An example identity: list the ones that provision your runners.
+    actor:
+      - runner-provisioner[bot]
+  condition: registration and not filter_allowlist
+falsepositives:
+  - Developers registering a personal runner on a repository they administer. Keep an allowlist of runner-provisioning identities.
+  - Autoscaling runner fleets register constantly. Their registrations come from a known automation identity, so allowlist that identity rather than the event.
+level: medium
+examples:
+  positive: |
+    {"action":"repo.register_self_hosted_runner","actor":"victim-dev","@timestamp":1790900290000,"org":"example-org","repo":"example-org/tooling"}
+    {"action":"enterprise.register_self_hosted_runner","actor":"victim-dev","@timestamp":1790900295000,"business":"example-enterprise"}
+    {"action":"repo.register_self_hosted_runner","@timestamp":1790900296000,"org":"example-org","repo":"example-org/tooling"}
+  negative: |
+    {"action":"org.register_self_hosted_runner","actor":"runner-provisioner[bot]","@timestamp":1790900280000,"org":"example-org"}
+    {"action":"repo.self_hosted_runner_online","actor":"victim-dev","@timestamp":1790900300000,"org":"example-org","repo":"example-org/tooling","runner_id":42,"runner_name":"build-07"}
