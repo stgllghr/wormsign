@@ -1,0 +1,7 @@
+# CANARY - inert, never merged. Its file name is a published Shai-Hulud IOC
+# (shai-hulud-workflow.yml, September 2025 wave). It has no jobs and only a manual
+# trigger, so it can never run. The pull request exists to prove that the
+# wormsign gate (built from main) fails a change that adds it.
+name: canary-inert
+on: workflow_dispatch
+jobs: {}
