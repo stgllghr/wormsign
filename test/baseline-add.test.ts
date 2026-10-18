@@ -168,13 +168,18 @@ test("baseline add: a symlinked baseline is refused, dangling or not, and neithe
 test("baseline add: a directory or a FIFO at the baseline path is refused as not a regular file", async () => {
   const d = tmp();
   mkdirSync(join(d, "dir.json"));
+  const r = await add(join(d, "dir.json"), FP1, "--reason", WHY);
+  assert.equal(r.code, 2);
+  assert.match(r.err, /it is not a regular file/);
+  assert.doesNotMatch(r.err, /internal error/);
+  // The FIFO in a child process with a timeout: an open that waits for a writer would block this process's only
+  // thread, where no test timeout can fire, and hang the whole run instead of failing this test.
   execFileSync("mkfifo", [join(d, "fifo.json")]);
-  for (const name of ["dir.json", "fifo.json"]) {
-    const r = await add(join(d, name), FP1, "--reason", WHY);
-    assert.equal(r.code, 2, name);
-    assert.match(r.err, /it is not a regular file/, name);
-    assert.doesNotMatch(r.err, /internal error/, name);
-  }
+  const f = spawnSync(process.execPath, [CLI, "baseline", "add", FP1, "--reason", WHY, "--baseline", join(d, "fifo.json")], { encoding: "utf8", timeout: 20_000 });
+  assert.equal(f.signal, null, "it waited on the FIFO");
+  assert.equal(f.status, 2, f.stderr);
+  assert.match(f.stderr, /it is not a regular file/);
+  assert.doesNotMatch(f.stderr, /internal error/);
 });
 
 test("baseline add: a baseline in a directory that does not exist is refused, and no directory is made", async () => {
