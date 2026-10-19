@@ -133,9 +133,9 @@ a new module gets a job without a workflow edit, and the script refuses a module
 `test/mutation-modules.test.ts` checks both.
 
 651 of the 974 have been killed at least once. The other 323, added or changed in the pre-publication reviews or
-since, were hand-applied by their authors against the tests that cover them; the script has not run them yet. No
-single run has yet covered all 974 on one commit; that first full CI run in this repository will be, and it will be
-linked from [Release status](installation.md#release-status). The kill record, the timings and the module list are in
+since, were hand-applied by their authors against the tests that cover them; the script has not run them yet. The
+first run of all 974 on one commit is this repository's first full CI run, linked from
+[Release status](installation.md#release-status). The kill record, the timings and the module list are in
 [evidence/test-runs.md](evidence/test-runs.md#mutation-check).
 
 **Proves:** for each listed decision, at least one test fails when it is removed. **Does not prove:** that the
@@ -181,8 +181,9 @@ with SHA-256.
 
 ## Runs on GitHub
 
-This repository's runs are recorded under [Release status](installation.md#release-status). One run from the
-private development repository is kept here because it will be repeated in public: the canary.
+This repository's runs, the public canary among them, are recorded under
+[Release status](installation.md#release-status). The canary's first run, in the private development repository,
+is kept here.
 
 ### The canary pull request
 

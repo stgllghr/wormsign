@@ -181,9 +181,9 @@ self-scan, `harden-dev.sh` on Ubuntu and macOS, and the mutation check of the 70
 request that adds an IOC-named workflow failed the gate, as it must
 ([validation.md](../validation.md#the-canary-pull-request)). No SARIF upload reached code scanning there.
 
-The PyPI soak, the pre-public review fixes and the Python PR-mode change have run only locally, on macOS: the suite
-of 0ff5d3e's tree on Node 22.23.3, 24.21.0 and 23.11.0 ([above](#test-suite)). Their first runs on GitHub's runners
-and on Linux are the first item of [Release status](../installation.md#release-status).
+The PyPI soak, the pre-public review fixes and the Python PR-mode change ran first locally, on macOS: the suite of
+0ff5d3e's tree on Node 22.23.3, 24.21.0 and 23.11.0 ([above](#test-suite)). Their first runs on GitHub's runners and on
+Linux are in the table under [Release status](../installation.md#release-status).
 
 ## Installation commands
 
