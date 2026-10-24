@@ -10,6 +10,14 @@ The first release, the version in `package.json`. It has not been tagged yet
 
 ### Added
 
+- **Typed ESM library API:** `scan`, `gateExitCode`, `renderReport`, `UsageError` and public types. The read-only
+  scanner uses bundled or explicitly selected IOC data, ignores ambient user caches and does not apply project
+  baselines. Package exports define the supported interface; compiled declarations and runnable JavaScript and
+  TypeScript examples ship in the tarball. The release smoke test checks external consumers after offline
+  installation. [library.md](docs/library.md)
+- **Release artifact consumers:** CI and releases build once and install that same tarball on Node 22 and 24.
+  Publication waits for both consumers. Slow mutation jobs retain diagnostics for thirty days while preserving
+  failed command exit statuses; maintainer instructions require final CI on the source commit being released.
 - **`wormsign scan [dir]`**, offline: install scripts, lockfile IOC versions, sources and integrity, workflows,
   payload files, exfiltration endpoints and auto-run editor and agent entries; what it cannot check is WS-SC-900.
   [cli/scan.md](docs/cli/scan.md)

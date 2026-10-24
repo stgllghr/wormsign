@@ -9,6 +9,7 @@ Start with the [README](../README.md).
 | protect my laptop | [hardening.md](hardening.md) |
 | check a lockfile before installing | [soak.md](soak.md) |
 | gate pull requests | [github-action.md](github-action.md#recommended-pull-request-gate) |
+| integrate checks into an agent or Node application | [library.md](library.md) |
 | accept a reviewed finding | [baseline.md](baseline.md) |
 | respond to an indicator I found | [incident-response.md](incident-response.md) |
 | know why it is built this way | [design.md](design.md) |
@@ -18,6 +19,8 @@ Start with the [README](../README.md).
 **Getting started**
 
 - [installation.md](installation.md): install from source or a release, and verify it.
+- [library.md](library.md): public TypeScript/JavaScript API, examples and integration limits.
+- [release-readiness.md](release-readiness.md): release scope, completed checks and remaining gates.
 - [github-action.md](github-action.md): the Action, its inputs and the pull-request gate.
 - [faq.md](faq.md): short answers that link to the detail.
 - [troubleshooting.md](troubleshooting.md): error messages, causes and fixes.

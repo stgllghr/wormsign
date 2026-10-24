@@ -17,14 +17,15 @@ import { pathToFileURL } from "node:url";
 
 const ROOT = join(import.meta.dirname, "..", "..");
 
-function mutation(root: string, ...args: string[]): { status: number | null; out: string; err: string } {
+function mutationWithEnv(root: string, override: Record<string, string>, ...args: string[]): { status: number | null; out: string; err: string } {
   // Without NODE_TEST_CONTEXT, which node:test sets in this file's process: a suite the script runs would inherit it,
   // and its own node --test would then report to this run in V8's serialized form, not as the spec reporter.
-  const env = { ...process.env };
+  const env = { ...process.env, ...override };
   delete env.NODE_TEST_CONTEXT;
   const r = spawnSync(process.execPath, [join(root, "scripts", "mutation-check.mjs"), ...args], { encoding: "utf8", env });
   return { status: r.status, out: r.stdout, err: r.stderr };
 }
+function mutation(root: string, ...args: string[]): { status: number | null; out: string; err: string } { return mutationWithEnv(root, {}, ...args); }
 
 const moduleFiles = (root: string): string[] =>
   readdirSync(join(root, "scripts"))
@@ -70,7 +71,8 @@ test("mutation: every scripts/mutants-*.mjs is listed by --list-modules, which i
   assert.match(full, /^ {4}needs: mutation-modules$/m);
   assert.match(full, when, "the mutation job runs on the schedule and on demand with slow only");
   assert.match(full, /^ {6}fail-fast: false\n {6}matrix:\n {8}module: \$\{\{ fromJSON\(needs\.mutation-modules\.outputs\.modules\) \}\}$/m, "one job per listed module; one failing module does not cancel the others");
-  assert.match(full, /^ {6}- run: npm run mutation -- --module "\$MODULE"\n {8}env:\n {10}MODULE: \$\{\{ matrix\.module \}\}$/m, "each job runs only its module");
+  assert.match(full, /^ {10}MODULE: \$\{\{ matrix\.module \}\}$/m, "the selected module comes from the matrix");
+  assert.match(full, /^ {10}npm run mutation -- --module "\$MODULE" 2>&1 \| tee "\$RUNNER_TEMP\/mutation\.log"$/m, "each job runs only its module and retains its transcript");
   const minutes = Number(/^ {4}timeout-minutes: (\d+)$/m.exec(full)?.[1]);
   assert.ok(minutes > 0 && minutes <= 120, `per-module timeout ${minutes} minutes`);
   assert.match(job(ci, "mutation-list"), /^ {6}- run: npm run mutation -- --check$/m, "every pull request checks every module's list");
@@ -204,4 +206,54 @@ test("mutation: when the unmutated suite fails, the log says why: each failed te
   assert.match(fine.out, /^baseline: the unmutated suite passes /m);
   assert.match(fine.out, /^killed {5}A1 \(\d failing: the file says ok; a subtest that never ends\)$/m);
   assert.match(fine.out, /^1\/1 mutants killed in \d+ min$/m);
+});
+
+test("mutation: process and compilation failures retain their diagnostic and never count as killed mutants", () => {
+  for (const mode of ["signal", "compile"] as const) {
+    const d = mkdtempSync(join(tmpdir(), "ws-mutation-process-"));
+    for (const name of ["scripts", "src", "node_modules", "bin"]) mkdirSync(join(d, name));
+    copyFileSync(join(ROOT, "scripts/mutation-check.mjs"), join(d, "scripts/mutation-check.mjs"));
+    writeFileSync(join(d, "scripts/mutants-alpha.mjs"), 'export default [["A1", "src/a.txt", "ok", "bad"]];\n');
+    writeFileSync(join(d, "src/a.txt"), "ok");
+    // This private fake npm makes no network request and executes no package code. Git still uses the normal PATH.
+    writeFileSync(join(d, "bin/npm"), [
+      `#!${process.execPath}`,
+      "const f=require('node:fs');if(f.readFileSync('src/a.txt','utf8')==='ok')process.exit(0);",
+      mode === "signal" ? "f.writeSync(1,('x'.repeat(16*1024)+'\\n').repeat(35));f.writeSync(1,'inert signalled suite diagnostic\\n');process.kill(process.pid,'SIGTERM');" : "f.writeSync(2,'src/a.ts(1,1): error TS1234: inert compilation diagnostic\\n');process.exit(2);",
+    ].join("\n"), { mode: 0o700 });
+    const result = mutationWithEnv(d, { PATH: join(d, "bin") + ":" + (process.env.PATH ?? "") });
+    assert.equal(result.status, 1, result.out + result.err);
+    assert.match(result.out, mode === "signal" ? /^TIMEOUT +A1$/m : /^NO-COMPILE +A1/m);
+    assert.match(result.out, /^0\/1 mutants killed in \d+ min$/m);
+    assert.match(result.err, /^why for A1:/m);
+    assert.ok(result.err.length < 15000, "unverified process diagnostics must stay bounded even with very long suite output lines");
+    if (mode === "signal") { assert.match(result.err, /process error code none; process signal SIGTERM/); assert.match(result.err, /inert signalled suite diagnostic/); }
+    else assert.match(result.err, /error TS1234: inert compilation diagnostic/);
+  }
+});
+
+
+test("mutation: compiler diagnostics inside an actual failed test are test failures, not project build failures", () => {
+  const d = mkdtempSync(join(tmpdir(), "ws-mutation-consumer-types-"));
+  for (const name of ["scripts", "src", "node_modules"]) mkdirSync(join(d, name));
+  for (const name of ["mutation-check.mjs", "run-tests.mjs"]) copyFileSync(join(ROOT, "scripts", name), join(d, "scripts", name));
+  writeFileSync(join(d, "package.json"), JSON.stringify({ name: "scratch", private: true, type: "module", scripts: { test: `"${process.execPath}" scripts/run-tests.mjs consumer.test.mjs` } }));
+  writeFileSync(join(d, "scripts/mutants-alpha.mjs"), 'export default [["A1", "src/a.txt", "ok", "bad"]];\n');
+  writeFileSync(join(d, "consumer.test.mjs"), [
+    'import { test } from "node:test";',
+    'import assert from "node:assert/strict";',
+    'import { readFileSync } from "node:fs";',
+    'test("external TypeScript consumer", () => {',
+    '  if (readFileSync("src/a.txt", "utf8") !== "ok") assert.fail("consumer.mts(1,1): error TS7016: inert missing declarations");',
+    '});',
+  ].join("\n"));
+  writeFileSync(join(d, "src/a.txt"), "not ok");
+  const broken = mutation(d);
+  assert.equal(broken.status, 1, broken.out + broken.err);
+  assert.match(broken.err, /\(fail: external TypeScript consumer\)/);
+  assert.match(broken.err, /error TS7016: inert missing declarations/);
+  writeFileSync(join(d, "src/a.txt"), "ok");
+  const killed = mutation(d);
+  assert.equal(killed.status, 0, killed.out + killed.err);
+  assert.match(killed.out, /^killed +A1 \(1 failing: external TypeScript consumer\)$/m);
 });

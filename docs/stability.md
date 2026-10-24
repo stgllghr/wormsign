@@ -23,10 +23,12 @@ What you can build on before 1.0, what a minor release may change, and how chang
 | Action inputs and outputs | [`action.yml`](../action.yml), [github-action.md](github-action.md#inputs) | Each input's name, meaning and default; the outputs `sarif`, `exit-code`, `findings`. An empty `command` on `pull_request` runs `diff`, `scan` and `soak`, with the worst exit code, the summed findings and one SARIF file holding a run per command. | New inputs; a rename, removal or default change after deprecation. |
 | SARIF | [`src/sarif.ts`](../src/sarif.ts), [output.md](output.md#sarif) | SARIF 2.1.0, one run (the Action's pull-request gate: one per command, `automationDetails.id` `wormsign-<command>/`), driver name `wormsign`, every rule listed, `partialFingerprints["wormsign/v1"]` equal to the fingerprint, `properties.severity`, the `security-severity` mapping. | Message, description and help text. |
 | JSON report | [output.md](output.md#json) | The documented fields. | New fields only; there is no schema version field. |
+| Library API | [library.md](library.md), `src/index.ts` | Documented named exports, option meanings and result fields. | New exports or fields; removal or renamed options after deprecation. |
 | Agent skill | [`plugins/wormsign/skills/wormsign/`](../plugins/wormsign/skills/wormsign/) | The skill name `wormsign`; the folders `wormsign skills` writes ([cli/skills.md](cli/skills.md#where-it-writes)); the manifest `.wormsign-skill.json`; the plugin `wormsign@wormsign`. | The skill's text, in any release. |
 
 Not stable: human output, notes and message text (do not parse them), JSON field order, `harden-dev.sh`'s output and
-the IOC data. wormsign is a command, not a library: `package.json` declares a `bin`, no `main` or `exports`.
+the IOC data. Only the root package exports documented in [library.md](library.md) are public library API.
+Implementation modules are internal, including any declarations present under `dist/src`.
 
 ## Maturity
 
@@ -43,6 +45,7 @@ holds for every labelled surface; the label says how far to rely on behaviour th
 |---|---|---|
 | `soak` (npm and PyPI) | Stable | live controls on [npm](evidence/soak-live.md) and [PyPI](evidence/soak-py-live.md), replays, the [latency study](evidence/soak-latency.md); [false positives](evidence/false-positives.md), Python only |
 | `diff`, `scan` | Stable | replays; for `scan` also the [false-positive corpus](evidence/false-positives.md), which did not run `diff` |
+| TypeScript/JavaScript library | Beta | Same scanner; external ESM and strict TypeScript consumer controls, with offline tarball smoke verification |
 | `soak --on-outage warn` | Beta | local servers only |
 | GitHub Action | Beta | the local harness; GitHub's runners only in the private development repository, before the pre-public fixes ([test-runs.md](evidence/test-runs.md#before-publication)) |
 | `baseline add` | Beta | tests only |

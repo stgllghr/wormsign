@@ -74,7 +74,8 @@ describes what the workflow file is configured to do; commands shown with output
 A release is a tag `vX.Y.Z`: one commit on top of `main` that adds only the compiled `dist/src`, which the Action
 runs ([why](github-action.md#how-the-action-gets-its-compiled-code)). On the tag, `release.yml`'s **build** job
 (read-only token) refuses a tag that does not match `package.json`'s version or fails the checks
-[below](#check-a-release-tag-yourself), then tests and smoke-installs the tarball. Its **publish** job (`contents:
+[below](#check-a-release-tag-yourself), then tests and packs the tarball. Read-only **verify-package** jobs install
+that same artifact on Node 22 and 24; publication waits for both consumers. Its **publish** job (`contents:
 write`, `id-token: write`, `attestations: write`; no npm code) releases `wormsign-X.Y.Z.tgz`, `SHA256SUMS`, and a
 signed SLSA build provenance attestation, stored on GitHub. The tarball has no npm dependencies (smol-toml is
 vendored), no install scripts and no tests.

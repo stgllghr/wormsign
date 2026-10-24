@@ -76,4 +76,6 @@ set -e
 [ "$rc" = 1 ] || { cat "$work/py-poetry.txt"; fail "soak --config-only of a poetry.lock exited $rc, expected 1"; }
 grep -q 'poetry.lock is not supported yet' "$work/py-poetry.txt" || fail "soak --config-only of a poetry.lock did not fail closed as not supported"
 
-echo "ci-pack-smoke: ok: $(basename "$tgz") installs offline; --version, scan (malicious 1, clean 0), harden-dev.sh --help, the vendored TOML parser and soak of Python locks work"
+node "$repo/scripts/ci-library-smoke.mjs" "$work" "$repo" || fail "installed library or examples failed"
+
+echo "ci-pack-smoke: ok: $(basename "$tgz") installs offline; CLI, library, typed examples, hardening and Python lock readers work"

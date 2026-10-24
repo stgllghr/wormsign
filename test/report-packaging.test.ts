@@ -34,19 +34,19 @@ test("package: every compiled file shipped has a source file (no stale dist outp
   for (const f of compiled) {
     // The vendored parser is copied, not compiled (scripts/copy-vendor.mjs): its source is the same file under src/vendor/.
     const vendored = f.path.startsWith("dist/src/vendor/");
-    const src = vendored ? f.path.replace(/^dist\//, "") : f.path.replace(/^dist\//, "").replace(/\.js$/, ".ts");
+    const src = vendored ? f.path.replace(/^dist\//, "") : f.path.replace(/^dist\//, "").replace(/(?:\.d\.ts|\.js)$/, ".ts");
     assert.ok(existsSync(join(ROOT, src)), `${f.path} has no ${src}; build must start from an empty dist`);
     if (vendored) assert.ok(readFileSync(join(ROOT, f.path)).equals(readFileSync(join(ROOT, src))), `${f.path} differs from ${src}`);
   }
 });
 
-test("package: ships the vendored TOML parser's code, licence and record, and no type declarations", () => {
+test("package: ships library declarations and the vendored parser's unchanged code, licence and record", () => {
   const files = packedFiles().map((f) => f.path);
   const vendor = files.filter((p) => p.startsWith("dist/src/vendor/smol-toml/")).map((p) => p.slice("dist/src/vendor/smol-toml/".length)).sort();
   const record = JSON.parse(readFileSync(join(ROOT, "src/vendor/smol-toml/VENDORED.json"), "utf8")) as { files: Record<string, string> };
   const expected = [...Object.keys(record.files).filter((f) => f.endsWith(".js") || f === "LICENSE"), "VENDORED.json"].sort();
   assert.deepEqual(vendor, expected);
-  assert.ok(!files.some((p) => p.endsWith(".d.ts")), "type declarations are for tsc only");
+  assert.ok(files.includes("dist/src/index.d.ts"), "public library types must ship");
   assert.match(pkg.scripts["build"] ?? "", /tsc -p tsconfig\.json && node scripts\/copy-vendor\.mjs$/, "build copies the vendored parser after tsc");
 });
 

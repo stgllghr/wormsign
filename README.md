@@ -1,10 +1,35 @@
 # wormsign
 
-wormsign keeps a malicious npm or PyPI version from being installed, and finds an npm worm's traces when one was.
-Built against the [Shai-Hulud worms](https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem),
-it is a TypeScript CLI with no npm runtime dependencies, a GitHub Action, a hardening script and SIEM detections
-(experimental; [each part's maturity](docs/stability.md#maturity)), centred on a **soak gate** that fails on a locked
-version younger than 7 days, one OSV lists as malware, and anything it cannot verify.
+wormsign is supply-chain security tooling for agent-driven development. It provides a **typed offline scanning
+library** and CLI gates for npm and PyPI, built against
+[Shai-Hulud-style worms](https://www.cisa.gov/news-events/alerts/2025/09/23/widespread-supply-chain-compromise-impacting-npm-ecosystem).
+It has no npm runtime dependencies; one pinned, hash-verified TOML parser is vendored
+([third-party notices](THIRD_PARTY_NOTICES.md)).
+
+The **soak gate** rejects locked versions younger than 7 days, versions OSV lists as malware, and inputs it cannot
+verify. Offline scans find known indicators, suspicious install scripts, workflow changes and agent persistence.
+A GitHub Action, hardening script and experimental SIEM detections provide additional integration paths
+([maturity and limits](docs/stability.md#maturity)).
+
+Automatic enforcement in a **shared sandbox for multiple coding agents** is a separate, experimental development
+milestone. This library release does not provide a protected execution environment. See the
+[roadmap](ROADMAP.md) and [release readiness](docs/release-readiness.md).
+
+## Use from an agent integration
+
+After [building and installing a local tarball](docs/library.md#install-from-the-local-release-candidate):
+
+```ts
+import { scan, gateExitCode } from "wormsign";
+
+const result = scan("/path/to/project");
+process.exitCode = gateExitCode(result.findings);
+```
+
+The API reads files without network access or package execution, uses the installed release's IOC data, and does
+not apply repository-controlled baselines. Findings and exit zero are observations, not installation permission.
+[API reference and examples](docs/library.md) · [Design decisions](docs/design.md) ·
+[Validation evidence](docs/validation.md).
 
 ## How it answers a Shai-Hulud worm
 

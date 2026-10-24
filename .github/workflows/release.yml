@@ -5,8 +5,8 @@
 # dist/src the GitHub Action runs. The build job refuses the tag unless dist/src is exactly what the tagged source
 # compiles to (scripts/ci-verify-release.sh).
 #
-# Two jobs, so write access never meets the build: `build` installs dev dependencies and compiles with read-only
-# permissions; `publish` only hashes, attests and uploads the finished tarball, and runs no npm code.
+# Read-only jobs build and install the same artifact on Node 22 and 24. `publish` waits for every consumer, then
+# only hashes, attests and uploads the finished tarball with write access; it runs no npm code.
 #
 # Verifying a release (with the GitHub CLI):
 #   gh release download vX.Y.Z --repo stgllghr/wormsign
@@ -68,10 +68,6 @@ jobs:
           tarball="$(npm pack --silent | tail -n 1)"
           echo "tarball=$tarball" >> "$GITHUB_OUTPUT"
           echo "commit=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-      - name: Tarball smoke test
-        env:
-          TARBALL: ${{ steps.pack.outputs.tarball }}
-        run: scripts/ci-pack-smoke.sh "$TARBALL"
       - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
           name: tarball
@@ -79,8 +75,36 @@ jobs:
           if-no-files-found: error
           retention-days: 7
 
-  publish:
+  verify-package:
+    name: installed release tarball (Node ${{ matrix.node }})
     needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: read # fixtures and the external consumer's development compiler
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [22, 24]
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: ${{ matrix.node }}
+          package-manager-cache: false
+      - run: npm ci --ignore-scripts
+      - uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: tarball
+      - name: Tarball smoke test
+        env:
+          TARBALL: ${{ needs.build.outputs.tarball }}
+        run: scripts/ci-pack-smoke.sh "$TARBALL"
+
+  publish:
+    needs: [build, verify-package]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     permissions:

@@ -12,7 +12,8 @@
     "exactOptionalPropertyTypes": false,
     "skipLibCheck": true,
     "types": ["node"],
-    "sourceMap": false
+    "sourceMap": false,
+    "declaration": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts"]
 }

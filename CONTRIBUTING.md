@@ -141,8 +141,18 @@ licensed under the [MIT License](LICENSE).
 
 ## Releasing (maintainer)
 
-1. Run the slow CI jobs on `main` (`gh workflow run ci.yml -f slow=true`).
-2. Bump `package.json`, date the release in `CHANGELOG.md`, and merge both through a pull request.
+First check the [release scope and readiness checklist](docs/release-readiness.md). A passing unit suite is not a
+substitute for inspecting and installing the actual packed artifact. CI and the release workflow each build one
+tarball, then install that same artifact on Node 22 and 24 with `scripts/ci-pack-smoke.sh`, including the external
+library consumer and shipped examples. Publication waits for both release consumers.
+
+1. Update the version in `package.json` and `package-lock.json`, update the shipped examples' version, date the
+   release in `CHANGELOG.md`, and merge through a pull request.
+2. Run the slow CI jobs on that exact `main` commit (`gh workflow run ci.yml --ref main -f slow=true`). Wait for
+   every job, including every mutation module, to pass. Inspect the `mutation-<module>` artifacts: these retain
+   the runner's verdicts and printed failure diagnostics for thirty days, including unsuccessful jobs. They are
+   transcripts, not independent review or complete per-test logs. Download any evidence needed for the release
+   before it expires. If source changes, repeat the checks on the new candidate commit.
 3. `scripts/ci-release-tag.sh <version>` makes the tag commit, which adds only `dist/src`
    ([how it is checked](docs/github-action.md#how-the-action-gets-its-compiled-code)). Push the tag;
    `release.yml` rebuilds, packs, attests and publishes it.
