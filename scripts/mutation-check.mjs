@@ -177,9 +177,8 @@ function suite() {
   const r = spawnSync("npm", ["test"], { cwd: work, encoding: "utf8", maxBuffer: 256 * 1024 * 1024, timeout: 20 * 60_000, killSignal: "SIGKILL" });
   const out = `${r.stdout ?? ""}${r.stderr ?? ""}`;
   const tail = (n) => `the output's last ${n} lines:\n${out.trimEnd().split(/\r?\n/).slice(-n).join("\n")}`;
-  if (r.error || r.signal) return { status: "timeout", failed: [], why: tail(30) };
+  if (r.error || r.signal) return { status: "timeout", failed: [], why: `process error code ${r.error?.code ?? "none"}; process signal ${r.signal ?? "none"}\n${tail(30)}` };
   if (r.status === 0) return { status: "pass", failed: [], why: "" };
-  if (/error TS\d+/.test(out)) return { status: "no-compile", failed: [out.match(/error TS\d+[^\n]*/)?.[0] ?? ""], why: [...out.matchAll(/^.*error TS\d+.*$/gm)].slice(0, 10).map((m) => m[0]).join("\n") };
   // The reporter writes to stdout; npm's own error lines follow on stderr and are no test's.
   const listed = failures(r.stdout ?? "");
   if (listed.length > 0) {
@@ -187,9 +186,16 @@ function suite() {
     if (listed.length > SHOWN_TESTS) shown.push(`... and ${listed.length - SHOWN_TESTS} more failed test(s)`);
     return { status: "fail", failed: [...new Set(listed.map((f) => f.name))], why: shown.join("\n\n") };
   }
+  // A consumer test can quote compiler diagnostics in its assertion. Its real failed-test footer takes
+  // precedence; a project build failure never reaches the test runner and has no such footer.
+  if (/error TS\d+/.test(out)) return { status: "no-compile", failed: [out.match(/error TS\d+[^\n]*/)?.[0] ?? ""], why: [...out.matchAll(/^.*error TS\d+.*$/gm)].slice(0, 10).map((m) => m[0]).join("\n") };
   // No list to read: every "✖ <name> (<time>)" line, deduplicated, and the output's end.
   const failed = [...new Set([...out.matchAll(/^\s*✖ (.+?) \(\d[\d.]*m?s\)$/gm)].map((m) => m[1]))];
   return { status: "fail", failed, why: tail(30) };
+}
+
+function diagnostic(value) {
+  return value.split(/\r?\n/).slice(0, 40).map((line) => line.length > 300 ? line.slice(0, 300) + "..." : line).join("\n");
 }
 
 process.on("exit", () => rmSync(work, { recursive: true, force: true }));
@@ -212,6 +218,7 @@ for (const [name, file, search, replace] of selected) {
   const verdict = r.status === "fail" ? "killed" : r.status === "pass" ? "SURVIVED" : r.status === "timeout" ? "TIMEOUT" : "NO-COMPILE";
   results.push({ name, verdict, failed: r.failed });
   console.log(`${verdict.padEnd(10)} ${name}${r.failed.length ? ` (${r.failed.length} failing: ${r.failed.slice(0, 2).join("; ").slice(0, 160)})` : ""}`);
+  if (r.status === "timeout" || r.status === "no-compile") console.error(`why for ${name}:\n${diagnostic(r.why || "(the suite printed nothing)")}`);
 }
 
 const bad = results.filter((r) => r.verdict !== "killed");

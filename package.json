@@ -1,15 +1,25 @@
 {
   "name": "wormsign",
   "version": "0.1.0",
-  "description": "Detection, diff-gating, soak-time enforcement and hardening for npm and PyPI supply-chain worms (Shai-Hulud style); soak reads npm and PyPI locks, scan and diff npm, and diff reports changed Python locks, manifests and pip/uv config. No npm runtime dependencies; one vendored, pinned, verified TOML parser, for the Python lockfiles soak reads and the pyproject.toml files diff compares.",
+  "description": "Offline TypeScript scanning library and CLI gates for agent-driven npm/PyPI development. No npm runtime dependencies; one vendored, pinned, verified TOML parser, for the Python lockfiles soak reads and the pyproject.toml files diff compares.",
   "type": "module",
   "license": "MIT AND Apache-2.0 AND BSD-3-Clause",
   "author": "stgllghr",
   "repository": { "type": "git", "url": "git+https://github.com/stgllghr/wormsign.git" },
   "homepage": "https://github.com/stgllghr/wormsign#readme",
   "bugs": { "url": "https://github.com/stgllghr/wormsign/issues" },
+  "keywords": ["supply-chain-security", "coding-agents", "npm", "pypi", "typescript"],
+  "main": "./dist/src/index.js",
+  "types": "./dist/src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js",
+      "default": "./dist/src/index.js"
+    }
+  },
   "bin": { "wormsign": "dist/src/cli.js" },
-  "files": ["dist/src", "data", "plugins/wormsign", "harden-dev.sh", "docs/hardening.md", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "SECURITY.md"],
+  "files": ["dist/src", "data", "plugins/wormsign", "harden-dev.sh", "docs/hardening.md", "docs/library.md", "examples/scan.mjs", "examples/scan.mts", "README.md", "LICENSE", "THIRD_PARTY_NOTICES.md", "SECURITY.md"],
   "engines": { "node": ">=22" },
   "scripts": {
     "clean": "node -e \"require('node:fs').rmSync('dist', { recursive: true, force: true })\"",

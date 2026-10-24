@@ -4,6 +4,14 @@ What comes after 0.1.0, in priority order. One maintainer works through it, best
 
 ## Next
 
+The immediate release adds a beta TypeScript/JavaScript scanning API, declarations and runnable examples, with
+verification against the installed tarball ([release checklist](docs/release-readiness.md)).
+
+A separate experimental milestone is automatic protection for a shared development sandbox used by multiple
+coding agents. It needs a trusted execution boundary, verified package intake, recovery and whole-task evaluation;
+the library reports observations and does not grant execution authority. That sandbox implementation is outside
+this library release.
+
 1. **A private-mirror mode for `soak`** ([#3](https://github.com/stgllghr/wormsign/issues/3)) (Artifactory and the like), as [ADR 0007](docs/adr/0007-private-registry-mirrors.md)
    decides: the public registries witness by default, with the mirror's URLs kept, private names declared and
    reported at medium, and an unclassified npm scope stopping the run; the mirror's own metadata, with a read-only
@@ -52,9 +60,9 @@ What comes after 0.1.0, in priority order. One maintainer works through it, best
 
 ## Deliberately out of scope
 
-- **Enforcement hooks in agents.** A hook is code that runs on every tool call. The lockfile gate and the
-  package-manager settings already enforce, for agents and people alike
-  ([ADR 0006](docs/adr/0006-skill-is-guidance.md)).
+- **Per-tool-call agent hooks as the execution boundary.** A hook alone cannot contain nested commands or
+  arbitrary downloaders. Runtime enforcement for shared sandboxes is a separate milestone above; the agent skill
+  remains guidance ([ADR 0006](docs/adr/0006-skill-is-guidance.md)).
 - **A hosted service.** wormsign runs from the repository and public APIs, with no account and no telemetry. A
   service would add both, and one more party to trust.
 - **Imitating installer parsers.** A model of pip, uv or npm that is wrong passes what the installer installs
