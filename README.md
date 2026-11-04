@@ -64,6 +64,9 @@ wormsign skills install                     # optional: agent skill
 - **A first `soak` often fails** on benign versions under 7 days: wait, pin an older one, or baseline it until it
   soaks (`baseline add --expires`, [exceptions](docs/soak.md#emergency-exceptions)).
 - **A tree you did not write:** add `--no-baseline`; its baseline could hide findings.
+- **This checkout itself:** run `npm run self-scan`. After a build, `wormsign scan .` here also reads `dist/test/`,
+  the compiled tests, and reports their inert IOC strings: the baseline approves them only in `test/`, so nothing
+  committed under `dist/` is hidden.
 - **Exit codes:** `0` below `--fail-on` (default `high`), `1` at or above it, `2` an error, or an incomplete
   `audit-org` audit that otherwise passes ([output](docs/output.md#exit-codes)).
 
