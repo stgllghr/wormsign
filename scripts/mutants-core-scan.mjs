@@ -29,6 +29,8 @@ export default [
   // packages from scan (through readText) and diff. Killed by "scan: a BOM-prefixed package.json, lockfile or
   // installed manifest is still checked" and "diff: ... a BOM does not hide scripts".
   ["stripBom keeps a leading byte-order mark", "src/fsutil.ts", '  return text.replace(/^\\uFEFF/, "");\n', "  return text;\n"],
+  // A directory link is judged where the OS leads it. Killed by scanner-hardening's link-text-climbs test.
+  ["SC-900 a directory link is judged with .. in its text collapsed", "src/scan.ts", "      target = realpathSync.native(join(root, rel));", "      target = realpathSync(join(root, rel));"],
   // The one opener every bounded reader shares (readBytes, readText, readChunks, and Python discovery's readHead,
   // sha256File and scanLargeFile) follows a final symlink. Killed by scanner-hardening's readText-on-a-symlink check.
   ["withRegularFile follows a final symlink", "src/fsutil.ts", "    fd = openSync(path, constants.O_RDONLY | (constants.O_NOFOLLOW ?? 0));\n", "    fd = openSync(path, constants.O_RDONLY);\n"],

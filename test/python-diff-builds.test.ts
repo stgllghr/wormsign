@@ -389,6 +389,37 @@ test("diff: a build file linked out of its project counts by what the link leads
   }
 });
 
+test("diff: a build file linked through a link whose text climbs with .. from another link is read where the OS reads it, from git and from disk", async () => {
+  // app/pyproject.toml -> ../hop/../base.toml with hop -> shared/deep: the OS climbs from shared/deep and opens
+  // shared/base.toml. Collapsed as text (node's fs.realpathSync), the same link text names the top's base.toml.
+  const shared: Files = {
+    "requirements.txt": HASH_LOCK,
+    "base.toml": pyproject(SETUPTOOLS),
+    "shared/base.toml": pyproject(SETUPTOOLS),
+    "shared/deep/keep": "\n",
+  };
+  const links = { hop: "shared/deep", "app/pyproject.toml": "../hop/../base.toml" };
+  const put = (d: string, files: Files, linked: Record<string, string> = {}): void => {
+    tempTreeAt(d, files);
+    for (const [rel, target] of Object.entries(linked)) {
+      mkdirSync(dirname(join(d, rel)), { recursive: true });
+      symlinkSync(target, join(d, rel));
+    }
+  };
+  const run = async (how: "git" | "dir", edit: Files): Promise<Run> => {
+    if (how === "git") return cli(["diff", "HEAD~1", "HEAD", "--dir", gitRepo([(d) => put(d, shared, links), (d) => put(d, edit)]), ...IOCS]);
+    const [a, b] = [mkdtempSync(join(tmpdir(), "ws-diffbuild-a-")), mkdtempSync(join(tmpdir(), "ws-diffbuild-b-"))];
+    put(a, shared, links);
+    put(b, { ...shared, ...edit }, links);
+    return cli(["diff", `dir:${a}`, `dir:${b}`, ...IOCS]);
+  };
+  const fresh = pyproject(SETUPTOOLS.replace('"setuptools>=61"', '"setuptools>=61", "freshly-published-backend==1.0.0"'));
+  for (const how of ["git", "dir"] as const) {
+    assert.deepEqual(builds(await run(how, { "shared/base.toml": fresh })), ["WS-DF-005 high app/pyproject.toml"], `the file the OS opens (${how})`);
+    assert.deepEqual(builds(await run(how, { "base.toml": fresh })), [], `control: the file the link text names when read as text (${how})`);
+  }
+});
+
 /** Writes `files` under `d` (as validation-helpers.ts tempTree does, into a directory that exists). */
 function tempTreeAt(d: string, files: Files): void {
   for (const [rel, text] of Object.entries(files)) {

@@ -92,15 +92,17 @@ const isLink = (p: string): boolean => {
  * change. Anything else reads as the link's own text and is reported as not checked, as in gitTree.
  */
 export function dirTree(root: string): Tree {
-  const realRoot = realpathSync(root);
+  const realRoot = realpathSync.native(root);
   /**
    * The real path when `p` leads to a regular file inside the root, null when it leads anywhere else, undefined when
    * it is absent. A link on the way that dangles or loops is null, not absent: before an install, a manifest linked
-   * into node_modules dangles, and the install then makes what it reads.
+   * into node_modules dangles, and the install then makes what it reads. The OS resolves the links (realpath(3), as
+   * gitTree walks them): node's own fs.realpathSync collapses ".." in a link's text before it follows a link earlier
+   * in that text, so `a -> ../hop/../base.toml` with `hop` a link would name a file the install does not open.
    */
   const fileIn = (p: string): string | null | undefined => {
     try {
-      const to = realpathSync(join(root, p));
+      const to = realpathSync.native(join(root, p));
       const rel = relative(realRoot, to);
       return !rel.startsWith(`..${sep}`) && !isAbsolute(rel) && statSync(to).isFile() ? to : null;
     } catch {

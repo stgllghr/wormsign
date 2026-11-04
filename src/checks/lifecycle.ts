@@ -335,7 +335,10 @@ const fold = (s: string): string => s.toUpperCase().toLowerCase();
  * manifest's directory: npm, Yarn and pnpm resolve a relative path against it.
  * The target is compared with the real root after following links, so a path
  * that leaves the repository and comes back in (`../repo/x`), or an absolute
- * one, is still seen to land where it does.
+ * one, is still seen to land where it does. The OS follows them (realpath(3)):
+ * node's own fs.realpathSync collapses ".." in a link's text before it follows
+ * a link earlier in that text, so `lib -> hop/../evil` with `hop` a link into
+ * node_modules would be judged at a scanned decoy.
  */
 function unscannedReason(spec: string, dir: string, project: Project): string | undefined {
   if (GIT_FILE.test(spec)) return "a git repository on the local file system, which wormsign does not read";
@@ -348,7 +351,7 @@ function unscannedReason(spec: string, dir: string, project: Project): string | 
     return "a path wormsign could not decode, so it could not tell where that is";
   }
   try {
-    target = realpathSync(target);
+    target = realpathSync.native(target);
   } catch {
     // Not there, so nothing to install yet: judge the path as written.
   }

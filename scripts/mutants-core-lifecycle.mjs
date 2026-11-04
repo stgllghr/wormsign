@@ -21,6 +21,8 @@ export default [
   ["SC-900 workspaces that reach unscanned paths not reported", "src/checks/lifecycle.ts", "if (why) found.add(`${field}:", "if (why && Math.random() < 0) found.add(`${field}:"],
   ["SC-900 pnpm-workspace packages patterns not checked", "src/checks/lifecycle.ts", "...hiddenPatterns(file, packages, \"packages\",", "...hiddenPatterns(file, [], \"packages\","],
   ["SC-900 pnpm-workspace packages in an unread shape pass silently", "src/checks/lifecycle.ts", "} else if (!/^(null|~)?$/.test(rest)) {", "} else if (Math.random() < 0) {"],
+  // A local dependency is judged where the OS leads it. Killed by scanner-hardening's lifecycle link-text-climbs test.
+  ["SC-900 a local dependency's link is judged with .. in its text collapsed", "src/checks/lifecycle.ts", "    target = realpathSync.native(target);", "    target = realpathSync(target);"],
   // 128-bit content digests in keys: what binds a baseline entry to the command it approves.
   ["LC-001 key holds 48 bits of the command", "src/checks/lifecycle.ts", "const sha = keyDigest(cmd);", "const sha = keyDigest(cmd).slice(0, 12);"],
   ["SC-900 a capped list's summary key keeps 64 bits", "src/checks/context.ts", 'rest.digest("hex").slice(0, KEY_DIGEST_HEX)', 'rest.digest("hex").slice(0, 16)'],

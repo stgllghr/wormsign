@@ -72,6 +72,5 @@ this library release.
 
 Listed in [soak.md's limitations](docs/soak.md#limitations), its
 [Python limitations](docs/soak.md#python-limitations) and the
-[threat model's out-of-scope list](docs/threat-model.md#out-of-scope). Each item above has an issue; the
-[`roadmap` label](https://github.com/stgllghr/wormsign/issues?q=label%3Aroadmap) also holds the `dir:`-mode
-symlink limit ([#14](https://github.com/stgllghr/wormsign/issues/14)).
+[threat model's out-of-scope list](docs/threat-model.md#out-of-scope). Each item above has an issue, under the
+[`roadmap` label](https://github.com/stgllghr/wormsign/issues?q=label%3Aroadmap).

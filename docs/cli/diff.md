@@ -127,5 +127,3 @@ reading it as absent. Use a full clone.
 - **Python build comparison is capped by file count, not bytes** (64 hook files, 16 `backend-path` entries, 200
   `.py` files beside a hook, 2,000 files under a `backend-path` entry), so a large monorepo can be slow; a CI timeout
   fails the job.
-- **In `dir:` mode, a hook behind a symlink whose link text climbs with `..` can be read at the wrong file**; git
-  revisions are not affected.
