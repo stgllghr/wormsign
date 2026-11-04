@@ -5,8 +5,7 @@ The public API is `scan`, `gateExitCode`, `renderReport`, `UsageError` and their
 existing offline scanner with bundled or explicitly selected IOC data, without repository baseline suppression.
 See the [API contract](library.md) and [individual maturity labels](stability.md#maturity).
 
-Automatic enforcement in a shared sandbox for multiple agents remains a separate experimental milestone.
-This release does not ship the sandbox implementation, intercept installers or grant execution authority.
+This release does not intercept installers or isolate what they run.
 
 ## Pull request verification
 
@@ -19,9 +18,8 @@ This release does not ship the sandbox implementation, intercept installers or g
 - [x] Run and inspect the twenty added full-suite mutations (eleven library, four runner, five workflow).
 - [ ] Run the pull request's required GitHub checks on its final commit.
 
-Local results and limits are recorded in [the verification summary](evidence/library-release.md) and the pull request. Historical results from the broader experimental
-sandbox workspace are not evidence that this focused source has passed. No runtime dependency or IOC update is
-part of this change.
+Local results and limits are recorded in [the verification summary](evidence/library-release.md) and the pull
+request. No runtime dependency or IOC update is part of this change.
 
 ## Before tagging
 

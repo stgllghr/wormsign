@@ -1,14 +1,14 @@
 {
   "name": "wormsign",
   "version": "0.1.0",
-  "description": "Offline TypeScript scanning library and CLI gates for agent-driven npm/PyPI development. No npm runtime dependencies; one vendored, pinned, verified TOML parser, for the Python lockfiles soak reads and the pyproject.toml files diff compares.",
+  "description": "Defences against npm and PyPI supply-chain worms (Shai-Hulud style): a soak gate for locked versions, offline scan and pull-request diff checks, a GitHub Action, workstation hardening and a typed scanning library. No npm runtime dependencies; one vendored, pinned, verified TOML parser, for the Python lockfiles soak reads and the pyproject.toml files diff compares.",
   "type": "module",
   "license": "MIT AND Apache-2.0 AND BSD-3-Clause",
   "author": "stgllghr",
   "repository": { "type": "git", "url": "git+https://github.com/stgllghr/wormsign.git" },
   "homepage": "https://github.com/stgllghr/wormsign#readme",
   "bugs": { "url": "https://github.com/stgllghr/wormsign/issues" },
-  "keywords": ["supply-chain-security", "coding-agents", "npm", "pypi", "typescript"],
+  "keywords": ["supply-chain-security", "shai-hulud", "npm", "pypi", "github-action", "coding-agents", "typescript"],
   "main": "./dist/src/index.js",
   "types": "./dist/src/index.d.ts",
   "exports": {
