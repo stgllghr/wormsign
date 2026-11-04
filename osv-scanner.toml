@@ -1,0 +1,6 @@
+# OSV-Scanner, which OpenSSF Scorecard's Vulnerabilities check runs, reads this file for package-lock.json beside it.
+
+[[IgnoredVulns]]
+id = "GHSA-g3hv-75wg-m249"
+ignoreUntil = 2027-01-31
+reason = "Development only: minimatch 10.2.6 comes in through eslint and typescript-eslint, whose ranges (^10.2.5) exclude the fix in 11.0.1. wormsign has no npm runtime dependencies, so it is not in the package, and the globs it expands are this repository's own eslint.config.js. Drop this entry once eslint allows minimatch 11."
