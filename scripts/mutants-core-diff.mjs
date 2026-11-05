@@ -26,4 +26,6 @@ export default [
   // Install-directory config a pull request controls.
   ["tree reads install-directory config in quadratic time", "src/tree.ts", '    let j = i + 1;\n    while (j < lines.length && !/\\S/.test(lines[j] as string)) j++;\n    const next = lines[j] ?? "";', '    const next = lines.slice(i + 1).find((l) => /\\S/.test(l)) ?? "";'],
   ["tree reads install-directory config past the text cap", "src/tree.ts", 'return git(repo, ["show", `${sha}:./${p}`], "utf8", MAX_TEXT_BYTES);', 'return git(repo, ["show", `${sha}:./${p}`], "utf8");'],
+  // A dir: tree resolves a link as the OS does. Killed by python-diff-builds' link-text-climbs-from-a-link test (#14).
+  ["tree: dir: mode collapses .. in link text before following the link before it", "src/tree.ts", "      const to = realpathSync.native(join(root, p));", "      const to = realpathSync(join(root, p));"],
 ];

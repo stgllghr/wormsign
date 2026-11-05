@@ -143,7 +143,7 @@ export function scanDirectory(root: string, ctx: ScanContext, opts: ScanOptions)
   let manifests = 0;
   let lockfiles = 0;
   let installed = 0;
-  const realRoot = realpathSync(root);
+  const realRoot = realpathSync.native(root);
   // Paths that decide what runs, by folded path: two in one group are one file on a case-insensitive disk.
   const byFold = new Map<string, string[]>();
   const track = (rel: string): void => {
@@ -163,12 +163,15 @@ export function scanDirectory(root: string, ctx: ScanContext, opts: ScanOptions)
    * when a workspace pattern or a file: dependency named it or a path through it,
    * and a package.json at its top is what makes it a package there. That case is
    * high; any other directory link (bazel-bin, a Nix `result`) is low. Only the
-   * target's metadata is read, never its content.
+   * target's metadata is read, never its content. The OS resolves the link
+   * (realpath(3)): node's own fs.realpathSync collapses ".." in a link's text
+   * before it follows a link earlier in that text, so `a -> hop/../w` with `hop`
+   * a link into node_modules would be judged at a scanned decoy.
    */
   const hiddenDirectory = (rel: string): Severity | undefined => {
     let target: string;
     try {
-      target = realpathSync(join(root, rel));
+      target = realpathSync.native(join(root, rel));
       if (!statSync(target).isDirectory()) return undefined;
     } catch {
       return undefined; // dangling: there is nothing for a package manager to follow either

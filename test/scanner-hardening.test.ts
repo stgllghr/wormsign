@@ -194,6 +194,24 @@ test("scan: a symlinked directory outside the scanned tree is high when it is a 
   assert.match(r.findings.find((f) => f.file === "bazel-bin")?.message ?? "", /when a workspace pattern or a file: dependency names a package inside it/);
 });
 
+test("scan: a directory link whose text climbs with .. from another link is judged where the OS leads it", () => {
+  // packages/a -> hop/../w with packages/hop -> ../node_modules/.cache/x: the OS climbs from node_modules/.cache/x and
+  // reaches the package in node_modules/.cache/w. Collapsed as text (node's fs.realpathSync) it is the scanned decoy
+  // packages/w, and the high finding was lost.
+  const d = project(
+    {
+      "package.json": '{"name":"root","workspaces":["packages/*"]}',
+      "node_modules/.cache/w/package.json": EVIL_PKG,
+      "node_modules/.cache/x/a.js": "",
+      "packages/w/package.json": '{"name":"decoy"}',
+    },
+    { "packages/hop": "../node_modules/.cache/x", "packages/a": "hop/../w" },
+  );
+  const r = scanDirectory(d, testCtx(), { nodeModules: false, ignorePrefixes: [] });
+  const sev = Object.fromEntries(r.findings.filter((f) => f.ruleId === "WS-SC-900").map((f) => [f.file, f.severity]));
+  assert.deepEqual(sev, { "packages/a": "high", "packages/hop": "low" });
+});
+
 test("scan: a linked package directory whose package.json cannot be inspected is high, and the scan carries on", () => {
   // A committed self-loop makes stat(package.json) throw ELOOP; any repo can ship one.
   const d = project({ "package.json": EVIL_PKG }, { "node_modules/.cache/w/package.json": "package.json", vendor: "node_modules/.cache/w" });
@@ -230,6 +248,22 @@ test("lifecycle: a local dependency inside node_modules or .git, or a local tarb
   assert.ok(unchecked.every((f) => f.severity === "high"));
   const nested = checkLifecycle("packages/a/package.json", JSON.stringify({ dependencies: { e: "../../node_modules/.cache/evil" } }), testCtx());
   assert.deepEqual(nested.map((f) => label(f.key)), ["dependencies:e"]);
+});
+
+test("lifecycle: a local dependency through a link whose text climbs with .. from another link is judged where the OS leads it", () => {
+  // lib -> hop/../evil with hop -> node_modules/.cache/x: npm installs node_modules/.cache/evil. Collapsed as text
+  // (node's fs.realpathSync) the same link text is the scanned decoy evil/.
+  const d = project(
+    {
+      "package.json": JSON.stringify({ name: "r", dependencies: { dep: "file:./lib" } }),
+      "node_modules/.cache/evil/package.json": EVIL_PKG,
+      "node_modules/.cache/x/a.js": "",
+      "evil/package.json": "{}",
+    },
+    { hop: "node_modules/.cache/x", lib: "hop/../evil" },
+  );
+  const unchecked = scan(d).findings.filter((f) => f.ruleId === "WS-SC-900" && f.file === "package.json");
+  assert.deepEqual(unchecked.map((f) => `${label(f.key)} ${f.severity}`), ["dependencies:dep high"]);
 });
 
 test("lifecycle: npm's other spellings of a hidden local path are caught, but git and registry specs are not", () => {
