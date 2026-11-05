@@ -4,3 +4,7 @@
 [[IgnoredVulns]]
 id = "PYSEC-2026-215"
 reason = "Test fixture, never installed: scripts/gen-py-fixtures.sh pins idna 3.10 on purpose, an old, long-published release for the tests to read."
+
+[[IgnoredVulns]]
+id = "PYSEC-2026-4320"
+reason = "Test fixture, never installed: scripts/gen-py-fixtures.sh pins certifi 2026.7.22 on purpose, an old, long-published release for the tests to read."

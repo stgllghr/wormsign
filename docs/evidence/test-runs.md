@@ -5,6 +5,11 @@ It supports [validation.md](../validation.md) and [Release status](../installati
 
 ## Test suite
 
+- **The debut branch** (`debut/polish`, on the library API of #24 and the link fix for #14): `npm test` on
+  2026-11-04 (UTC), macOS 15.6.1 (arm64), npm 10.9.2, Node 23.11.0: 1,368 tests, 1,367 passed, 0 failed,
+  1 skipped, in 130 s. It adds three tests, in `test/python-diff-builds.test.ts` and
+  `test/scanner-hardening.test.ts`. `main` (2886b88) itself, in a fresh clone on the same Mac: 1,350 tests, 1,349
+  passed, 1 skipped.
 - **The tree of 0ff5d3e**, which equals release 328fbef of the private development repository: `npm test` (build,
   then every test) on 2026-10-16 (UTC), macOS 15.6.1 (arm64), npm 10.9.2, one run after another:
 
@@ -63,8 +68,9 @@ was killed; the script has not run them yet (runner pass pending; the module tab
 | 2026-10-15 | expressions read across lines: the rewritten `workflow-expressions` (13), the new `workflow-multiline` (11), `core-workflows` (16); then the new `skill-eval-cues` (5) and 2 on the hook's text | 40 of 40 (83); 7 of 7 (13) |
 | 2026-10-15 | at integration: the new `baseline-cli`, `detections` and `simplicity`, one `--module` run each; then 3 `core-soak` mutants whose code moved to `src/soak-config.ts` and 5 new (2 `core-soak`, 3 `harden-script`) | 18 of 18 (34), 18 of 18 (32), 10 of 10 (18); 8 of 8 (15) |
 
-The first full CI run on Node 24 replaces this record. The kills were recorded in the private development repository,
-whose history is not published. There, the largest uninterrupted local run killed 69 of 69 in 44 minutes, and on
+CI's full runs on Node 24 have since run every mutant: 973 of 974 killed on 7926cc9, the other a timeout fixed in
+#21, then all 974 on 2886b88 on 2026-11-01 ([Release status](../installation.md#release-status)). The kills above were
+recorded in the private development repository, whose history is not published. There, the largest uninterrupted local run killed 69 of 69 in 44 minutes, and on
 GitHub's runners the full check of the 70 mutants of the time passed twice, in 63 and 50 minutes.
 
 **Timing.** About two minutes per local suite run, twice that on a runner: a module job (at most 18 mutants plus the
@@ -75,20 +81,20 @@ with exit 1 before any test, and a mutant that only edits a comment is reported 
 caught real drift: after the lockfile, file-hash and config-name code was rewritten, five `STALE` lines, and those
 mutants were pointed at the new code.
 
-**The 73 modules** (`npm run mutation -- --list-modules`). *Hand-applied* counts the mutants added or changed after
-8baf3ce: hand-applied by their authors, runner pass pending.
+**The 76 modules** (`npm run mutation -- --list-modules`). *Hand-applied* counts the mutants added or changed after
+8baf3ce: hand-applied by their authors before the script ran them; CI's full run of 2026-11-01 has since run them all.
 
 | Module | Mutants | Hand-applied | What they switch off |
 |---|---|---|---|
-| `core-lifecycle` | 14 |  | lifecycle scripts, local specs, script heuristics |
+| `core-lifecycle` | 15 |  | lifecycle scripts, local specs, script heuristics |
 | `core-lockfile` | 15 |  | IOC versions, git sources, integrity, Yarn readers |
 | `core-workflows` | 16 | 1 | WS-GH-001 to WS-GH-007 |
 | `workflow-expressions` | 15 | 4 | unread `${{ }}` expressions, YAML-escape decoding, a `${{` in a comment |
 | `workflow-multiline` | 13 | 2 | `${{ }}` expressions read across lines; line breaks YAML reads |
 | `workflow-paths` | 14 | 14 | property paths and head refs as GitHub reads them (WS-GH-003 to 005) |
-| `core-scan` | 17 |  | payload hashes and names, endpoints, install scripts; the shared file readers |
+| `core-scan` | 18 |  | payload hashes and names, endpoints, install scripts; the shared file readers |
 | `core-pm-code` | 11 |  | WS-LC-004; the `.npmrc` keys followed |
-| `core-diff` | 17 |  | WS-DF-001 to WS-DF-006, the base's baseline |
+| `core-diff` | 18 |  | WS-DF-001 to WS-DF-006, the base's baseline |
 | `core-soak` | 16 | 3 | WS-SK-001 to WS-SK-004, OSV privacy, the 7-day default |
 | `code-scanning` | 1 | 1 | a package name kept as one path segment of soak's registry URL |
 | `bunfig` | 7 | 7 | `bunfig.toml` headers and strings, as `soak` and H07 read them |
@@ -136,6 +142,9 @@ mutants were pointed at the new code.
 | `gate-io` | 15 | 2 | the Action's logs and uploads; `diff`'s messages; a crash's exit code |
 | `ci` | 15 |  | the Action's refusals and SARIF; self-scan; release verifier |
 | `ci-workflows` | 4 |  | the module cap; the gate wait; on-demand slow jobs |
+| `release-pipeline` | 5 |  | one tarball installed on Node 22 and 24 before a release; a kept transcript keeps the failing exit |
+| `mutation-diagnostics` | 4 |  | the mutation runner's own diagnostics: compiler output, timeouts, signals |
+| `library` | 11 |  | the library API: findings, IOC selection, no baseline, the packed consumer |
 | `action-gate` | 15 | 15 | the Action's one-call gate: `diff`, `scan`, `soak`, worst exit, SARIF runs |
 | `action-registry` | 10 | 10 | the Action's `registry-host` and `registry` inputs |
 | `skills` | 18 | 1 | `wormsign skills`: link refusal, foreign folders, `check` |
@@ -155,6 +164,21 @@ mutants were pointed at the new code.
 | `skill-eval-grading` | 6 | 6 | soak-failure graded on what the run changed; the decline and ask wording of runs 4 and 5; project-bin's stop at a denied install |
 
 ## README Quickstart
+
+The Quickstart of 2886b88, cloned from GitHub on 2026-11-03 in fresh `node:22-bookworm` (Node 22.23.4, npm 10.9.9)
+and `node:24-bookworm` (Node 24.22.2, npm 11.19.1) containers, as root, with the same results on both. The project
+was a new directory whose `package-lock.json` (`npm install --package-lock-only --ignore-scripts`) locks
+`left-pad` 1.3.0:
+
+| Command | Exit | Output |
+|---|---|---|
+| `git clone https://github.com/stgllghr/wormsign.git && cd wormsign` | 0 | checked out at 2886b88 |
+| `npm ci --ignore-scripts && npm run build` | 0 | `found 0 vulnerabilities` |
+| `npm link` | 0 | `/usr/local/bin/wormsign`; `wormsign --version` prints `0.1.0` |
+| `./harden-dev.sh` | 1 | `4 pass, 1 warn, 3 fail` on the image's own settings; of the lines kept, H06 fails (Yarn Classic 1.22.22 runs install scripts) and H05 warns (it has no release-age setting) |
+| `wormsign soak .` | 0 | one medium WS-SK-003, no `min-release-age` in `.npmrc`; 1 version checked against the registry and OSV |
+| `wormsign scan .` | 0 | `0 finding(s)`, `2 files scanned` |
+| `wormsign skills install` | 2 | `no supported agent found (looked for /root/.claude, /root/.codex and /root/.cursor)` |
 
 The [Quickstart](../../README.md#quickstart) of 54c30c7, run on 2026-10-15 from 15:36:35 to 15:36:49 UTC in an empty
 directory under `env -i`, with a new empty `HOME` and `TMPDIR` and a new npm global prefix (`npm_config_prefix`, its

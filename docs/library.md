@@ -1,7 +1,7 @@
 # TypeScript and JavaScript library
 
 The package exposes a small, synchronous ESM API on Node.js 22 or later. It uses the same offline scanner and
-finding format as the CLI. The API is beta; automatic shared-agent sandbox enforcement is future work and is not included.
+finding format as the CLI. The API is beta.
 The package has no npm runtime dependencies.
 
 ## Install from the local release candidate
@@ -95,8 +95,7 @@ long-lived service.
 
 An empty finding list or exit zero is **not permission to install or execute code**. This API does not check
 release age or live malware advisories, verify every package artifact, isolate workloads or intercept installers.
-Bundled IOC data can become outdated. Use the CLI's [soak gate](soak.md) for the checks it supports; automatic
-shared-sandbox enforcement is a separate milestone in the [roadmap](../ROADMAP.md).
+Bundled IOC data can become outdated. Use the CLI's [soak gate](soak.md) for the checks it supports.
 
 The package smoke test installs the actual tarball offline, runs the shipped examples on clean and inert positive
 controls, and type-checks an external consumer. See [release readiness](release-readiness.md) for the remaining gates.

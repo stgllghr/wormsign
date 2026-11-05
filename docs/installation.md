@@ -52,12 +52,13 @@ On an older npm, `wormsign soak` reports the setting as ignored (WS-SK-004) and 
   | `ci.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437604) | success |
   | `ci.yml` | `workflow_dispatch` with `-f slow=true` (full mutation check, macOS): [first run](https://github.com/stgllghr/wormsign/actions/runs/38855495362), cancelled | 47 jobs passed; 4 module baselines failed on test races, fixed in #18; one mutant survived, a stale kill, fixed in #19 |
   | `ci.yml` | the same, on the fixed `main` (7926cc9): [run](https://github.com/stgllghr/wormsign/actions/runs/38874783278) | 82 of 83 jobs passed: 973 of 974 mutants killed; the one timeout, a test that hung in-process instead of failing, is fixed in #21 |
+  | `ci.yml` | the monthly schedule, on `main` after #21 (2886b88), 2026-11-01: [run](https://github.com/stgllghr/wormsign/actions/runs/41301243571) | 83 of 83 jobs passed: all 974 mutants killed, and the macOS `harden-dev.sh` tests |
   | `wormsign.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437638) | success |
   | `action-selftest.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437615) | success |
-  | `codeql.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437613) | success; its first alerts are being triaged |
+  | `codeql.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437613) | success; its first alerts were fixed in #17 |
   | `scorecard.yml` | push to `main`: [run](https://github.com/stgllghr/wormsign/actions/runs/38855437684) | success |
   | `wormsign.yml` | the canary pull request ([validation.md](validation.md#the-canary-pull-request)) [#15](https://github.com/stgllghr/wormsign/pull/15), closed unmerged: [run](https://github.com/stgllghr/wormsign/actions/runs/38855521831) | failed, as it must: `gate (built from base)` failed on CRITICAL WS-GH-001 |
-  | code scanning | the canary's SARIF upload: [run](https://github.com/stgllghr/wormsign/actions/runs/38855521831) | the alerts view shows WS-GH-001 (critical, [#39](https://github.com/stgllghr/wormsign/security/code-scanning/39)) and WS-DF-003 (medium, [#38](https://github.com/stgllghr/wormsign/security/code-scanning/38)) |
+  | code scanning | the canary's SARIF upload: [run](https://github.com/stgllghr/wormsign/actions/runs/38855521831) | the alerts view, which only the repository's maintainers can open, showed WS-GH-001 (critical, alert 39) and WS-DF-003 (medium, alert 38) |
 
   They are also the first runs of the PyPI soak and the pre-public fixes on GitHub's runners and on Linux.
 - **Not yet done:** the v0.1.0 tag, its release and the output of `gh attestation verify` for its
